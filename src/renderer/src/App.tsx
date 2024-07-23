@@ -10,9 +10,9 @@ function App(): JSX.Element {
       </section>
       <main>
         <section id="groups">
-          <span>Tracks</span>
-          <span>Artists</span>
-          <span>Albums</span>
+          <span className="group">Tracks</span>
+          <span className="group">Artists</span>
+          <span className="group">Albums</span>
         </section>
         <section id="items">
           <img src="" alt="" />
