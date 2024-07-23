@@ -1,7 +1,9 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { readdirSync, Stats, statSync } from 'fs'
+import path from 'node:path'
 
 function createWindow(): void {
   // Create the browser window.
@@ -35,9 +37,6 @@ function createWindow(): void {
   }
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
@@ -49,26 +48,38 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
+  ipcMain.handle('read-dir', () => {
+    const dirs = dialog.showOpenDialogSync({ properties: ['openDirectory'] })
+
+    const files: Array<string> = []
+
+    if (dirs) {
+      for (let i = 0; i < dirs.length; i++) {
+        const dirItems = readdirSync(path.join(dirs[i]))
+
+        for (let j = 0; j < dirItems.length; j++) {
+          const info: Stats = statSync(path.join(dirs[i], dirItems[j]))
+
+          if (info.isDirectory()) {
+            dirs.push(path.join(dirs[i], dirItems[j]))
+          } else if (dirItems[j].includes('.mp3') || dirItems[j].includes('.ogg')) {
+            files.push(path.join(dirs[i], dirItems[j]))
+          }
+        }
+      }
+    }
+    return files
+  })
 
   createWindow()
 
   app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 })
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
-
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.

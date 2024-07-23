@@ -1,7 +1,11 @@
 import Versions from './components/Versions'
 
 function App(): JSX.Element {
-  const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
+  const readdir = async (): Promise<void> => {
+    const files: Array<string> = await window.dirApi.readDir()
+
+    console.log(files)
+  }
 
   return (
     <>
@@ -22,10 +26,8 @@ function App(): JSX.Element {
           <span>Time</span>
         </section>
       </main>
-      {/* <a target="_blank" rel="noreferrer" onClick={ipcHandle}>
-        Send IPC
-      </a>
-      <Versions></Versions> */}
+      <button onClick={readdir}>Readdir</button>
+      <Versions></Versions>
     </>
   )
 }
