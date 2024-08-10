@@ -5,6 +5,8 @@ function App(): JSX.Element {
     const files: Array<string> = await window.dirApi.readDir()
 
     console.log(files)
+    const s = document.getElementById('player') as HTMLSourceElement
+    s.src = files[0].replaceAll('\\', '/')
   }
 
   return (
@@ -24,6 +26,7 @@ function App(): JSX.Element {
           <span>Artist</span>
           <span>Album</span>
           <span>Time</span>
+          <audio id="player" src="" controls />
         </section>
       </main>
       <button onClick={readdir}>Readdir</button>
