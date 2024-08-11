@@ -73,8 +73,11 @@ app.whenReady().then(() => {
   });
 
   ipcMain.handle('get-track-tags', async (_event, file) => {
-    const metadata = await parseFile(file);
-    console.log(metadata);
+    return await parseFile(file);
+  });
+
+  ipcMain.handle('uint8-to-b64', async (_event, data) => {
+    return Buffer.from(data).toString('base64');
   });
 
   createWindow();

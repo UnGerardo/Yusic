@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import DirApi from './DirApi'
 import TrackTagsApi from './TrackTagsApi'
+import { IAudioMetadata } from 'music-metadata'
 
 // Custom APIs for renderer
 const dirApi: DirApi = {
@@ -9,7 +10,8 @@ const dirApi: DirApi = {
 }
 
 const trackTagsApi: TrackTagsApi = {
-  getTrackTags: (file: string): Promise<void> => ipcRenderer.invoke('get-track-tags', file)
+  getTrackTags: (file: string): Promise<IAudioMetadata> => ipcRenderer.invoke('get-track-tags', file),
+  uint8ToBase64: (data: Uint8Array): Promise<string> => ipcRenderer.invoke('uint8-to-b64', data)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

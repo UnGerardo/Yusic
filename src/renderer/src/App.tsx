@@ -1,5 +1,7 @@
+import { IAudioMetadata } from "music-metadata";
 
 function App(): JSX.Element {
+
   const readdir = async (): Promise<void> => {
     const files: Array<string> = await window.dirApi.readDir();
 
@@ -8,7 +10,24 @@ function App(): JSX.Element {
     s.src = files[0].replaceAll('\\', '/');
 
     for (const file of files) {
-      await window.trackTagsApi.getTrackTags(file);
+      const $items = document.getElementById('items');
+      const metadata: IAudioMetadata = await window.trackTagsApi.getTrackTags(file);
+
+      const $item = document.createElement('section');
+      const $picture = document.createElement('img');
+      $picture.src = `data:${metadata.common.picture?.at(0)?.format};base64,${await window.trackTagsApi.uint8ToBase64(metadata.common.picture?.at(0)?.data!)}`;
+      $picture.height = 100;
+      const $name = document.createElement('span');
+      $name.innerText = metadata.common.title || '';
+      const $artists = document.createElement('span');
+      $artists.innerText = metadata.common.artist || '';
+      const $album = document.createElement('span');
+      $album.innerText = metadata.common.album || '';
+      const $duration = document.createElement('span');
+      $duration.innerText = `${metadata.format.duration}` || '';
+
+      $item.append($picture, $name, $artists, $album, $duration);
+      $items?.appendChild($item);
     }
   }
 
