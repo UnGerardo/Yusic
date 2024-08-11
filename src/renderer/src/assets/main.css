@@ -24,6 +24,7 @@ body {
 main {
   display: flex;
   height: 100%;
+  overflow-y: hidden;
 }
 
 #groups {
@@ -45,5 +46,7 @@ main {
 }
 
 #items {
+  height: 100%;
   width: 75%;
+  overflow-y: auto;
 }
