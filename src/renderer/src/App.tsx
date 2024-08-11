@@ -1,4 +1,3 @@
-import Versions from './components/Versions'
 
 function App(): JSX.Element {
   const readdir = async (): Promise<void> => {
@@ -26,11 +25,10 @@ function App(): JSX.Element {
           <span>Artist</span>
           <span>Album</span>
           <span>Time</span>
-          <audio id="player" src="" controls />
         </section>
       </main>
+      <audio id="player" src="" controls />
       <button onClick={readdir}>Readdir</button>
-      <Versions></Versions>
     </>
   )
 }
