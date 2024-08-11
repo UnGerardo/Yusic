@@ -8,6 +8,8 @@
   ],
   "compilerOptions": {
     "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
