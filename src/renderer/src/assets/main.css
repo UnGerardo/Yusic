@@ -60,6 +60,10 @@ main {
   margin: 10px 10px 0;
   border-bottom: 1px whitesmoke solid;
 }
+.track-component:hover {
+  background-color: #3d3d3f;
+  cursor: pointer;
+}
 
 .track-artist {
   font-size: 15px;

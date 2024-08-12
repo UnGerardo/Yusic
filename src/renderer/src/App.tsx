@@ -8,15 +8,11 @@ function App(): JSX.Element {
   const [items, setItems] = useState<Track[]>([]);
 
   const readdir = async (): Promise<void> => {
-    const files: Array<string> = await window.dirApi.readDir();
+    const filePaths: Array<string> = await window.dirApi.readDir();
 
-    console.log(files);
-    const s = document.getElementById('player') as HTMLSourceElement;
-    s.src = files[0].replaceAll('\\', '/');
-
-    for (const file of files) {
-      const metadata: IAudioMetadata = await window.trackTagsApi.getTrackTags(file);
-      const track = new Track(metadata, await window.trackTagsApi.uint8ToBase64(metadata.common.picture?.at(0)?.data!))
+    for (const filePath of filePaths) {
+      const metadata: IAudioMetadata = await window.trackTagsApi.getTrackTags(filePath);
+      const track = new Track(metadata, filePath, await window.trackTagsApi.uint8ToBase64(metadata.common.picture?.at(0)?.data!))
       setItems(prevItems => [
         ...prevItems,
         track
@@ -42,7 +38,10 @@ function App(): JSX.Element {
             <p>Album</p>
             <p className="track-duration">Time</p>
           </section>
-          {items.map(item => (<TrackComponent track={item} />))}
+          {items.map(item => (<TrackComponent track={item} onClick={() => {
+            const s = document.getElementById('player') as HTMLSourceElement;
+            s.src = item.filePath;
+          }} />))}
         </section>
       </main>
       <audio id="player" src="" controls />

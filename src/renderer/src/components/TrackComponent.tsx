@@ -1,9 +1,10 @@
+import React from "react";
 import Track from "../classes/Track"
 
-function TrackComponent({ track }: { track: Track }): JSX.Element {
+function TrackComponent({ track, onClick }: { track: Track, onClick: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void }): JSX.Element {
 
   return (
-    <section className="track-component">
+    <section className="track-component" onClick={onClick}>
       <img className="track-img" src={`data:${track.imgFormat};base64,${track.imgData}`} />
       <section className="track-title-artist ellip-overflow">
         <p className="ellip-overflow m-b-5">{track.name}</p>
