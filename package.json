@@ -1,9 +1,10 @@
 {
   "name": "yusic",
   "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "description": "An Electron music player.",
   "main": "./out/main/index.js",
-  "author": "example.com",
+  "type": "module",
+  "author": "ungerardo",
   "homepage": "https://electron-vite.org",
   "scripts": {
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
@@ -20,7 +21,8 @@
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
-    "@electron-toolkit/utils": "^3.0.0"
+    "@electron-toolkit/utils": "^3.0.0",
+    "music-metadata": "^10.0.1"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",

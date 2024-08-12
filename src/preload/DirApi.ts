@@ -1,3 +1,3 @@
-export interface DirApi {
-  readDir: () => Promise<Array<string>>
+export default interface DirApi {
+  readDir: () => Promise<Array<string>>;
 }
