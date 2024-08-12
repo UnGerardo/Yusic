@@ -37,11 +37,10 @@ function App(): JSX.Element {
         </section>
         <section id="items">
           <section className="track-component">
-            <img src="" alt="" />
-            <span>Track Name</span>
-            <span>Artist</span>
-            <span>Album</span>
-            <span>Time</span>
+            <p>Image</p>
+            <p>Title & Artist</p>
+            <p>Album</p>
+            <p className="track-duration">Time</p>
           </section>
           {items.map(item => (<TrackComponent track={item} />))}
         </section>

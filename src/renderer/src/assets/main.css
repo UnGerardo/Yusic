@@ -50,3 +50,53 @@ main {
   width: 75%;
   overflow-y: auto;
 }
+
+.track-component {
+  display: grid;
+  grid-template-columns: 80px 2fr 2fr 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  margin: 10px 10px 0;
+  border-bottom: 1px whitesmoke solid;
+}
+
+.track-artist {
+  font-size: 15px;
+  color: #BBB;
+}
+
+.track-img {
+  border-radius: 5px;
+  width: 100%;
+}
+
+.ellip-overflow {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.m-b-5 {
+  margin-bottom: 5px;
+}
+
+@media (max-width: 900px) {
+  .track-component {
+    grid-template-columns: 60px 2fr 2fr 30px;
+  }
+
+  .track-duration {
+    display: none;
+  }
+}
+
+@media (max-width: 650px) {
+  .track-component {
+    grid-template-columns: 50px 2fr 30px;
+  }
+
+  .track-album {
+    display: none;
+  }
+}
