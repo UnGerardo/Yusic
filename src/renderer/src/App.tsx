@@ -24,16 +24,24 @@ function App(): JSX.Element {
     }
   }
 
+  let trackProgressInterval: NodeJS.Timeout | undefined;
+
   const playPauseTrack = () => {
     const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
     const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
+    const $trackProgress = document.getElementById('track-progress') as HTMLInputElement;
 
     if ($playPauseIcon.src === playIcon) {
       $audioPlayer.play();
       $playPauseIcon.src = pauseIcon;
+
+      trackProgressInterval = setInterval(() => {
+        $trackProgress.value = `${$audioPlayer.currentTime}`;
+      }, 500);
     } else {
       $audioPlayer.pause();
       $playPauseIcon.src = playIcon;
+      clearInterval(trackProgressInterval);
     }
   }
 
