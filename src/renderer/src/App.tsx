@@ -11,6 +11,10 @@ function App(): JSX.Element {
   // const [componentType, setComponentType] = useState('track');
   const [items, setItems] = useState<Track[]>([]);
 
+  const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
+  const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
+  const $trackProgress = document.getElementById('track-progress') as HTMLInputElement;
+
   const readdir = async (): Promise<void> => {
     const filePaths: Array<string> = await window.dirApi.readDir();
 
@@ -25,12 +29,7 @@ function App(): JSX.Element {
   }
 
   let trackProgressInterval: NodeJS.Timeout | undefined;
-
   const playPauseTrack = () => {
-    const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
-    const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
-    const $trackProgress = document.getElementById('track-progress') as HTMLInputElement;
-
     if ($playPauseIcon.src === playIcon) {
       $audioPlayer.play();
       $playPauseIcon.src = pauseIcon;
@@ -45,18 +44,13 @@ function App(): JSX.Element {
     }
   }
 
+  let timeToSeekTo: number = 0;
+  const seeking = () => { timeToSeekTo = parseInt($trackProgress.value); }
+  const seekTo = () => { $audioPlayer.currentTime = timeToSeekTo; }
+
   const resetTrackProgress = () => {
-    const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
-    const $trackProgress = document.getElementById('track-progress') as HTMLInputElement;
     $trackProgress.max = `${$audioPlayer.duration}`;
     $trackProgress.value = `${$audioPlayer.currentTime}`;
-  }
-
-  const seekTo = () => {
-    const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
-    const $trackProgress = document.getElementById('track-progress') as HTMLInputElement;
-
-    $audioPlayer.currentTime = parseInt($trackProgress.value);
   }
 
   return (
@@ -92,7 +86,7 @@ function App(): JSX.Element {
           </section>
           <img src={forwardStepIcon} alt="Next" id="next-song-icon" height={15} />
         </section>
-        <input type="range" value={0} id="track-progress" onChange={seekTo} />
+        <input type="range" value={0} id="track-progress" onChange={seeking} onMouseUp={seekTo} />
       </section>
     </>
   )
