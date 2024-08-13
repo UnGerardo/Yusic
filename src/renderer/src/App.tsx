@@ -52,6 +52,13 @@ function App(): JSX.Element {
     $trackProgress.value = `${$audioPlayer.currentTime}`;
   }
 
+  const seekTo = () => {
+    const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
+    const $trackProgress = document.getElementById('track-progress') as HTMLInputElement;
+
+    $audioPlayer.currentTime = parseInt($trackProgress.value);
+  }
+
   return (
     <>
       <section id="options">
@@ -85,7 +92,7 @@ function App(): JSX.Element {
           </section>
           <img src={forwardStepIcon} alt="Next" id="next-song-icon" height={15} />
         </section>
-        <input type="range" value={0} id="track-progress" />
+        <input type="range" value={0} id="track-progress" onChange={seekTo} />
       </section>
     </>
   )
