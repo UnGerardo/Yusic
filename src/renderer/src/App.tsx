@@ -1,7 +1,7 @@
 import { IAudioMetadata } from "music-metadata";
 import Track from "./classes/Track";
 import TrackComponent from "./components/TrackComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import playIcon from '../../../resources/icons/play-solid.svg'
 import pauseIcon from '../../../resources/icons/pause-solid.svg'
 import backwardStepIcon from '../../../resources/icons/backward-step-solid.svg'
@@ -14,6 +14,11 @@ function App(): JSX.Element {
   const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
   const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
   const $trackProgress = document.getElementById('track-progress') as HTMLInputElement;
+
+  useEffect(() => {
+    const $trackProgress = document.getElementById('track-progress') as HTMLInputElement;
+    $trackProgress.value = '0';
+  });
 
   const readdir = async (): Promise<void> => {
     const filePaths: Array<string> = await window.dirApi.readDir();
@@ -45,8 +50,16 @@ function App(): JSX.Element {
   }
 
   let timeToSeekTo: number = 0;
-  const seeking = () => { timeToSeekTo = parseInt($trackProgress.value); }
-  const seekTo = () => { $audioPlayer.currentTime = timeToSeekTo; }
+  const seeking = () => {
+    clearInterval(trackProgressInterval);
+    timeToSeekTo = parseInt($trackProgress.value);
+  }
+  const seekTo = () => {
+    $audioPlayer.currentTime = timeToSeekTo;
+    trackProgressInterval = setInterval(() => {
+      $trackProgress.value = `${$audioPlayer.currentTime}`;
+    }, 500);
+  }
 
   const resetTrackProgress = () => {
     $trackProgress.max = `${$audioPlayer.duration}`;
@@ -78,7 +91,7 @@ function App(): JSX.Element {
         </section>
       </main>
       <section id="player-controls">
-        <audio id="player" src="" controls onLoadedMetadata={resetTrackProgress} />
+        <audio id="player" src="" onLoadedMetadata={resetTrackProgress} />
         <section id="controls">
           <img src={backwardStepIcon} alt="Previous" id="previous-song-icon" height={15} />
           <section id="play-pause-icon-bg" onClick={playPauseTrack} >
@@ -86,7 +99,11 @@ function App(): JSX.Element {
           </section>
           <img src={forwardStepIcon} alt="Next" id="next-song-icon" height={15} />
         </section>
-        <input type="range" value={0} id="track-progress" onChange={seeking} onMouseUp={seekTo} />
+        <section id="slider">
+          <span>0:00</span>
+          <input type="range" id="track-progress" onChange={seeking} onMouseUp={seekTo} />
+          <span>0:00</span>
+        </section>
       </section>
     </>
   )
