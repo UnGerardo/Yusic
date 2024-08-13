@@ -24,6 +24,19 @@ function App(): JSX.Element {
     }
   }
 
+  const playPauseTrack = () => {
+    const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
+    const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
+
+    if ($playPauseIcon.src === playIcon) {
+      $audioPlayer.play();
+      $playPauseIcon.src = pauseIcon;
+    } else {
+      $audioPlayer.pause();
+      $playPauseIcon.src = playIcon;
+    }
+  }
+
   return (
     <>
       <section id="options">
@@ -52,7 +65,7 @@ function App(): JSX.Element {
         <audio id="player" src="" controls />
         <section id="controls">
           <img src={backwardStepIcon} alt="Previous" id="previous-song-icon" height={15} />
-          <section id="play-pause-icon-bg" >
+          <section id="play-pause-icon-bg" onClick={playPauseTrack} >
             <img src={playIcon} alt="Play" id="play-pause-icon" />
           </section>
           <img src={forwardStepIcon} alt="Next" id="next-song-icon" height={15} />
