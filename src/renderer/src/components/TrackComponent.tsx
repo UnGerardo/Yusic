@@ -11,12 +11,12 @@ function TrackComponent({ track, onClick }: { track: Track, onClick: (event: Rea
         <p className="track-artist ellip-overflow">{track.artists}</p>
       </section>
       <p className="track-album">{track.album}</p>
-      <p className="track-duration">{formatSeconds(track.duration)}</p>
+      <p className="track-duration">{formatSeconds(track.duration!)}</p>
     </section>
   );
 }
 
-function formatSeconds(totalSeconds) {
+function formatSeconds(totalSeconds: number) {
   totalSeconds = Math.round(totalSeconds);
 
   const hours = Math.floor(totalSeconds / 3600);

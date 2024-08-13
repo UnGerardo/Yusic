@@ -2,6 +2,10 @@ import { IAudioMetadata } from "music-metadata";
 import Track from "./classes/Track";
 import TrackComponent from "./components/TrackComponent";
 import { useState } from "react";
+import playIcon from '../../../resources/icons/play-solid.svg'
+import pauseIcon from '../../../resources/icons/pause-solid.svg'
+import backwardStepIcon from '../../../resources/icons/backward-step-solid.svg'
+import forwardStepIcon from '../../../resources/icons/forward-step-solid.svg'
 
 function App(): JSX.Element {
   // const [componentType, setComponentType] = useState('track');
@@ -23,7 +27,7 @@ function App(): JSX.Element {
   return (
     <>
       <section id="options">
-        <span>Select Music Folder</span>
+        <button onClick={readdir}>Select Music Folder</button>
       </section>
       <main>
         <section id="groups">
@@ -44,8 +48,17 @@ function App(): JSX.Element {
           }} />))}
         </section>
       </main>
-      <audio id="player" src="" controls />
-      <button onClick={readdir}>Readdir</button>
+      <section id="player-controls">
+        <audio id="player" src="" controls />
+        <section id="controls">
+          <img src={backwardStepIcon} alt="Previous" id="previous-song-icon" height={15} />
+          <section id="play-pause-icon-bg" >
+            <img src={playIcon} alt="Play" id="play-pause-icon" />
+          </section>
+          <img src={forwardStepIcon} alt="Next" id="next-song-icon" height={15} />
+        </section>
+        <input type="range" value={0} id="track-progress" />
+      </section>
     </>
   )
 }
