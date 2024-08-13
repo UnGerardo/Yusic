@@ -6,6 +6,7 @@ import playIcon from '../../../resources/icons/play-solid.svg'
 import pauseIcon from '../../../resources/icons/pause-solid.svg'
 import backwardStepIcon from '../../../resources/icons/backward-step-solid.svg'
 import forwardStepIcon from '../../../resources/icons/forward-step-solid.svg'
+import formatSeconds from "./utils/formatSeconds";
 
 function App(): JSX.Element {
   // const [componentType, setComponentType] = useState('track');
@@ -14,6 +15,8 @@ function App(): JSX.Element {
   const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
   const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
   const $trackProgress = document.getElementById('track-progress') as HTMLInputElement;
+  const $currentTime = document.getElementById('current-time') as HTMLSpanElement;
+  const $totalTime = document.getElementById('total-time') as HTMLSpanElement;
 
   useEffect(() => {
     const $trackProgress = document.getElementById('track-progress') as HTMLInputElement;
@@ -41,6 +44,7 @@ function App(): JSX.Element {
 
       trackProgressInterval = setInterval(() => {
         $trackProgress.value = `${$audioPlayer.currentTime}`;
+        $currentTime.innerText = formatSeconds($audioPlayer.currentTime);
       }, 500);
     } else {
       $audioPlayer.pause();
@@ -53,17 +57,21 @@ function App(): JSX.Element {
   const seeking = () => {
     clearInterval(trackProgressInterval);
     timeToSeekTo = parseInt($trackProgress.value);
+    $currentTime.innerText = formatSeconds(parseInt($trackProgress.value));
   }
   const seekTo = () => {
     $audioPlayer.currentTime = timeToSeekTo;
     trackProgressInterval = setInterval(() => {
       $trackProgress.value = `${$audioPlayer.currentTime}`;
+      $currentTime.innerText = formatSeconds($audioPlayer.currentTime);
     }, 500);
   }
 
   const resetTrackProgress = () => {
     $trackProgress.max = `${$audioPlayer.duration}`;
+    $totalTime.innerText = formatSeconds($audioPlayer.duration);
     $trackProgress.value = `${$audioPlayer.currentTime}`;
+    $currentTime.innerText = '0:00';
   }
 
   return (
@@ -100,9 +108,9 @@ function App(): JSX.Element {
           <img src={forwardStepIcon} alt="Next" id="next-song-icon" height={15} />
         </section>
         <section id="slider">
-          <span>0:00</span>
+          <span id="current-time">0:00</span>
           <input type="range" id="track-progress" onChange={seeking} onMouseUp={seekTo} />
-          <span>0:00</span>
+          <span id="total-time">0:00</span>
         </section>
       </section>
     </>

@@ -1,5 +1,6 @@
 import React from "react";
 import Track from "../classes/Track"
+import formatSeconds from "@renderer/utils/formatSeconds";
 
 function TrackComponent({ track, onClick }: { track: Track, onClick: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void }): JSX.Element {
 
@@ -14,19 +15,6 @@ function TrackComponent({ track, onClick }: { track: Track, onClick: (event: Rea
       <p className="track-duration">{formatSeconds(track.duration!)}</p>
     </section>
   );
-}
-
-function formatSeconds(totalSeconds: number) {
-  totalSeconds = Math.round(totalSeconds);
-
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = Math.floor(totalSeconds % 60);
-
-  let minStr = hours ? `${String(minutes).padStart(2, '0')}:` : (minutes ? `${minutes}:` : '');
-  let secStr = minutes ? String(seconds).padStart(2, '0') : `${seconds}`;
-
-  return `${hours ? `${hours}:` : ''}${minStr}${secStr}`;
 }
 
 export default TrackComponent;
