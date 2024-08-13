@@ -45,6 +45,13 @@ function App(): JSX.Element {
     }
   }
 
+  const resetTrackProgress = () => {
+    const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
+    const $trackProgress = document.getElementById('track-progress') as HTMLInputElement;
+    $trackProgress.max = `${$audioPlayer.duration}`;
+    $trackProgress.value = `${$audioPlayer.currentTime}`;
+  }
+
   return (
     <>
       <section id="options">
@@ -70,7 +77,7 @@ function App(): JSX.Element {
         </section>
       </main>
       <section id="player-controls">
-        <audio id="player" src="" controls />
+        <audio id="player" src="" controls onLoadedMetadata={resetTrackProgress} />
         <section id="controls">
           <img src={backwardStepIcon} alt="Previous" id="previous-song-icon" height={15} />
           <section id="play-pause-icon-bg" onClick={playPauseTrack} >
