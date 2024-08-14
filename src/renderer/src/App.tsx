@@ -100,7 +100,7 @@ function App(): JSX.Element {
       </main>
       <section id="player-controls">
         <audio id="player" src="" onLoadedMetadata={resetTrackProgress} />
-        <section id="controls">
+        <section id="controls" className="no-select">
           <img src={backwardStepIcon} alt="Previous" id="previous-song-icon" height={15} />
           <section id="play-pause-icon-bg" onClick={playPauseTrack} >
             <img src={playIcon} alt="Play" id="play-pause-icon" />
@@ -108,9 +108,9 @@ function App(): JSX.Element {
           <img src={forwardStepIcon} alt="Next" id="next-song-icon" height={15} />
         </section>
         <section id="slider">
-          <span id="current-time">0:00</span>
+          <span id="current-time" className="no-select">0:00</span>
           <input type="range" id="track-progress" onChange={seeking} onMouseUp={seekTo} />
-          <span id="total-time">0:00</span>
+          <span id="total-time" className="no-select">0:00</span>
         </section>
       </section>
     </>

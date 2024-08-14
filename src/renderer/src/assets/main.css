@@ -157,3 +157,7 @@ main {
   align-items: center;
   width: fit-content;
 }
+
+.no-select {
+  user-select: none;
+}
