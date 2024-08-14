@@ -28,14 +28,14 @@ function App(): JSX.Element {
 
     for (const filePath of filePaths) {
       const metadata: IAudioMetadata = await window.trackTagsApi.getTrackTags(filePath);
-      const track = new Track(metadata, filePath, await window.trackTagsApi.uint8ToBase64(metadata.common.picture?.at(0)?.data!))
+      let pictureData = metadata.common.picture?.at(0)?.data!;
+      const track = new Track(metadata, filePath, pictureData ? await window.trackTagsApi.uint8ToBase64(pictureData) : pictureData)
       setItems(prevItems => [
         ...prevItems,
         track
       ]);
     }
   }
-
   let trackProgressInterval: NodeJS.Timeout | undefined;
   const playPauseTrack = () => {
     if ($playPauseIcon.src === playIcon) {
