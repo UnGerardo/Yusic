@@ -29,7 +29,7 @@ function App(): JSX.Element {
     for (const filePath of filePaths) {
       const metadata: IAudioMetadata = await window.trackTagsApi.getTrackTags(filePath);
       let pictureData = metadata.common.picture?.at(0)?.data!;
-      const track = new Track(metadata, filePath, pictureData ? await window.trackTagsApi.uint8ToBase64(pictureData) : pictureData)
+      const track = new Track(metadata, filePath, pictureData ? await window.trackTagsApi.uint8ToBase64(pictureData) : pictureData);
       setItems(prevItems => [
         ...prevItems,
         track
@@ -95,6 +95,9 @@ function App(): JSX.Element {
           {items.map(item => (<TrackComponent track={item} onClick={() => {
             const s = document.getElementById('player') as HTMLSourceElement;
             s.src = item.filePath;
+            clearInterval(trackProgressInterval);
+            $audioPlayer.pause();
+            $playPauseIcon.src = playIcon;
           }} />))}
         </section>
       </main>
