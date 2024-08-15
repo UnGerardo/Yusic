@@ -44,11 +44,12 @@ export default function PlayerControls({ updateProgressInterval, setUpdateProgre
   }
   const seekTo = () => {
     $audioPlayer.currentTime = timeToSeekTo;
-    // FIXME: When paused: sets an interval that is then overwritten when played, so now there is always and interval for the function below
-    setUpdateProgressInterval(setInterval(() => {
-      $trackProgress.value = `${$audioPlayer.currentTime}`;
-      $currentTime.innerText = formatSeconds($audioPlayer.currentTime);
-    }, 500));
+    if (!$audioPlayer.paused) {
+      setUpdateProgressInterval(setInterval(() => {
+        $trackProgress.value = `${$audioPlayer.currentTime}`;
+        $currentTime.innerText = formatSeconds($audioPlayer.currentTime);
+      }, 500));
+    }
   }
 
   return (
@@ -67,5 +68,5 @@ export default function PlayerControls({ updateProgressInterval, setUpdateProgre
         <span id="total-time" className="no-select">0:00</span>
       </section>
     </section>
-  )
+  );
 }
