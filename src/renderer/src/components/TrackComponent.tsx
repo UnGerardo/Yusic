@@ -6,7 +6,7 @@ function TrackComponent({ track, onClick }: { track: Track, onClick: (event: Rea
 
   return (
     <section className="track-component" onClick={onClick}>
-      <img className="track-img" src={`data:${track.imgFormat};base64,${track.imgData}`} />
+      <img className="track-img" src={track.imgData ? `data:${track.imgFormat};base64,${track.imgData}` : ''} />
       <section className="track-title-artist ellip-overflow">
         <p className="ellip-overflow m-b-5">{track.name}</p>
         <p className="track-artist ellip-overflow">{track.artists}</p>
