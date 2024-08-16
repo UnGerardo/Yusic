@@ -83,7 +83,7 @@ export default function PlayerControls(
       <section id="slider">
         <span id="current-time" className="no-select slider-times">0:00</span>
         <input type="range" id="track-progress" onChange={seeking} onMouseUp={seekTo} style={{
-          background: `linear-gradient(to right, white 0%, white ${trackProgress}%, #888 ${trackProgress}%, #888 100%)`
+          background: `linear-gradient(to right, white 0%, white ${trackProgress}%, #555 ${trackProgress}%, #555 100%)`
         }} />
         <span id="total-time" className="no-select slider-times">0:00</span>
       </section>
