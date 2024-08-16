@@ -4,11 +4,13 @@ import TrackComponent from "./components/TrackComponent";
 import { useState } from "react";
 import playIcon from '@resources/icons/play-solid.svg'
 import PlayerControls from "./components/PlayerControls";
+import CurrentSong from "./components/CurrentSong";
 
 function App(): JSX.Element {
   // const [componentType, setComponentType] = useState('track');
-  const [items, setItems] = useState<Track[]>([]);
+  const [tracks, setTracks] = useState<Track[]>([]);
   const [updateProgressInterval, setUpdateProgressInterval] = useState<NodeJS.Timeout | undefined>(undefined);
+  const [currentTrack, setCurrentTrack] = useState<Track>();
 
   const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
   const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
@@ -20,7 +22,7 @@ function App(): JSX.Element {
       const metadata: IAudioMetadata = await window.trackTagsApi.getTrackTags(filePath);
       let pictureData = metadata.common.picture?.at(0)?.data!;
       const track = new Track(metadata, filePath, pictureData ? await window.trackTagsApi.uint8ToBase64(pictureData) : pictureData);
-      setItems(prevItems => [
+      setTracks(prevItems => [
         ...prevItems,
         track
       ]);
@@ -38,23 +40,27 @@ function App(): JSX.Element {
           <span className="group">Artists</span>
           <span className="group">Albums</span>
         </section>
-        <section id="items">
+        <section id="tracks">
           <section className="track-component">
             <p>Image</p>
             <p>Title & Artist</p>
             <p>Album</p>
             <p className="track-duration">Time</p>
           </section>
-          {items.map(item => (<TrackComponent track={item} onClick={() => {
+          {tracks.map(item => (<TrackComponent track={item} onClick={() => {
             const s = document.getElementById('player') as HTMLSourceElement;
             s.src = item.filePath;
             clearInterval(updateProgressInterval);
             $audioPlayer.pause();
             $playPauseIcon.src = playIcon;
+            setCurrentTrack(item);
           }} />))}
         </section>
       </main>
-      <PlayerControls updateProgressInterval={updateProgressInterval} setUpdateProgressInterval={setUpdateProgressInterval} />
+      <section id="bottom-panel">
+        {currentTrack ? <CurrentSong track={currentTrack} /> : <div></div>}
+        <PlayerControls updateProgressInterval={updateProgressInterval} setUpdateProgressInterval={setUpdateProgressInterval} />
+      </section>
     </>
   )
 }
