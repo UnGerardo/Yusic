@@ -161,3 +161,9 @@ main {
 .no-select {
   user-select: none;
 }
+
+#currentSong {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  align-items: center;
+}

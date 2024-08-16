@@ -5,7 +5,13 @@ import backwardStepIcon from '@resources/icons/backward-step-solid.svg';
 import forwardStepIcon from '@resources/icons/forward-step-solid.svg';
 import { useState } from "react";
 
-export default function PlayerControls({ updateProgressInterval, setUpdateProgressInterval }: { updateProgressInterval: NodeJS.Timeout | undefined, setUpdateProgressInterval: React.Dispatch<React.SetStateAction<NodeJS.Timeout | undefined>> }): JSX.Element {
+export default function PlayerControls(
+  { updateProgressInterval, setUpdateProgressInterval }
+  : { updateProgressInterval:
+    NodeJS.Timeout | undefined,
+    setUpdateProgressInterval: React.Dispatch<React.SetStateAction<NodeJS.Timeout | undefined>>
+  })
+  : JSX.Element {
   const [timeToSeekTo, setTimeToSeekTo] = useState(0);
 
   const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
