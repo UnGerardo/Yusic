@@ -26,6 +26,7 @@ export default function PlayerControls(
       $audioPlayer.play();
       $playPauseIcon.src = pauseIcon;
 
+      clearInterval(updateProgressInterval);
       setUpdateProgressInterval(setInterval(() => {
         $trackProgress.value = `${$audioPlayer.currentTime}`;
         $currentTime.innerText = formatSeconds($audioPlayer.currentTime);
@@ -55,6 +56,7 @@ export default function PlayerControls(
   const seekTo = () => {
     $audioPlayer.currentTime = timeToSeekTo;
     if (!$audioPlayer.paused) {
+      clearInterval(updateProgressInterval);
       setUpdateProgressInterval(setInterval(() => {
         $trackProgress.value = `${$audioPlayer.currentTime}`;
         $currentTime.innerText = formatSeconds($audioPlayer.currentTime);

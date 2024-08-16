@@ -119,7 +119,6 @@ main {
   background: linear-gradient(to right, white 0%, white 50%, #888 50%, #888 100%);
   border-radius: 5px;
   outline: none;
-  /* transition: background 450ms ease-in; */
   height: 4px;
   width: 100%;
 }
