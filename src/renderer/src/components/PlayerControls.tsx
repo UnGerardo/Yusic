@@ -22,6 +22,10 @@ export default function PlayerControls(
   const $totalTime = document.getElementById('total-time') as HTMLSpanElement;
 
   const playPauseTrack = () => {
+    if (!$audioPlayer || $audioPlayer.readyState !== 4) {
+      return;
+    }
+
     if ($playPauseIcon.src === playIcon) {
       $audioPlayer.play();
       $playPauseIcon.src = pauseIcon;
@@ -48,12 +52,20 @@ export default function PlayerControls(
   }
 
   const seeking = () => {
+    if (!$audioPlayer || $audioPlayer.readyState !== 4) {
+      return;
+    }
+
     clearInterval(updateProgressInterval);
     setTimeToSeekTo(parseFloat($trackProgress.value));
     setTrackProgress((parseFloat($trackProgress.value)/parseFloat($trackProgress.max)) * 100);
     $currentTime.innerText = formatSeconds(parseInt($trackProgress.value));
   }
   const seekTo = () => {
+    if (!$audioPlayer || $audioPlayer.readyState !== 4) {
+      return;
+    }
+
     $audioPlayer.currentTime = timeToSeekTo;
     if (!$audioPlayer.paused) {
       clearInterval(updateProgressInterval);
