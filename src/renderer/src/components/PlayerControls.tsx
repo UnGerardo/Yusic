@@ -12,6 +12,7 @@ export default function PlayerControls(
     setUpdateProgressInterval: React.Dispatch<React.SetStateAction<NodeJS.Timeout | undefined>>
   })
   : JSX.Element {
+  const [trackProgress, setTrackProgress] = useState(0);
   const [timeToSeekTo, setTimeToSeekTo] = useState(0);
 
   const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
@@ -28,6 +29,7 @@ export default function PlayerControls(
       setUpdateProgressInterval(setInterval(() => {
         $trackProgress.value = `${$audioPlayer.currentTime}`;
         $currentTime.innerText = formatSeconds($audioPlayer.currentTime);
+        setTrackProgress((parseFloat($trackProgress.value)/parseFloat($trackProgress.max)) * 100);
       }, 500));
     } else {
       $audioPlayer.pause();
@@ -41,11 +43,13 @@ export default function PlayerControls(
     $totalTime.innerText = formatSeconds($audioPlayer.duration);
     $trackProgress.value = `${$audioPlayer.currentTime}`;
     $currentTime.innerText = '0:00';
+    setTrackProgress(0);
   }
 
   const seeking = () => {
     clearInterval(updateProgressInterval);
-    setTimeToSeekTo(parseInt($trackProgress.value));
+    setTimeToSeekTo(parseFloat($trackProgress.value));
+    setTrackProgress((parseFloat($trackProgress.value)/parseFloat($trackProgress.max)) * 100);
     $currentTime.innerText = formatSeconds(parseInt($trackProgress.value));
   }
   const seekTo = () => {
@@ -54,13 +58,19 @@ export default function PlayerControls(
       setUpdateProgressInterval(setInterval(() => {
         $trackProgress.value = `${$audioPlayer.currentTime}`;
         $currentTime.innerText = formatSeconds($audioPlayer.currentTime);
+        setTrackProgress((parseFloat($trackProgress.value)/parseFloat($trackProgress.max)) * 100);
       }, 500));
     }
   }
 
+  const onAudioEnd = () => {
+    $playPauseIcon.src = playIcon;
+    clearInterval(updateProgressInterval);
+  }
+
   return (
     <section id="player-controls">
-      <audio id="player" src="" onLoadedMetadata={resetTrackProgress} />
+      <audio id="player" src="" onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd} />
       <section id="controls" className="no-select">
         <img src={backwardStepIcon} alt="Previous" id="previous-song-icon" height={15} />
         <section id="play-pause-icon-bg" onClick={playPauseTrack} >
@@ -70,7 +80,9 @@ export default function PlayerControls(
       </section>
       <section id="slider">
         <span id="current-time" className="no-select slider-times">0:00</span>
-        <input type="range" id="track-progress" onChange={seeking} onMouseUp={seekTo} />
+        <input type="range" id="track-progress" onChange={seeking} onMouseUp={seekTo} style={{
+          background: `linear-gradient(to right, white 0%, white ${trackProgress}%, #888 ${trackProgress}%, #888 100%)`
+        }} />
         <span id="total-time" className="no-select slider-times">0:00</span>
       </section>
     </section>

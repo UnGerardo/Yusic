@@ -115,19 +115,16 @@ main {
 }
 
 #track-progress {
-  /* appearance: none; */
-  background-color: red;
-  color: green;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 0 5px;
+  -webkit-appearance: none;
+  background: linear-gradient(to right, white 0%, white 50%, #888 50%, #888 100%);
+  border-radius: 5px;
+  outline: none;
+  /* transition: background 450ms ease-in; */
   height: 4px;
   width: 100%;
 }
 #track-progress::-webkit-slider-thumb {
   appearance: none;
-  background-color: #fff;
-  color: red;
   border-radius: 50%;
   width: 8px;
   height: 8px;
