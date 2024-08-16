@@ -9,8 +9,10 @@ import { parseFile } from 'music-metadata'
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    minWidth: 815,
+    width: 1000,
+    minHeight: 550,
+    height: 700,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),

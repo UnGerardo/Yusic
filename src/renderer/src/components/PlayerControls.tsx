@@ -69,9 +69,9 @@ export default function PlayerControls(
         <img src={forwardStepIcon} alt="Next" id="next-song-icon" height={15} />
       </section>
       <section id="slider">
-        <span id="current-time" className="no-select">0:00</span>
+        <span id="current-time" className="no-select slider-times">0:00</span>
         <input type="range" id="track-progress" onChange={seeking} onMouseUp={seekTo} />
-        <span id="total-time" className="no-select">0:00</span>
+        <span id="total-time" className="no-select slider-times">0:00</span>
       </section>
     </section>
   );
