@@ -17,16 +17,17 @@ function App(): JSX.Element {
 
   const readdir = async (): Promise<void> => {
     const filePaths: Array<string> = await window.dirApi.readDir();
+    let tracks: Track[] = [];
 
     for (const filePath of filePaths) {
       const metadata: IAudioMetadata = await window.trackTagsApi.getTrackTags(filePath);
       let pictureData = metadata.common.picture?.at(0)?.data!;
       const track = new Track(metadata, filePath, pictureData ? await window.trackTagsApi.uint8ToBase64(pictureData) : pictureData);
-      setTracks(prevItems => [
-        ...prevItems,
-        track
-      ]);
+      tracks.push(track);
     }
+    setTracks([
+      ...tracks
+    ]);
   }
 
   return (
