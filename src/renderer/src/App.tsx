@@ -1,5 +1,5 @@
 import { IAudioMetadata } from "music-metadata";
-import Track from "./classes/Track";
+import Track from "../../classes/Track";
 import TrackComponent from "./components/TrackComponent";
 import { useState } from "react";
 import playIcon from '@resources/icons/play-solid.svg'
@@ -21,13 +21,14 @@ function App(): JSX.Element {
 
     for (const filePath of filePaths) {
       const metadata: IAudioMetadata = await window.trackTagsApi.getTrackTags(filePath);
-      let pictureData = metadata.common.picture?.at(0)?.data!;
-      const track = new Track(metadata, filePath, pictureData ? await window.trackTagsApi.uint8ToBase64(pictureData) : pictureData);
+      let pictureData = metadata.common.picture?.at(0)?.data || new Uint8Array();
+      const track = new Track(metadata, filePath, await window.trackTagsApi.uint8ToBase64(pictureData));
       tracks.push(track);
     }
     setTracks([
       ...tracks
     ]);
+    await window.databaseApi.writeMusicFiles(tracks);
   }
 
   return (
@@ -50,7 +51,7 @@ function App(): JSX.Element {
           </section>
           {tracks.map(item => (<TrackComponent track={item} onClick={() => {
             const s = document.getElementById('player') as HTMLSourceElement;
-            s.src = item.filePath;
+            s.src = item.path;
             clearInterval(updateProgressInterval);
             $audioPlayer.pause();
             $playPauseIcon.src = playIcon;

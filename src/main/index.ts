@@ -1,10 +1,13 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
-import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
-import { readdirSync, Stats, statSync } from 'fs'
-import path from 'node:path'
-import { parseFile } from 'music-metadata'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
+import { join } from 'path';
+import { electronApp, optimizer, is } from '@electron-toolkit/utils';
+import icon from '../../resources/icon.png?asset';
+import { mkdirSync, readdirSync, Stats, statSync } from 'fs';
+import path from 'node:path';
+import { parseFile } from 'music-metadata';
+import Database from 'better-sqlite3';
+
+import Track from '../classes/Track';
 
 function createWindow(): void {
   // Create the browser window.
@@ -50,6 +53,46 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window);
   })
+
+  mkdirSync('data', { recursive: true });
+  const db = new Database('data/music.db');
+  db.pragma('journal_mode = WAL');
+
+  db.prepare(`
+    CREATE TABLE IF NOT EXISTS MusicFiles (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      path TEXT NOT NULL UNIQUE,
+      title TEXT NOT NULL,
+      artists TEXT,
+      album TEXT,
+      duration REAL,
+      imgFormat TEXT,
+      imgData TEXT
+    )
+  `).run();
+
+  const insertMusicFile = db.prepare(`
+    INSERT INTO MusicFiles (path, title, artists, album, duration, imgFormat, imgData)
+    VALUES (@path, @title, @artists, @album, @duration, @imgFormat, @imgData)
+  `);
+
+  const insertMusicFiles = db.transaction((tracks: Track[]) => {
+    for (const track of tracks) {
+      insertMusicFile.run({
+        path: track.path,
+        title: track.title,
+        artists: track.artists,
+        album: track.album,
+        duration: track.duration,
+        imgFormat: track.imgFormat,
+        imgData: track.imgData
+      });
+    }
+  });
+
+  ipcMain.handle('write-music-files', (_event, tracks: Track[]) => {
+    insertMusicFiles(tracks);
+  });
 
   ipcMain.handle('read-dir', () => {
     const dirs = dialog.showOpenDialogSync({ properties: ['openDirectory'] });
