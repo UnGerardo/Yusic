@@ -17,7 +17,8 @@ const trackTagsApi: TrackTagsApi = {
 }
 
 const databaseApi: DatabaseApi = {
-  writeMusicFiles: (tracks: Track[]): Promise<void> => ipcRenderer.invoke('write-music-files', tracks)
+  writeMusicFiles: (tracks: Track[]): Promise<void> => ipcRenderer.invoke('write-music-files', tracks),
+  getAllMusicFiles: (): Promise<Track[]> => ipcRenderer.invoke('get-all-music-files')
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

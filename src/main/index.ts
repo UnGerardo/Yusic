@@ -94,6 +94,14 @@ app.whenReady().then(() => {
     insertMusicFiles(tracks);
   });
 
+  const getAllMusicFiles = () => {
+    return db.prepare('SELECT * from MusicFiles').all() as Track[];
+  }
+
+  ipcMain.handle('get-all-music-files', (): Track[] => {
+    return getAllMusicFiles();
+  });
+
   ipcMain.handle('read-dir', () => {
     const dirs = dialog.showOpenDialogSync({ properties: ['openDirectory'] });
 

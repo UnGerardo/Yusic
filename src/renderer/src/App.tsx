@@ -1,7 +1,7 @@
 import { IAudioMetadata } from "music-metadata";
 import Track from "../../classes/Track";
 import TrackComponent from "./components/TrackComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import playIcon from '@resources/icons/play-solid.svg'
 import PlayerControls from "./components/PlayerControls";
 import CurrentSong from "./components/CurrentSong";
@@ -14,6 +14,12 @@ function App(): JSX.Element {
 
   const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
   const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
+
+  useEffect(() => {
+    window.databaseApi.getAllMusicFiles().then((musicFiles: Track[]) => {
+      setTracks([...musicFiles]);
+    });
+  }, []);
 
   const readdir = async (): Promise<void> => {
     const filePaths: Array<string> = await window.dirApi.readDir();
