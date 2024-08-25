@@ -27,13 +27,19 @@ main {
   overflow-y: hidden;
 }
 
+.scrollbar {
+  scrollbar-color: gray rgb(43, 43, 43);
+  scrollbar-width: thin;
+}
+
 #groups {
   border-right: 1px white solid;
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 100%;
-  width: 25%;
+  width: 10%;
+  max-width: 200px;
 }
 
 .group {
@@ -47,7 +53,7 @@ main {
 
 #tracks {
   height: 100%;
-  width: 75%;
+  width: max-content;
   overflow-y: auto;
 }
 

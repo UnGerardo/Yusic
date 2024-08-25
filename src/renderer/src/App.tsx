@@ -48,7 +48,7 @@ function App(): JSX.Element {
           <span className="group">Artists</span>
           <span className="group">Albums</span>
         </section>
-        <section id="tracks">
+        <section id="tracks" className="scrollbar">
           <section className="track-component">
             <p>Image</p>
             <p>Title & Artist</p>
