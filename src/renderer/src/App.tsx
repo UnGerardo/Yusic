@@ -9,6 +9,8 @@ import CurrentSong from "./components/CurrentSong";
 function App(): JSX.Element {
   // const [componentType, setComponentType] = useState('track');
   const [tracks, setTracks] = useState<Track[]>([]);
+  const [queue, setQueue] = useState<Track[]>([]);
+  const [queueIndex, setQueueIndex] = useState<number>(0);
   const [updateProgressInterval, setUpdateProgressInterval] = useState<NodeJS.Timeout | undefined>(undefined);
   const [currentTrack, setCurrentTrack] = useState<Track>();
 
@@ -55,19 +57,29 @@ function App(): JSX.Element {
             <p>Album</p>
             <p className="track-duration">Time</p>
           </section>
-          {tracks.map(item => (<TrackComponent track={item} onClick={() => {
-            const s = document.getElementById('player') as HTMLSourceElement;
-            s.src = item.path;
+          {tracks.map((item, i) => (<TrackComponent key={i} track={item} onClick={() => {
+            const $player = document.getElementById('player') as HTMLSourceElement;
+            $player.src = item.path;
             clearInterval(updateProgressInterval);
             $audioPlayer.pause();
             $playPauseIcon.src = playIcon;
             setCurrentTrack(item);
+            setQueueIndex(i);
+            setQueue(tracks);
           }} />))}
         </section>
       </main>
       <section id="bottom-panel">
         {currentTrack ? <CurrentSong track={currentTrack} /> : <div></div>}
-        <PlayerControls updateProgressInterval={updateProgressInterval} setUpdateProgressInterval={setUpdateProgressInterval} />
+        <PlayerControls
+          queue={queue}
+          queueIndex={queueIndex}
+          setQueueIndex={setQueueIndex}
+          currentTrack={currentTrack}
+          setCurrentTrack={setCurrentTrack}
+          updateProgressInterval={updateProgressInterval}
+          setUpdateProgressInterval={setUpdateProgressInterval}
+        />
       </section>
     </>
   )

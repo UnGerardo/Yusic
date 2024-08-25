@@ -4,11 +4,18 @@ import pauseIcon from '@resources/icons/pause-solid.svg';
 import backwardStepIcon from '@resources/icons/backward-step-solid.svg';
 import forwardStepIcon from '@resources/icons/forward-step-solid.svg';
 import { useState } from "react";
+import Track from "src/classes/Track";
 
 export default function PlayerControls(
-  { updateProgressInterval, setUpdateProgressInterval }
-  : { updateProgressInterval:
-    NodeJS.Timeout | undefined,
+  { queue, queueIndex, setQueueIndex, currentTrack, setCurrentTrack, updateProgressInterval, setUpdateProgressInterval }
+  :
+  {
+    queue: Track[],
+    queueIndex: number,
+    setQueueIndex: React.Dispatch<React.SetStateAction<number>>,
+    currentTrack: Track | undefined,
+    setCurrentTrack: React.Dispatch<React.SetStateAction<Track | undefined>>,
+    updateProgressInterval: NodeJS.Timeout | undefined,
     setUpdateProgressInterval: React.Dispatch<React.SetStateAction<NodeJS.Timeout | undefined>>
   })
   : JSX.Element {
@@ -49,6 +56,10 @@ export default function PlayerControls(
     $trackProgress.value = `${$audioPlayer.currentTime}`;
     $currentTime.innerText = '0:00';
     setTrackProgress(0);
+
+    if ($playPauseIcon.src === pauseIcon) {
+      $audioPlayer.play();
+    }
   }
 
   const seeking = () => {
@@ -78,8 +89,17 @@ export default function PlayerControls(
   }
 
   const onAudioEnd = () => {
-    $playPauseIcon.src = playIcon;
-    clearInterval(updateProgressInterval);
+    if (queueIndex === queue.length - 1) {
+      $playPauseIcon.src = playIcon;
+      clearInterval(updateProgressInterval);
+      return;
+    }
+
+    const queueIndexInc = queueIndex + 1;
+    setQueueIndex(queueIndexInc);
+    const nextTrack: Track = queue[queueIndexInc];
+    setCurrentTrack(nextTrack);
+    $audioPlayer.src = nextTrack!.path;
   }
 
   return (
