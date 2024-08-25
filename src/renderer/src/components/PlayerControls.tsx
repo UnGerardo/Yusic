@@ -102,15 +102,35 @@ export default function PlayerControls(
     $audioPlayer.src = nextTrack!.path;
   }
 
+  const backwardStep = () => {
+    if (queueIndex === 0) return;
+
+    const queueIndexDec = queueIndex - 1;
+    setQueueIndex(queueIndexDec);
+    const previousTrack: Track = queue[queueIndexDec];
+    setCurrentTrack(previousTrack);
+    $audioPlayer.src = previousTrack!.path;
+  }
+
+  const forwardStep = () => {
+    if (queueIndex === queue.length - 1) return;
+
+    const queueIndexInc = queueIndex + 1;
+    setQueueIndex(queueIndexInc);
+    const nextTrack: Track = queue[queueIndexInc];
+    setCurrentTrack(nextTrack);
+    $audioPlayer.src = nextTrack!.path;
+  }
+
   return (
     <section id="player-controls">
       <audio id="player" src="" onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd} />
       <section id="controls" className="no-select">
-        <img src={backwardStepIcon} alt="Previous" id="previous-song-icon" height={15} />
+        <img src={backwardStepIcon} onClick={backwardStep} alt="Previous" id="previous-song-icon" height={15} />
         <section id="play-pause-icon-bg" onClick={playPauseTrack} >
           <img src={playIcon} alt="Play" id="play-pause-icon" />
         </section>
-        <img src={forwardStepIcon} alt="Next" id="next-song-icon" height={15} />
+        <img src={forwardStepIcon} onClick={forwardStep} alt="Next" id="next-song-icon" height={15} />
       </section>
       <section id="slider">
         <span id="current-time" className="no-select slider-times">0:00</span>
