@@ -39,10 +39,39 @@ function App(): JSX.Element {
     await window.databaseApi.writeMusicFiles(tracks);
   }
 
+  function shuffleArray(array: any[]): any[] {
+    let currentIndex = array.length;
+
+    while (currentIndex != 0) {
+      let randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      const temp = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temp;
+    }
+
+    return array;
+  }
+
+  const shuffle = (): void => {
+    clearInterval(updateProgressInterval);
+    $audioPlayer.pause();
+    $playPauseIcon.src = playIcon;
+
+    const newQueue: Track[] = shuffleArray([...tracks]);
+    setQueue(newQueue);
+    setQueueIndex(0);
+    setCurrentTrack(newQueue[0]);
+
+    $audioPlayer.src = newQueue[0].path;
+  }
+
   return (
     <>
       <section id="options">
         <button onClick={readdir}>Select Music Folder</button>
+        <button onClick={shuffle}>Shuffle Tracks</button>
       </section>
       <main>
         <section id="groups">
