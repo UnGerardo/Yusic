@@ -71,6 +71,11 @@ function App(): JSX.Element {
     $audioPlayer.src = newQueue[0].path;
   }
 
+  const displayQueue = () => {
+    const $queue = document.getElementById('queue') as HTMLElement;
+    $queue.style.display = 'flex';
+  }
+
   return (
     <>
       <section id="options">
@@ -90,18 +95,28 @@ function App(): JSX.Element {
             <p className="track-album">Album</p>
             <p className="track-duration">Time</p>
           </section>
-          {tracks.map((item, i) => (<TrackComponent key={i} track={item} onClick={() => {
-            const $player = document.getElementById('player') as HTMLSourceElement;
-            $player.src = item.path;
-            clearInterval(updateProgressInterval);
-            $audioPlayer.pause();
-            $playPauseIcon.src = playIcon;
-            const $queue = document.getElementById('queue') as HTMLElement;
-            $queue.style.display = 'flex';
-            setCurrentTrack(item);
-            setQueueIndex(i);
-            setQueue(tracks);
-          }} />))}
+          {tracks.map((track, i) =>
+            <TrackComponent
+              key={i}
+              track={track}
+              onClick={() => {
+                const $player = document.getElementById('player') as HTMLAudioElement;
+                const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
+
+                $player.src = track.path;
+                clearInterval(updateProgressInterval);
+                $player.pause();
+                $playPauseIcon.src = playIcon;
+
+                displayQueue();
+
+                setCurrentTrack(track);
+                setQueueIndex(i);
+                setQueue(tracks);
+              }}
+            />
+            )
+          }
         </section>
         <Queue queue={queue} />
       </main>

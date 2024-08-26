@@ -1,8 +1,13 @@
 import React from "react";
-import Track from "src/classes/Track"
 import formatSeconds from "@renderer/utils/formatSeconds";
+import Track from "src/classes/Track";
 
-function TrackComponent({ track, onClick }: { track: Track, onClick: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void }): JSX.Element {
+const TrackComponent = React.memo((
+  { track, onClick }:
+  {
+    track: Track,
+    onClick: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void
+  }): JSX.Element => {
 
   return (
     <section className="track-component" onClick={onClick}>
@@ -15,6 +20,6 @@ function TrackComponent({ track, onClick }: { track: Track, onClick: (event: Rea
       <p className="track-duration">{formatSeconds(track.duration!)}</p>
     </section>
   );
-}
+});
 
 export default TrackComponent;
