@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import playIcon from '@resources/icons/play-solid.svg'
 import PlayerControls from "./components/PlayerControls";
 import CurrentSong from "./components/CurrentSong";
+import Queue from "./components/Queue";
 
 function App(): JSX.Element {
   // const [componentType, setComponentType] = useState('track');
@@ -14,6 +15,7 @@ function App(): JSX.Element {
   const [updateProgressInterval, setUpdateProgressInterval] = useState<NodeJS.Timeout | undefined>(undefined);
   const [currentTrack, setCurrentTrack] = useState<Track>();
 
+  const $queue = document.getElementById('queue') as HTMLElement;
   const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
   const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
 
@@ -55,6 +57,8 @@ function App(): JSX.Element {
   }
 
   const shuffle = (): void => {
+    $queue.style.display = 'flex';
+
     clearInterval(updateProgressInterval);
     $audioPlayer.pause();
     $playPauseIcon.src = playIcon;
@@ -92,11 +96,14 @@ function App(): JSX.Element {
             clearInterval(updateProgressInterval);
             $audioPlayer.pause();
             $playPauseIcon.src = playIcon;
+            const $queue = document.getElementById('queue') as HTMLElement;
+            $queue.style.display = 'flex';
             setCurrentTrack(item);
             setQueueIndex(i);
             setQueue(tracks);
           }} />))}
         </section>
+        <Queue queue={queue} />
       </main>
       <section id="bottom-panel">
         {currentTrack ? <CurrentSong track={currentTrack} /> : <div></div>}

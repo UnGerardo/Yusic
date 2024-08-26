@@ -7,7 +7,7 @@ import { useState } from "react";
 import Track from "src/classes/Track";
 
 export default function PlayerControls(
-  { queue, queueIndex, setQueueIndex, currentTrack, setCurrentTrack, updateProgressInterval, setUpdateProgressInterval }
+  { queue, queueIndex, setQueueIndex, setCurrentTrack, updateProgressInterval, setUpdateProgressInterval }
   :
   {
     queue: Track[],

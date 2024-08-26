@@ -53,7 +53,7 @@ main {
 
 #tracks {
   height: 100%;
-  width: max-content;
+  width: 100%;
   overflow-y: auto;
 }
 
@@ -69,6 +69,26 @@ main {
 .track-component:hover {
   background-color: #3d3d3f;
   cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .track-component {
+    grid-template-columns: 60px 2fr 2fr 30px;
+  }
+
+  .track-duration {
+    display: none;
+  }
+}
+
+@media (max-width: 650px) {
+  .track-component {
+    grid-template-columns: 50px 2fr 30px;
+  }
+
+  .track-album {
+    display: none;
+  }
 }
 
 .track-artist {
@@ -89,6 +109,24 @@ main {
 
 .m-b-5 {
   margin-bottom: 5px;
+}
+
+#queue {
+  border-left: 1px white solid;
+  display: none;
+  flex-direction: column;
+  overflow-y: auto;
+  min-width: 300px;
+}
+
+.queued-track {
+  display: grid;
+  grid-template-columns: 50px 1fr ;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  margin: 10px 10px 0;
+  /* border-bottom: 1px whitesmoke solid; */
 }
 
 #player-controls {
