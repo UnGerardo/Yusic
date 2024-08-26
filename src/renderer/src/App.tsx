@@ -87,7 +87,7 @@ function App(): JSX.Element {
           <section className="track-component">
             <p>Image</p>
             <p>Title & Artist</p>
-            <p>Album</p>
+            <p className="track-album">Album</p>
             <p className="track-duration">Time</p>
           </section>
           {tracks.map((item, i) => (<TrackComponent key={i} track={item} onClick={() => {

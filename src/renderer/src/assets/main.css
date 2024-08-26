@@ -71,9 +71,9 @@ main {
   cursor: pointer;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 920px) {
   .track-component {
-    grid-template-columns: 60px 2fr 2fr 30px;
+    grid-template-columns: 60px 2fr 1fr;
   }
 
   .track-duration {
@@ -81,9 +81,9 @@ main {
   }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 820px) {
   .track-component {
-    grid-template-columns: 50px 2fr 30px;
+    grid-template-columns: 50px 2fr;
   }
 
   .track-album {
@@ -117,6 +117,7 @@ main {
   flex-direction: column;
   overflow-y: auto;
   min-width: 300px;
+  max-width: 300px;
 }
 
 .queued-track {

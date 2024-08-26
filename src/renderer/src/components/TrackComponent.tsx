@@ -11,7 +11,7 @@ function TrackComponent({ track, onClick }: { track: Track, onClick: (event: Rea
         <p className="ellip-overflow m-b-5">{track.title}</p>
         <p className="track-artist ellip-overflow">{track.artists}</p>
       </section>
-      <p className="track-album">{track.album}</p>
+      <p className="track-album ellip-overflow">{track.album}</p>
       <p className="track-duration">{formatSeconds(track.duration!)}</p>
     </section>
   );
