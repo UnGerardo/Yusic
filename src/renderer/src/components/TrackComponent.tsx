@@ -10,7 +10,7 @@ const TrackComponent = React.memo((
   }): JSX.Element => {
 
   return (
-    <section className="track-component" onClick={onClick}>
+    <section className="track-component track-hover" onClick={onClick}>
       <img className="track-img" src={track.imgData ? `data:${track.imgFormat};base64,${track.imgData}` : ''} />
       <section className="track-title-artist ellip-overflow">
         <p className="ellip-overflow m-b-5">{track.title}</p>
