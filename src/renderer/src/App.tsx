@@ -118,7 +118,7 @@ function App(): JSX.Element {
             )
           }
         </section>
-        <Queue queue={queue} />
+        <Queue queue={queue} queueIndex={queueIndex} />
       </main>
       <section id="bottom-panel">
         {currentTrack ? <CurrentSong track={currentTrack} /> : <div></div>}
