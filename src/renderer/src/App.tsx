@@ -76,6 +76,13 @@ function App(): JSX.Element {
     $queue.style.display = 'flex';
   }
 
+  const playTrackInQueue = (index: number) => {
+    setQueueIndex(index);
+    const thisTrack: Track = queue[index];
+    setCurrentTrack(thisTrack);
+    $audioPlayer.src = thisTrack!.path;
+  }
+
   return (
     <>
       <section id="options">
@@ -118,7 +125,7 @@ function App(): JSX.Element {
             )
           }
         </section>
-        <Queue queue={queue} queueIndex={queueIndex} />
+        <Queue queue={queue} queueIndex={queueIndex} playTrackInQueue={playTrackInQueue} />
       </main>
       <section id="bottom-panel">
         {currentTrack ? <CurrentSong track={currentTrack} /> : <div></div>}
