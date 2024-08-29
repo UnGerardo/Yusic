@@ -14,6 +14,7 @@ function App(): JSX.Element {
   const [queueIndex, setQueueIndex] = useState<number>(0);
   const [updateProgressInterval, setUpdateProgressInterval] = useState<NodeJS.Timeout | undefined>(undefined);
   const [currentTrack, setCurrentTrack] = useState<Track>();
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const $queue = document.getElementById('queue') as HTMLElement;
   const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
@@ -96,34 +97,41 @@ function App(): JSX.Element {
           <span className="group">Albums</span>
         </section>
         <section id="tracks" className="scrollbar">
+          <section>
+            <input type="text" id="search" onChange={() => {
+              setSearchQuery((document.getElementById('search') as HTMLInputElement).value);
+            }} />
+          </section>
           <section className="track-component">
             <p>Image</p>
             <p>Title & Artist</p>
             <p className="track-album">Album</p>
             <p className="track-duration">Time</p>
           </section>
-          {tracks.map((track, i) =>
-            <TrackComponent
-              key={i}
-              track={track}
-              onClick={() => {
-                const $player = document.getElementById('player') as HTMLAudioElement;
-                const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
+          {tracks.map((track, i) => {
+            if (track.title?.toLowerCase().includes(searchQuery.toLowerCase())) {
+              return <TrackComponent
+                key={i}
+                track={track}
+                onClick={() => {
+                  const $player = document.getElementById('player') as HTMLAudioElement;
+                  const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
 
-                $player.src = track.path;
-                clearInterval(updateProgressInterval);
-                $player.pause();
-                $playPauseIcon.src = playIcon;
+                  $player.src = track.path;
+                  clearInterval(updateProgressInterval);
+                  $player.pause();
+                  $playPauseIcon.src = playIcon;
 
-                displayQueue();
+                  displayQueue();
 
-                setCurrentTrack(track);
-                setQueueIndex(i);
-                setQueue(tracks);
-              }}
-            />
-            )
-          }
+                  setCurrentTrack(track);
+                  setQueueIndex(i);
+                  setQueue(tracks);
+                }}
+              />
+            }
+            return <></>;
+          })}
         </section>
         <Queue queue={queue} queueIndex={queueIndex} playTrackInQueue={playTrackInQueue} />
       </main>
