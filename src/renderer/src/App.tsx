@@ -122,13 +122,14 @@ function App(): JSX.Element {
             <p className="track-album">Album</p>
             <p className="track-duration">Time</p>
           </section>
-          {tracks.map((track, i) =>
-            track.title?.toLowerCase().includes(searchQuery.toLowerCase()) ?
+          {tracks
+            .filter((track) => track.title?.toLowerCase().includes(searchQuery.toLowerCase()))
+            .map((track, i) =>
               <TrackComponent
-                key={i}
+                key={track.id}
                 track={track}
                 onClick={() => playStartingAtTrack(track, i)}
-              /> : <></>
+              />
           )}
         </section>
         <Queue queue={queue} queueIndex={queueIndex} playTrackInQueue={playTrackInQueue} />
