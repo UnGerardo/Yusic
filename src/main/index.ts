@@ -43,6 +43,8 @@ function createWindow(): void {
   }
 }
 
+app.commandLine.appendSwitch('disable-features', 'DnsOverHttps');
+
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron');
