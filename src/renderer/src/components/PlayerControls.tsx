@@ -22,10 +22,11 @@ export default function PlayerControls(
   const [trackProgress, setTrackProgress] = useState(0);
   const [timeToSeekTo, setTimeToSeekTo] = useState(0);
 
+  const [playerIcon, setPlayerIcon] = useState<string>(playIcon);
+
   const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
   const $trackProgress = document.getElementById('track-progress') as HTMLInputElement;
   const $currentTime = document.getElementById('current-time') as HTMLSpanElement;
-  const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
   const $totalTime = document.getElementById('total-time') as HTMLSpanElement;
 
   const playPauseTrack = () => {
@@ -33,9 +34,9 @@ export default function PlayerControls(
       return;
     }
 
-    if ($playPauseIcon.src === playIcon) {
+    if (playerIcon === playIcon) {
       $audioPlayer.play();
-      $playPauseIcon.src = pauseIcon;
+      setPlayerIcon(pauseIcon);
 
       clearInterval(updateProgressInterval);
       setUpdateProgressInterval(setInterval(() => {
@@ -45,7 +46,7 @@ export default function PlayerControls(
       }, 500));
     } else {
       $audioPlayer.pause();
-      $playPauseIcon.src = playIcon;
+      setPlayerIcon(playIcon);
       clearInterval(updateProgressInterval);
     }
   }
@@ -57,7 +58,7 @@ export default function PlayerControls(
     $currentTime.innerText = '0:00';
     setTrackProgress(0);
 
-    if ($playPauseIcon.src === pauseIcon) {
+    if (playerIcon === pauseIcon) {
       $audioPlayer.play();
     }
   }
@@ -90,7 +91,7 @@ export default function PlayerControls(
 
   const onAudioEnd = () => {
     if (queueIndex === queue.length - 1) {
-      $playPauseIcon.src = playIcon;
+      setPlayerIcon(playIcon);
       clearInterval(updateProgressInterval);
       return;
     }
@@ -128,7 +129,7 @@ export default function PlayerControls(
       <section id="controls" className="no-select">
         <img src={backwardStepIcon} onClick={backwardStep} alt="Previous" id="previous-song-icon" height={15} />
         <section id="play-pause-icon-bg" onClick={playPauseTrack} >
-          <img src={playIcon} alt="Play" id="play-pause-icon" />
+          <img src={playerIcon} alt="Play" id="play-pause-icon" />
         </section>
         <img src={forwardStepIcon} onClick={forwardStep} alt="Next" id="next-song-icon" height={15} />
       </section>
