@@ -104,6 +104,17 @@ app.whenReady().then(() => {
     return getAllMusicFiles();
   });
 
+  ipcMain.handle('get-track-ids', (): number[] => {
+    return db.prepare('SELECT id FROM MusicFiles').all() as number[];
+  });
+
+  ipcMain.handle('get-track-by-id', (_event, id: number): Track => {
+    const query = db.prepare('SELECT * FROM MusicFile WHERE id = ?');
+    return query.get(id) as Track;
+  });
+
+  ipcMain.handle('log', (_event, s: string): void => console.log(s));
+
   ipcMain.handle('read-dir', () => {
     const dirs = dialog.showOpenDialogSync({ properties: ['openDirectory'] });
 

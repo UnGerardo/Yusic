@@ -8,7 +8,8 @@ import Track from '../classes/Track'
 
 // Custom APIs for renderer
 const dirApi: DirApi = {
-  readDir: (): Promise<Array<string>> => ipcRenderer.invoke('read-dir')
+  readDir: (): Promise<Array<string>> => ipcRenderer.invoke('read-dir'),
+  log: (s: string): Promise<void> => ipcRenderer.invoke('log', s)
 }
 
 const trackTagsApi: TrackTagsApi = {
@@ -18,7 +19,9 @@ const trackTagsApi: TrackTagsApi = {
 
 const databaseApi: DatabaseApi = {
   writeMusicFiles: (tracks: Track[]): Promise<void> => ipcRenderer.invoke('write-music-files', tracks),
-  getAllMusicFiles: (): Promise<Track[]> => ipcRenderer.invoke('get-all-music-files')
+  getAllMusicFiles: (): Promise<Track[]> => ipcRenderer.invoke('get-all-music-files'),
+  getTrackIds: (): Promise<number[]> => ipcRenderer.invoke('get-track-ids'),
+  getTrackById: (id: number) => ipcRenderer.invoke('get-track-by-id', id),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
