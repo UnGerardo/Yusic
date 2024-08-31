@@ -6,9 +6,9 @@ import playIcon from '@resources/icons/play-solid.svg'
 import PlayerControls from "./components/PlayerControls";
 import CurrentSong from "./components/CurrentSong";
 import Queue from "./components/Queue";
+import shuffleArray from "./utils/shuffleArray";
 
 function App(): JSX.Element {
-  // const [componentType, setComponentType] = useState('track');
   const [tracks, setTracks] = useState<Track[]>([]);
   const [queue, setQueue] = useState<Track[]>([]);
   const [queueIndex, setQueueIndex] = useState<number>(0);
@@ -40,21 +40,6 @@ function App(): JSX.Element {
       ...tracks
     ]);
     await window.databaseApi.writeMusicFiles(tracks);
-  }
-
-  function shuffleArray(array: any[]): any[] {
-    let currentIndex = array.length;
-
-    while (currentIndex != 0) {
-      let randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-
-      const temp = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temp;
-    }
-
-    return array;
   }
 
   const shuffle = (): void => {
