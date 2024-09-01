@@ -23,11 +23,11 @@ export default function PlayerControls(
   const [timeToSeekTo, setTimeToSeekTo] = useState(0);
 
   const [playerIcon, setPlayerIcon] = useState<string>(playIcon);
+  const [currentTimeText, setCurrentTimeText] = useState('');
+  const [totalTimeText, setTotalTimeText] = useState('');
 
   const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
   const $trackProgress = document.getElementById('track-progress') as HTMLInputElement;
-  const $currentTime = document.getElementById('current-time') as HTMLSpanElement;
-  const $totalTime = document.getElementById('total-time') as HTMLSpanElement;
 
   const playPauseTrack = () => {
     if (!$audioPlayer || $audioPlayer.readyState !== 4) {
@@ -43,11 +43,10 @@ export default function PlayerControls(
 
         return setInterval(() => {
           $trackProgress.value = `${$audioPlayer.currentTime}`;
-          $currentTime.innerText = formatSeconds($audioPlayer.currentTime);
+          setCurrentTimeText(formatSeconds($audioPlayer.currentTime));
           setTrackProgress((parseFloat($trackProgress.value)/parseFloat($trackProgress.max)) * 100);
         }, 500);
       });
-
     } else {
       $audioPlayer.pause();
       setPlayerIcon(playIcon);
@@ -57,9 +56,9 @@ export default function PlayerControls(
 
   const resetTrackProgress = () => {
     $trackProgress.max = `${$audioPlayer.duration}`;
-    $totalTime.innerText = formatSeconds($audioPlayer.duration);
+    setTotalTimeText(formatSeconds($audioPlayer.duration));
     $trackProgress.value = `${$audioPlayer.currentTime}`;
-    $currentTime.innerText = '0:00';
+    setCurrentTimeText('0:00');
     setTrackProgress(0);
 
     if (playerIcon === pauseIcon) {
@@ -75,8 +74,9 @@ export default function PlayerControls(
     clearInterval(updateProgressInterval);
     setTimeToSeekTo(parseFloat($trackProgress.value));
     setTrackProgress((parseFloat($trackProgress.value)/parseFloat($trackProgress.max)) * 100);
-    $currentTime.innerText = formatSeconds(parseInt($trackProgress.value));
+    setCurrentTimeText(formatSeconds(parseInt($trackProgress.value)));
   }
+
   const seekTo = () => {
     if (!$audioPlayer || $audioPlayer.readyState !== 4) {
       return;
@@ -89,7 +89,7 @@ export default function PlayerControls(
 
         return setInterval(() => {
           $trackProgress.value = `${$audioPlayer.currentTime}`;
-          $currentTime.innerText = formatSeconds($audioPlayer.currentTime);
+          setCurrentTimeText(formatSeconds($audioPlayer.currentTime));
           setTrackProgress((parseFloat($trackProgress.value)/parseFloat($trackProgress.max)) * 100);
         }, 500);
       });
@@ -141,11 +141,11 @@ export default function PlayerControls(
         <img src={forwardStepIcon} onClick={forwardStep} alt="Next" id="next-song-icon" height={15} />
       </section>
       <section id="slider">
-        <span id="current-time" className="no-select slider-times">0:00</span>
+        <span id="current-time" className="no-select slider-times">{currentTimeText}</span>
         <input type="range" id="track-progress" onChange={seeking} onMouseUp={seekTo} style={{
           background: `linear-gradient(to right, white 0%, white ${trackProgress}%, #555 ${trackProgress}%, #555 100%)`
         }} />
-        <span id="total-time" className="no-select slider-times">0:00</span>
+        <span id="total-time" className="no-select slider-times">{totalTimeText}</span>
       </section>
     </section>
   );
