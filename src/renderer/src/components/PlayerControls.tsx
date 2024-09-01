@@ -38,12 +38,16 @@ export default function PlayerControls(
       $audioPlayer.play();
       setPlayerIcon(pauseIcon);
 
-      clearInterval(updateProgressInterval);
-      setUpdateProgressInterval(setInterval(() => {
-        $trackProgress.value = `${$audioPlayer.currentTime}`;
-        $currentTime.innerText = formatSeconds($audioPlayer.currentTime);
-        setTrackProgress((parseFloat($trackProgress.value)/parseFloat($trackProgress.max)) * 100);
-      }, 500));
+      setUpdateProgressInterval((oldInterval) => {
+        clearInterval(oldInterval);
+
+        return setInterval(() => {
+          $trackProgress.value = `${$audioPlayer.currentTime}`;
+          $currentTime.innerText = formatSeconds($audioPlayer.currentTime);
+          setTrackProgress((parseFloat($trackProgress.value)/parseFloat($trackProgress.max)) * 100);
+        }, 500);
+      });
+
     } else {
       $audioPlayer.pause();
       setPlayerIcon(playIcon);
@@ -80,12 +84,15 @@ export default function PlayerControls(
 
     $audioPlayer.currentTime = timeToSeekTo;
     if (!$audioPlayer.paused) {
-      clearInterval(updateProgressInterval);
-      setUpdateProgressInterval(setInterval(() => {
-        $trackProgress.value = `${$audioPlayer.currentTime}`;
-        $currentTime.innerText = formatSeconds($audioPlayer.currentTime);
-        setTrackProgress((parseFloat($trackProgress.value)/parseFloat($trackProgress.max)) * 100);
-      }, 500));
+      setUpdateProgressInterval((oldInterval) => {
+        clearInterval(oldInterval);
+
+        return setInterval(() => {
+          $trackProgress.value = `${$audioPlayer.currentTime}`;
+          $currentTime.innerText = formatSeconds($audioPlayer.currentTime);
+          setTrackProgress((parseFloat($trackProgress.value)/parseFloat($trackProgress.max)) * 100);
+        }, 500);
+      });
     }
   }
 
