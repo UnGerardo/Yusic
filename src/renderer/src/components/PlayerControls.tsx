@@ -19,20 +19,14 @@ export default function PlayerControls(
     setUpdateProgressInterval: React.Dispatch<React.SetStateAction<NodeJS.Timeout | undefined>>
   })
   : JSX.Element {
-  const [trackProgress, setTrackProgress] = useState(0);
-  const [timeToSeekTo, setTimeToSeekTo] = useState(0);
-
   const [playerIcon, setPlayerIcon] = useState<string>(playIcon);
-  const [currentTimeText, setCurrentTimeText] = useState('');
-  const [totalTimeText, setTotalTimeText] = useState('');
+  const [currentTime, setCurrentTime] = useState(0);
+  const [maxTime, setMaxTime] = useState(0);
 
   const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
-  const $trackProgress = document.getElementById('track-progress') as HTMLInputElement;
 
   const playPauseTrack = () => {
-    if (!$audioPlayer || $audioPlayer.readyState !== 4) {
-      return;
-    }
+    if (!$audioPlayer || $audioPlayer.readyState !== 4) return;
 
     if (playerIcon === playIcon) {
       $audioPlayer.play();
@@ -40,12 +34,7 @@ export default function PlayerControls(
 
       setUpdateProgressInterval((oldInterval) => {
         clearInterval(oldInterval);
-
-        return setInterval(() => {
-          $trackProgress.value = `${$audioPlayer.currentTime}`;
-          setCurrentTimeText(formatSeconds($audioPlayer.currentTime));
-          setTrackProgress((parseFloat($trackProgress.value)/parseFloat($trackProgress.max)) * 100);
-        }, 500);
+        return setInterval(() => setCurrentTime($audioPlayer.currentTime), 499);
       });
     } else {
       $audioPlayer.pause();
@@ -55,43 +44,33 @@ export default function PlayerControls(
   }
 
   const resetTrackProgress = () => {
-    $trackProgress.max = `${$audioPlayer.duration}`;
-    setTotalTimeText(formatSeconds($audioPlayer.duration));
-    $trackProgress.value = `${$audioPlayer.currentTime}`;
-    setCurrentTimeText('0:00');
-    setTrackProgress(0);
+    setMaxTime($audioPlayer.duration);
+    setCurrentTime(0);
 
     if (playerIcon === pauseIcon) {
       $audioPlayer.play();
     }
   }
 
-  const seeking = () => {
-    if (!$audioPlayer || $audioPlayer.readyState !== 4) {
-      return;
-    }
+  const seeking = (event) => {
+    if (!$audioPlayer || $audioPlayer.readyState !== 4) return;
+
+    const seekingTime = event.target.value as number;
 
     clearInterval(updateProgressInterval);
-    setTimeToSeekTo(parseFloat($trackProgress.value));
-    setTrackProgress((parseFloat($trackProgress.value)/parseFloat($trackProgress.max)) * 100);
-    setCurrentTimeText(formatSeconds(parseInt($trackProgress.value)));
+    setCurrentTime(seekingTime);
   }
 
-  const seekTo = () => {
-    if (!$audioPlayer || $audioPlayer.readyState !== 4) {
-      return;
-    }
+  const seekTo = (event) => {
+    if (!$audioPlayer || $audioPlayer.readyState !== 4) return;
 
-    $audioPlayer.currentTime = timeToSeekTo;
+    const seekToTime = event.target.value as number;
+
+    $audioPlayer.currentTime = seekToTime;
     if (!$audioPlayer.paused) {
       setUpdateProgressInterval((oldInterval) => {
         clearInterval(oldInterval);
-
-        return setInterval(() => {
-          $trackProgress.value = `${$audioPlayer.currentTime}`;
-          setCurrentTimeText(formatSeconds($audioPlayer.currentTime));
-          setTrackProgress((parseFloat($trackProgress.value)/parseFloat($trackProgress.max)) * 100);
-        }, 500);
+        return setInterval(() => setCurrentTime($audioPlayer.currentTime), 499);
       });
     }
   }
@@ -141,11 +120,11 @@ export default function PlayerControls(
         <img src={forwardStepIcon} onClick={forwardStep} alt="Next" id="next-song-icon" height={15} />
       </section>
       <section id="slider">
-        <span id="current-time" className="no-select slider-times">{currentTimeText}</span>
+        <span id="current-time" className="no-select slider-times">{formatSeconds(currentTime)}</span>
         <input type="range" id="track-progress" onChange={seeking} onMouseUp={seekTo} style={{
-          background: `linear-gradient(to right, white 0%, white ${trackProgress}%, #555 ${trackProgress}%, #555 100%)`
-        }} />
-        <span id="total-time" className="no-select slider-times">{totalTimeText}</span>
+          background: `linear-gradient(to right, white 0%, white ${(currentTime/maxTime) * 100}%, #555 ${(currentTime/maxTime) * 100}%, #555 100%)`
+        }} max={maxTime} />
+        <span id="total-time" className="no-select slider-times">{formatSeconds(maxTime)}</span>
       </section>
     </section>
   );
