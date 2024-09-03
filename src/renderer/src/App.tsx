@@ -7,6 +7,8 @@ import PlayerControls from "./components/PlayerControls";
 import CurrentSong from "./components/CurrentSong";
 import Queue from "./components/Queue";
 import shuffleArray from "./utils/shuffleArray";
+import { FixedSizeList } from 'react-window';
+import AutoSizer from "react-virtualized-auto-sizer";
 
 function App(): JSX.Element {
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -107,15 +109,26 @@ function App(): JSX.Element {
             <p className="track-album">Album</p>
             <p className="track-duration">Time</p>
           </section>
-          {tracks
-            .filter((track) => track.title?.toLowerCase().includes(searchQuery.toLowerCase()))
-            .map((track, i) =>
-              <TrackComponent
-                key={track.id}
-                track={track}
-                onClick={() => playStartingAtTrack(track, i)}
-              />
-          )}
+          <AutoSizer>
+            {({ height, width }) => (
+              <FixedSizeList
+                height={height}
+                itemCount={tracks.length}
+                itemSize={91}
+                width={width}
+              >
+                {({ index, style }) => (
+                  <div style={style}>
+                    <TrackComponent
+                      key={tracks[index].id}
+                      track={tracks[index]}
+                      onClick={() => playStartingAtTrack(tracks[index], index)}
+                    />
+                  </div>
+                )}
+              </FixedSizeList>
+            )}
+          </AutoSizer>
         </section>
         <Queue queue={queue} queueIndex={queueIndex} playTrackInQueue={playTrackInQueue} />
       </main>
