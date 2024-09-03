@@ -3,10 +3,10 @@ import playIcon from '@resources/icons/play-solid.svg';
 import pauseIcon from '@resources/icons/pause-solid.svg';
 import backwardStepIcon from '@resources/icons/backward-step-solid.svg';
 import forwardStepIcon from '@resources/icons/forward-step-solid.svg';
-import { useState } from "react";
+import React, { useRef, useState } from "react";
 import Track from "src/classes/Track";
 
-export default function PlayerControls(
+const PlayerControls = React.memo((
   { queue, queueIndex, setQueueIndex, setCurrentTrack, updateProgressInterval, setUpdateProgressInterval }
   :
   {
@@ -18,42 +18,49 @@ export default function PlayerControls(
     updateProgressInterval: NodeJS.Timeout | undefined,
     setUpdateProgressInterval: React.Dispatch<React.SetStateAction<NodeJS.Timeout | undefined>>
   })
-  : JSX.Element {
+  : JSX.Element => {
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [playerIcon, setPlayerIcon] = useState<string>(playIcon);
   const [currentTime, setCurrentTime] = useState(0);
   const [maxTime, setMaxTime] = useState(0);
 
-  const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
+  // const audioRef = document.getElementById('player') as HTMLAudioElement;
 
   const playPauseTrack = () => {
-    if (!$audioPlayer || $audioPlayer.readyState !== 4) return;
+    const audio = audioRef.current as HTMLAudioElement;
+
+    if (!audio || audio.readyState !== 4) return;
 
     if (playerIcon === playIcon) {
-      $audioPlayer.play();
+      audio.play();
       setPlayerIcon(pauseIcon);
 
       setUpdateProgressInterval((oldInterval) => {
         clearInterval(oldInterval);
-        return setInterval(() => setCurrentTime($audioPlayer.currentTime), 499);
+        return setInterval(() => setCurrentTime(audio.currentTime), 499);
       });
     } else {
-      $audioPlayer.pause();
+      audio.pause();
       setPlayerIcon(playIcon);
       clearInterval(updateProgressInterval);
     }
   }
 
   const resetTrackProgress = () => {
-    setMaxTime($audioPlayer.duration);
+    const audio = audioRef.current as HTMLAudioElement;
+
+    setMaxTime(audio.duration);
     setCurrentTime(0);
 
     if (playerIcon === pauseIcon) {
-      $audioPlayer.play();
+      audio.play();
     }
   }
 
   const seeking = (event) => {
-    if (!$audioPlayer || $audioPlayer.readyState !== 4) return;
+    const audio = audioRef.current as HTMLAudioElement;
+
+    if (!audio || audio.readyState !== 4) return;
 
     const seekingTime = event.target.value as number;
 
@@ -62,15 +69,17 @@ export default function PlayerControls(
   }
 
   const seekTo = (event) => {
-    if (!$audioPlayer || $audioPlayer.readyState !== 4) return;
+    const audio = audioRef.current as HTMLAudioElement;
+
+    if (!audio || audio.readyState !== 4) return;
 
     const seekToTime = event.target.value as number;
 
-    $audioPlayer.currentTime = seekToTime;
-    if (!$audioPlayer.paused) {
+    audio.currentTime = seekToTime;
+    if (!audio.paused) {
       setUpdateProgressInterval((oldInterval) => {
         clearInterval(oldInterval);
-        return setInterval(() => setCurrentTime($audioPlayer.currentTime), 499);
+        return setInterval(() => setCurrentTime(audio.currentTime), 499);
       });
     }
   }
@@ -82,36 +91,39 @@ export default function PlayerControls(
       return;
     }
 
+    const audio = audioRef.current as HTMLAudioElement;
     const queueIndexInc = queueIndex + 1;
     setQueueIndex(queueIndexInc);
     const nextTrack: Track = queue[queueIndexInc];
     setCurrentTrack(nextTrack);
-    $audioPlayer.src = nextTrack!.path;
+    audio.src = nextTrack!.path;
   }
 
   const backwardStep = () => {
     if (queueIndex === 0) return;
 
+    const audio = audioRef.current as HTMLAudioElement;
     const queueIndexDec = queueIndex - 1;
     setQueueIndex(queueIndexDec);
     const previousTrack: Track = queue[queueIndexDec];
     setCurrentTrack(previousTrack);
-    $audioPlayer.src = previousTrack!.path;
+    audio.src = previousTrack!.path;
   }
 
   const forwardStep = () => {
     if (queueIndex === queue.length - 1) return;
 
+    const audio = audioRef.current as HTMLAudioElement;
     const queueIndexInc = queueIndex + 1;
     setQueueIndex(queueIndexInc);
     const nextTrack: Track = queue[queueIndexInc];
     setCurrentTrack(nextTrack);
-    $audioPlayer.src = nextTrack!.path;
+    audio.src = nextTrack!.path;
   }
 
   return (
     <section id="player-controls">
-      <audio id="player" src="" onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd} />
+      <audio id="player" src="" ref={audioRef} onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd} />
       <section id="controls" className="no-select">
         <img src={backwardStepIcon} onClick={backwardStep} alt="Previous" id="previous-song-icon" height={15} />
         <section id="play-pause-icon-bg" onClick={playPauseTrack} >
@@ -128,4 +140,6 @@ export default function PlayerControls(
       </section>
     </section>
   );
-}
+});
+
+export default PlayerControls;
