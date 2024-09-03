@@ -1,13 +1,14 @@
+import React from "react";
 import Track from "src/classes/Track";
 
-function QueuedTrack(
+const QueuedTrack = React.memo((
   { i, track, queueIndex, playTrackInQueue }:
   {
     i: number,
     track: Track,
     queueIndex: number,
     playTrackInQueue: (index: number) => void
-  }): JSX.Element {
+  }): JSX.Element => {
 
   return (
     <section id={i === queueIndex ? 'current-track' : ''} className="queued-track" onClick={() => playTrackInQueue(i)}>
@@ -18,6 +19,6 @@ function QueuedTrack(
       </section>
     </section>
   );
-}
+});
 
 export default QueuedTrack;
