@@ -1,17 +1,19 @@
-import { IAudioMetadata } from "music-metadata";
-import Track from "../../classes/Track";
+import { useEffect, useState, useContext } from "react";
+import { FixedSizeList } from 'react-window';
+import AutoSizer from "react-virtualized-auto-sizer";
+
+import Track from "@classes/Track";
+import playIcon from '@resources/icons/play-solid.svg';
+
+import { TracksContext } from "./components/TracksContext/TracksContext";
 import TrackComponent from "./components/TrackComponent";
-import { useEffect, useState } from "react";
-import playIcon from '@resources/icons/play-solid.svg'
 import PlayerControls from "./components/PlayerControls";
 import CurrentSong from "./components/CurrentSong";
 import Queue from "./components/Queue";
 import shuffleArray from "./utils/shuffleArray";
-import { FixedSizeList } from 'react-window';
-import AutoSizer from "react-virtualized-auto-sizer";
 
 function App(): JSX.Element {
-  const [tracks, setTracks] = useState<Track[]>([]);
+  const { tracks, setTracks } = useContext(TracksContext);
   const [queue, setQueue] = useState<Track[]>([]);
   const [queueIndex, setQueueIndex] = useState<number>(0);
   const [updateProgressInterval, setUpdateProgressInterval] = useState<NodeJS.Timeout | undefined>(undefined);
@@ -27,22 +29,6 @@ function App(): JSX.Element {
       setTracks([...musicFiles]);
     });
   }, []);
-
-  const readdir = async (): Promise<void> => {
-    const filePaths: Array<string> = await window.dirApi.readDir();
-    let tracks: Track[] = [];
-
-    for (const filePath of filePaths) {
-      const metadata: IAudioMetadata = await window.trackTagsApi.getTrackTags(filePath);
-      let pictureData = metadata.common.picture?.at(0)?.data || new Uint8Array();
-      const track = new Track(metadata, filePath, await window.trackTagsApi.uint8ToBase64(pictureData));
-      tracks.push(track);
-    }
-    setTracks([
-      ...tracks
-    ]);
-    await window.databaseApi.writeMusicFiles(tracks);
-  }
 
   const shuffle = (): void => {
     $queue.style.display = 'flex';
@@ -90,7 +76,7 @@ function App(): JSX.Element {
   return (
     <>
       <section id="options">
-        <button onClick={readdir}>Select Music Folder</button>
+        {/* <button onClick={readdir}>Select Music Folder</button> */}
         <button onClick={shuffle}>Shuffle Tracks</button>
       </section>
       <main>
