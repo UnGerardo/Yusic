@@ -13,7 +13,8 @@ export default defineConfig({
     resolve: {
       alias: {
         '@renderer': resolve('src/renderer/src'),
-        '@resources': resolve('resources')
+        '@resources': resolve('resources'),
+        '@classes': resolve('src/classes'),
       }
     },
     plugins: [react()]
