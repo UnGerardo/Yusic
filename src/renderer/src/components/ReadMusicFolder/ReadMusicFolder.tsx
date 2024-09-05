@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { IAudioMetadata } from "music-metadata";
 
 import Track from "@classes/Track";
 import addFolderIcon from '@resources/icons/add-folder.svg';
@@ -20,10 +19,7 @@ const ReadMusicFolder = () => {
     let newTracks: Track[] = [];
 
     for (const filePath of filePaths) {
-      const metadata: IAudioMetadata = await window.trackTagsApi.getTrackTags(filePath);
-      let pictureData = metadata.common.picture?.at(0)?.data || new Uint8Array();
-      const track = new Track(metadata, filePath, await window.trackTagsApi.uint8ToBase64(pictureData));
-      newTracks.push(track);
+      newTracks.push(await window.musicMetadataApi.getTrackInfo(filePath));
     }
 
     setTracks([ ...tracks, ...newTracks]);

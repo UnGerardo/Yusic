@@ -4,7 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 import { mkdirSync, readdirSync, Stats, statSync } from 'fs';
 import path from 'node:path';
-import { parseFile } from 'music-metadata';
+import { IAudioMetadata, parseFile } from 'music-metadata';
 import Database from 'better-sqlite3';
 
 import Track from '../classes/Track';
@@ -138,12 +138,12 @@ app.whenReady().then(() => {
     return files;
   });
 
-  ipcMain.handle('get-track-tags', async (_event, file) => {
-    return await parseFile(file);
-  });
+  ipcMain.handle('get-track-info', async (_event, filePath): Promise<Track> => {
+    const metadata: IAudioMetadata = await parseFile(filePath);
+    let pictureData = metadata.common.picture?.at(0)?.data || new Uint8Array();
+    const track = new Track(metadata, filePath, Buffer.from(pictureData).toString('base64'));
 
-  ipcMain.handle('uint8-to-b64', async (_event, data) => {
-    return Buffer.from(data).toString('base64');
+    return track;
   });
 
   createWindow();

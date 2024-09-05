@@ -1,10 +1,10 @@
-import { contextBridge, ipcRenderer } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
-import DirApi from './DirApi'
-import TrackTagsApi from './TrackTagsApi'
-import { IAudioMetadata } from 'music-metadata'
-import DatabaseApi from './DatabaseApi'
-import Track from '../classes/Track'
+import { contextBridge, ipcRenderer } from 'electron';
+import { electronAPI } from '@electron-toolkit/preload';
+
+import Track from '../classes/Track';
+import DatabaseApi from './DatabaseApi';
+import DirApi from './DirApi';
+import MusicMetadataApi from './MusicMetadataApi';
 
 // Custom APIs for renderer
 const dirApi: DirApi = {
@@ -12,9 +12,8 @@ const dirApi: DirApi = {
   log: (s: string): Promise<void> => ipcRenderer.invoke('log', s)
 }
 
-const trackTagsApi: TrackTagsApi = {
-  getTrackTags: (file: string): Promise<IAudioMetadata> => ipcRenderer.invoke('get-track-tags', file),
-  uint8ToBase64: (data: Uint8Array): Promise<string> => ipcRenderer.invoke('uint8-to-b64', data)
+const musicMetadataApi: MusicMetadataApi = {
+  getTrackInfo: (filePath: string): Promise<Track> => ipcRenderer.invoke('get-track-info', filePath),
 }
 
 const databaseApi: DatabaseApi = {
@@ -31,7 +30,7 @@ if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI);
     contextBridge.exposeInMainWorld('dirApi', dirApi);
-    contextBridge.exposeInMainWorld('trackTagsApi', trackTagsApi);
+    contextBridge.exposeInMainWorld('musicMetadataApi', musicMetadataApi);
     contextBridge.exposeInMainWorld('databaseApi', databaseApi);
   } catch (error) {
     console.error(error);
