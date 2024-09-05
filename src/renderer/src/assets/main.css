@@ -220,3 +220,21 @@ main {
   color: #a5a5a5;
   font-size: 12px;
 }
+
+.icon-big {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+  padding: 8px;
+  height: 50px;
+  width: 50px;
+  transition: transform 0.3s;
+}
+.icon-big:hover {
+  background-color: rgba(255, 255, 255, .4);
+  transform: scale(1.1);
+}
+.icon-big:active {
+  transform: scale(0.95);
+}

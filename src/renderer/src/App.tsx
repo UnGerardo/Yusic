@@ -6,10 +6,13 @@ import Track from "@classes/Track";
 import playIcon from '@resources/icons/play-solid.svg';
 
 import { TracksContext } from "./components/TracksContext/TracksContext";
-import TrackComponent from "./components/TrackComponent";
-import PlayerControls from "./components/PlayerControls";
+
 import CurrentSong from "./components/CurrentSong";
+import PlayerControls from "./components/PlayerControls";
 import Queue from "./components/Queue";
+import ReadMusicFolder from "./components/ReadMusicFolder/ReadMusicFolder";
+import TrackComponent from "./components/TrackComponent";
+
 import shuffleArray from "./utils/shuffleArray";
 
 function App(): JSX.Element {
@@ -76,7 +79,6 @@ function App(): JSX.Element {
   return (
     <>
       <section id="options">
-        {/* <button onClick={readdir}>Select Music Folder</button> */}
         <button onClick={shuffle}>Shuffle Tracks</button>
       </section>
       <main>
@@ -87,6 +89,7 @@ function App(): JSX.Element {
         </section>
         <section id="tracks" className="scrollbar">
           <section>
+            <ReadMusicFolder />
             <input type="text" id="search" onChange={(event) => setSearchQuery(event.target.value)} />
           </section>
           <section className="track-component">
