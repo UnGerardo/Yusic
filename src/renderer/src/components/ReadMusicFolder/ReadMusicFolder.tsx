@@ -6,23 +6,23 @@ import addFolderIcon from '@resources/icons/add-folder.svg';
 import { TracksContext } from "../TracksContext/TracksContext";
 
 const ReadMusicFolder = () => {
-  const { tracks, setTracks } = useContext(TracksContext);
+  const { setTracks } = useContext(TracksContext);
 
   const readFolder = async (): Promise<void> => {
-    const filePaths: Array<string> = await window.dirApi.readDir();
+    const filePaths: string[] = await window.dirApi.readDir();
 
     if (filePaths.length === 0) {
       alert('No files found.');
       return;
     }
 
-    let newTracks: Track[] = [];
+    const newTracks: Track[] = [];
 
     for (const filePath of filePaths) {
       newTracks.push(await window.musicMetadataApi.getTrackInfo(filePath));
     }
 
-    setTracks([ ...tracks, ...newTracks]);
+    setTracks((oldTracks) => [ ...oldTracks, ...newTracks]);
     await window.databaseApi.writeMusicFiles(newTracks);
   }
 

@@ -115,27 +115,39 @@ app.whenReady().then(() => {
 
   ipcMain.handle('log', (_event, s: string): void => console.log(s));
 
-  ipcMain.handle('read-dir', () => {
-    const dirs = dialog.showOpenDialogSync({ properties: ['openDirectory'] });
+  ipcMain.handle('read-dir', (): string[] => {
+    const selectedDirs = dialog.showOpenDialogSync({ properties: ['openDirectory'] });
 
-    const files: Array<string> = [];
+    if (!selectedDirs || selectedDirs.length === 0) return [];
 
-    if (dirs) {
-      for (let i = 0; i < dirs.length; i++) {
-        const dirItems = readdirSync(path.join(dirs[i]));
+    const audioFiles: string[] = [];
+    const dirStack: string[] = [...selectedDirs];
 
-        for (let j = 0; j < dirItems.length; j++) {
-          const info: Stats = statSync(path.join(dirs[i], dirItems[j]));
+    while (dirStack.length > 0) {
+      const dirPath: string = dirStack.pop()!;
+      const items: string[] = readdirSync(dirPath);
 
-          if (info.isDirectory()) {
-            dirs.push(path.join(dirs[i], dirItems[j]));
-          } else if (dirItems[j].includes('.mp3') || dirItems[j].includes('.ogg')) {
-            files.push(path.join(dirs[i], dirItems[j]));
-          }
+      for (const item of items) {
+        const fullPath: string = path.join(dirPath, item);
+        const itemStats: Stats = statSync(fullPath);
+
+        if (itemStats.isDirectory()) {
+          dirStack.push(fullPath);
+          continue;
+        }
+
+        const splitItemPath = item.split('.');
+        const fileExtension = splitItemPath[splitItemPath.length - 1];
+
+        switch (fileExtension) {
+          case 'mp3':
+          case 'ogg':
+            audioFiles.push(fullPath);
         }
       }
     }
-    return files;
+
+    return audioFiles;
   });
 
   ipcMain.handle('get-track-info', async (_event, filePath): Promise<Track> => {

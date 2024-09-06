@@ -8,7 +8,7 @@ import MusicMetadataApi from './MusicMetadataApi';
 
 // Custom APIs for renderer
 const dirApi: DirApi = {
-  readDir: (): Promise<Array<string>> => ipcRenderer.invoke('read-dir'),
+  readDir: (): Promise<string[]> => ipcRenderer.invoke('read-dir'),
   log: (s: string): Promise<void> => ipcRenderer.invoke('log', s)
 }
 
