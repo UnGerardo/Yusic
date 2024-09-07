@@ -23,7 +23,6 @@ function App(): JSX.Element {
   const [currentTrack, setCurrentTrack] = useState<Track>();
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const $queue = document.getElementById('queue') as HTMLElement;
   const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
   const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
 
@@ -34,7 +33,6 @@ function App(): JSX.Element {
   }, []);
 
   const shuffle = (): void => {
-    $queue.style.display = 'flex';
 
     clearInterval(updateProgressInterval);
     $audioPlayer.pause();
@@ -46,11 +44,6 @@ function App(): JSX.Element {
     setCurrentTrack(newQueue[0]);
 
     $audioPlayer.src = newQueue[0].path;
-  }
-
-  const displayQueue = () => {
-    const $queue = document.getElementById('queue') as HTMLElement;
-    $queue.style.display = 'flex';
   }
 
   const playTrackInQueue = (index: number) => {
@@ -68,8 +61,6 @@ function App(): JSX.Element {
     clearInterval(updateProgressInterval);
     $player.pause();
     $playPauseIcon.src = playIcon;
-
-    displayQueue();
 
     setCurrentTrack(track);
     setQueueIndex(i);

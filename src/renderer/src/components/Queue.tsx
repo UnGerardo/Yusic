@@ -12,7 +12,7 @@ function Queue(
   }) {
 
   return (
-    <section id="queue" className="scrollbar">
+    <section id="queue" className="scrollbar" style={{ display: queue.length > 0 ? 'flex' : 'none' }}>
       <AutoSizer>
         {({ height, width }) => (
           <FixedSizeList
