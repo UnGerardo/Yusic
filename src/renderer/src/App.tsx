@@ -6,6 +6,7 @@ import Track from "@classes/Track";
 import playIcon from '@resources/icons/play-solid.svg';
 
 import { TracksContext } from "./components/TracksContext/TracksContext";
+import { PlayerIconContext } from "./components/PlayerIconContext/PlayerIconContext";
 
 import CurrentSong from "./components/CurrentSong";
 import PlayerControls from "./components/PlayerControls";
@@ -17,6 +18,8 @@ import shuffleArray from "./utils/shuffleArray";
 
 function App(): JSX.Element {
   const { tracks, setTracks } = useContext(TracksContext);
+  const { setPlayerIcon } = useContext(PlayerIconContext);
+
   const [queue, setQueue] = useState<Track[]>([]);
   const [queueIndex, setQueueIndex] = useState<number>(0);
   const [updateProgressInterval, setUpdateProgressInterval] = useState<NodeJS.Timeout | undefined>(undefined);
@@ -24,7 +27,6 @@ function App(): JSX.Element {
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
-  const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
 
   useEffect(() => {
     window.databaseApi.getAllMusicFiles().then((musicFiles: Track[]) => {
@@ -33,10 +35,9 @@ function App(): JSX.Element {
   }, []);
 
   const shuffle = (): void => {
-
     clearInterval(updateProgressInterval);
     $audioPlayer.pause();
-    $playPauseIcon.src = playIcon;
+    setPlayerIcon(playIcon);
 
     const newQueue: Track[] = shuffleArray([...tracks]);
     setQueue(newQueue);
@@ -54,13 +55,10 @@ function App(): JSX.Element {
   }
 
   const playStartingAtTrack = (track: Track, i: number) => {
-    const $player = document.getElementById('player') as HTMLAudioElement;
-    const $playPauseIcon = document.getElementById('play-pause-icon') as HTMLImageElement;
-
-    $player.src = track.path;
+    $audioPlayer.src = track.path;
     clearInterval(updateProgressInterval);
-    $player.pause();
-    $playPauseIcon.src = playIcon;
+    $audioPlayer.pause();
+    setPlayerIcon(playIcon);
 
     setCurrentTrack(track);
     setQueueIndex(i);
