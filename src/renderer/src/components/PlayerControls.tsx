@@ -1,12 +1,10 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 import formatSeconds from "@renderer/utils/formatSeconds";
 import playIcon from '@resources/icons/play-solid.svg';
 import pauseIcon from '@resources/icons/pause-solid.svg';
 import backwardStepIcon from '@resources/icons/backward-step-solid.svg';
 import forwardStepIcon from '@resources/icons/forward-step-solid.svg';
-
-import { PlayerIconContext } from "./PlayerIconContext/PlayerIconContext";
 
 import Track from "src/classes/Track";
 
@@ -23,9 +21,8 @@ const PlayerControls = React.memo((
     setUpdateProgressInterval: React.Dispatch<React.SetStateAction<NodeJS.Timeout | undefined>>
   })
   : JSX.Element => {
-  const  {playerIcon, setPlayerIcon } = useContext(PlayerIconContext);
-
   const $audioRef = useRef<HTMLAudioElement>(null);
+  const [playerIcon, setPlayerIcon] = useState<string>(playIcon);
   const [currentTime, setCurrentTime] = useState(0);
   const [maxTime, setMaxTime] = useState(0);
 

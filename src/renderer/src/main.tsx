@@ -5,14 +5,11 @@ import ReactDOM from 'react-dom/client';
 
 import App from './App';
 import { TracksProvider } from './components/TracksContext/TracksContext';
-import { PlayerIconProvider } from './components/PlayerIconContext/PlayerIconContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <TracksProvider>
-      <PlayerIconProvider>
-        <App />
-      </PlayerIconProvider>
+      <App />
     </TracksProvider>
   </React.StrictMode>
 );
