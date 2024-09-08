@@ -3,7 +3,7 @@ import { useContext } from "react";
 import Track from "@classes/Track";
 import addFolderIcon from '@resources/icons/add-folder.svg';
 
-import { TracksContext } from "../TracksContext/TracksContext";
+import { TracksContext } from "@contexts/TracksContext/TracksContext";
 
 const ReadMusicFolder = () => {
   const { setTracks } = useContext(TracksContext);
@@ -28,7 +28,7 @@ const ReadMusicFolder = () => {
 
   return (
     <div className="icon-big">
-      <img src={addFolderIcon} onClick={readFolder} />
+      <img src={addFolderIcon} onClick={readFolder} alt="add folder icon" />
     </div>
   )
 }

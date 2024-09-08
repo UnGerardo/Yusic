@@ -23,6 +23,9 @@
       "@classes/*": [
         "src/classes/*"
       ],
+      "@contexts/*": [
+        "src/renderer/src/contexts/*"
+      ],
     }
   }
 }

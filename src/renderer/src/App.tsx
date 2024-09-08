@@ -4,7 +4,7 @@ import AutoSizer from "react-virtualized-auto-sizer";
 
 import Track from "@classes/Track";
 
-import { TracksContext } from "./components/TracksContext/TracksContext";
+import { TracksContext } from "@contexts/TracksContext/TracksContext";
 
 import CurrentSong from "./components/CurrentSong";
 import PlayerControls from "./components/PlayerControls";
