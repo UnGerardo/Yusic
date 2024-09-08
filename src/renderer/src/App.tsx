@@ -4,7 +4,8 @@ import AutoSizer from "react-virtualized-auto-sizer";
 
 import Track from "@classes/Track";
 
-import { TracksContext } from "@contexts/TracksContext/TracksContext";
+import { TracksContext, TracksProvider } from "@contexts/TracksContext/TracksContext";
+import { AudioSourceContext, AudioSourceProvider } from "@contexts/AudioSourceContext/AudioSourceContext";
 
 import CurrentSong from "./components/CurrentSong";
 import PlayerControls from "./components/PlayerControls";
@@ -16,14 +17,13 @@ import shuffleArray from "./utils/shuffleArray";
 
 function App(): JSX.Element {
   const { tracks, setTracks } = useContext(TracksContext);
+  const { setAudioSource } = useContext(AudioSourceContext);
 
   const [queue, setQueue] = useState<Track[]>([]);
   const [queueIndex, setQueueIndex] = useState<number>(0);
   const [updateProgressInterval, setUpdateProgressInterval] = useState<NodeJS.Timeout | undefined>(undefined);
   const [currentTrack, setCurrentTrack] = useState<Track>();
   const [searchQuery, setSearchQuery] = useState<string>('');
-
-  const $audioPlayer = document.getElementById('player') as HTMLAudioElement;
 
   useEffect(() => {
     window.databaseApi.getAllMusicFiles().then((musicFiles: Track[]) => {
@@ -37,18 +37,18 @@ function App(): JSX.Element {
     setQueueIndex(0);
     setCurrentTrack(newQueue[0]);
 
-    $audioPlayer.src = newQueue[0].path;
+    setAudioSource(newQueue[0].path);
   }
 
   const playTrackInQueue = (index: number) => {
     setQueueIndex(index);
     const thisTrack: Track = queue[index];
     setCurrentTrack(thisTrack);
-    $audioPlayer.src = thisTrack!.path;
+    setAudioSource(thisTrack!.path);
   }
 
   const playStartingAtTrack = (track: Track, i: number) => {
-    $audioPlayer.src = track.path;
+    setAudioSource(track.path);
 
     setCurrentTrack(track);
     setQueueIndex(i);
@@ -68,7 +68,9 @@ function App(): JSX.Element {
         </section>
         <section id="tracks" className="scrollbar">
           <section>
-            <ReadMusicFolder />
+            <TracksProvider>
+              <ReadMusicFolder />
+            </TracksProvider>
             <input type="text" id="search" onChange={(event) => setSearchQuery(event.target.value)} />
           </section>
           <section className="track-component">
@@ -102,15 +104,17 @@ function App(): JSX.Element {
       </main>
       <section id="bottom-panel">
         {currentTrack ? <CurrentSong track={currentTrack} /> : <div></div>}
-        <PlayerControls
-          queue={queue}
-          queueIndex={queueIndex}
-          setQueueIndex={setQueueIndex}
-          currentTrack={currentTrack}
-          setCurrentTrack={setCurrentTrack}
-          updateProgressInterval={updateProgressInterval}
-          setUpdateProgressInterval={setUpdateProgressInterval}
-        />
+        <AudioSourceProvider>
+          <PlayerControls
+            queue={queue}
+            queueIndex={queueIndex}
+            setQueueIndex={setQueueIndex}
+            currentTrack={currentTrack}
+            setCurrentTrack={setCurrentTrack}
+            updateProgressInterval={updateProgressInterval}
+            setUpdateProgressInterval={setUpdateProgressInterval}
+          />
+        </AudioSourceProvider>
       </section>
     </>
   )

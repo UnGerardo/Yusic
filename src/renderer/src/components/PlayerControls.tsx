@@ -1,10 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 
 import formatSeconds from "@renderer/utils/formatSeconds";
 import playIcon from '@resources/icons/play-solid.svg';
 import pauseIcon from '@resources/icons/pause-solid.svg';
 import backwardStepIcon from '@resources/icons/backward-step-solid.svg';
 import forwardStepIcon from '@resources/icons/forward-step-solid.svg';
+import { AudioSourceContext } from "@contexts/AudioSourceContext/AudioSourceContext";
 
 import Track from "src/classes/Track";
 
@@ -21,6 +22,8 @@ const PlayerControls = React.memo((
     setUpdateProgressInterval: React.Dispatch<React.SetStateAction<NodeJS.Timeout | undefined>>
   })
   : JSX.Element => {
+  const { audioSource, setAudioSource } = useContext(AudioSourceContext);
+
   const $audioRef = useRef<HTMLAudioElement>(null);
   const [playerIcon, setPlayerIcon] = useState<string>(playIcon);
   const [currentTime, setCurrentTime] = useState(0);
@@ -91,39 +94,36 @@ const PlayerControls = React.memo((
       return;
     }
 
-    const audio = $audioRef.current as HTMLAudioElement;
     const queueIndexInc = queueIndex + 1;
     setQueueIndex(queueIndexInc);
     const nextTrack: Track = queue[queueIndexInc];
     setCurrentTrack(nextTrack);
-    audio.src = nextTrack!.path;
+    setAudioSource(nextTrack!.path);
   }
 
   const backwardStep = () => {
     if (queueIndex === 0) return;
 
-    const audio = $audioRef.current as HTMLAudioElement;
     const queueIndexDec = queueIndex - 1;
     setQueueIndex(queueIndexDec);
     const previousTrack: Track = queue[queueIndexDec];
     setCurrentTrack(previousTrack);
-    audio.src = previousTrack!.path;
+    setAudioSource(previousTrack!.path);
   }
 
   const forwardStep = () => {
     if (queueIndex === queue.length - 1) return;
 
-    const audio = $audioRef.current as HTMLAudioElement;
     const queueIndexInc = queueIndex + 1;
     setQueueIndex(queueIndexInc);
     const nextTrack: Track = queue[queueIndexInc];
     setCurrentTrack(nextTrack);
-    audio.src = nextTrack!.path;
+    setAudioSource(nextTrack!.path);
   }
 
   return (
     <section id="player-controls">
-      <audio id="player" src="" ref={$audioRef} onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd} />
+      <audio id="player" src={audioSource} ref={$audioRef} onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd} />
       <section id="controls" className="no-select">
         <img src={backwardStepIcon} onClick={backwardStep} alt="Previous" id="previous-song-icon" height={15} />
         <section id="play-pause-icon-bg" onClick={playPauseTrack} >
