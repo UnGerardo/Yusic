@@ -5,7 +5,7 @@ import playIcon from '@resources/icons/play-solid.svg';
 import pauseIcon from '@resources/icons/pause-solid.svg';
 import backwardStepIcon from '@resources/icons/backward-step-solid.svg';
 import forwardStepIcon from '@resources/icons/forward-step-solid.svg';
-import { AudioSourceContext } from "@contexts/AudioSourceContext/AudioSourceContext";
+import { AudioSourceContext } from "@contexts/AudioSourceContext";
 
 import Track from "src/classes/Track";
 

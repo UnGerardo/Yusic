@@ -3,7 +3,7 @@ import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
 
 import Track from "@classes/Track";
-import { TracksContext } from "@contexts/TracksContext/TracksContext";
+import { TracksContext } from "@contexts/TracksContext";
 import TrackComponent from "../TrackComponent";
 
 const TrackList = ({ handleOnClick }) => {

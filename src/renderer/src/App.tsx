@@ -2,8 +2,8 @@ import { useState, useContext } from "react";
 
 import Track from "@classes/Track";
 
-import { TracksContext, TracksProvider } from "@contexts/TracksContext/TracksContext";
-import { AudioSourceContext, AudioSourceProvider } from "@contexts/AudioSourceContext/AudioSourceContext";
+import { TracksContext, TracksProvider } from "@contexts/TracksContext";
+import { AudioSourceContext, AudioSourceProvider } from "@contexts/AudioSourceContext";
 
 import CurrentSong from "./components/CurrentSong";
 import PlayerControls from "./components/PlayerControls";
