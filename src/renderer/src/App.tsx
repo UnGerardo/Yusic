@@ -1,6 +1,4 @@
-import { useEffect, useState, useContext } from "react";
-import { FixedSizeList } from 'react-window';
-import AutoSizer from "react-virtualized-auto-sizer";
+import { useState, useContext } from "react";
 
 import Track from "@classes/Track";
 
@@ -11,12 +9,12 @@ import CurrentSong from "./components/CurrentSong";
 import PlayerControls from "./components/PlayerControls";
 import Queue from "./components/Queue";
 import ReadMusicFolder from "./components/ReadMusicFolder/ReadMusicFolder";
-import TrackComponent from "./components/TrackComponent";
+import TrackList from "./components/TrackList/TrackList";
 
 import shuffleArray from "./utils/shuffleArray";
 
 function App(): JSX.Element {
-  const { tracks, setTracks } = useContext(TracksContext);
+  const { tracks } = useContext(TracksContext);
   const { setAudioSource } = useContext(AudioSourceContext);
 
   const [queue, setQueue] = useState<Track[]>([]);
@@ -24,12 +22,6 @@ function App(): JSX.Element {
   const [updateProgressInterval, setUpdateProgressInterval] = useState<NodeJS.Timeout | undefined>(undefined);
   const [currentTrack, setCurrentTrack] = useState<Track>();
   const [searchQuery, setSearchQuery] = useState<string>('');
-
-  useEffect(() => {
-    window.databaseApi.getAllMusicFiles().then((musicFiles: Track[]) => {
-      setTracks([...musicFiles]);
-    });
-  }, []);
 
   const shuffle = (): void => {
     const newQueue: Track[] = shuffleArray([...tracks]);
@@ -47,7 +39,7 @@ function App(): JSX.Element {
     setAudioSource(thisTrack!.path);
   }
 
-  const playStartingAtTrack = (track: Track, i: number) => {
+  const playStartingAtTrack = (tracks: Track[], track: Track, i: number) => {
     setAudioSource(track.path);
 
     setCurrentTrack(track);
@@ -79,26 +71,9 @@ function App(): JSX.Element {
             <p className="track-album">Album</p>
             <p className="track-duration">Time</p>
           </section>
-          <AutoSizer>
-            {({ height, width }) => (
-              <FixedSizeList
-                height={height}
-                itemCount={tracks.length}
-                itemSize={91}
-                width={width}
-              >
-                {({ index, style }) => (
-                  <div style={style}>
-                    <TrackComponent
-                      key={tracks[index].id}
-                      track={tracks[index]}
-                      onClick={() => playStartingAtTrack(tracks[index], index)}
-                    />
-                  </div>
-                )}
-              </FixedSizeList>
-            )}
-          </AutoSizer>
+          <TracksProvider>
+            <TrackList handleOnClick={playStartingAtTrack} />
+          </TracksProvider>
         </section>
         <Queue queue={queue} queueIndex={queueIndex} playTrackInQueue={playTrackInQueue} />
       </main>
