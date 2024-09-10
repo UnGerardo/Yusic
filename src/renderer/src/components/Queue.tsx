@@ -1,8 +1,6 @@
 import { useContext } from "react";
 import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
-import { PlayingTrackProvider } from '@contexts/PlayingTrackContext';
-import { AudioSourceProvider } from '@contexts/AudioSourceContext';
 import { QueueContext } from "@contexts/QueueContext";
 import QueuedTrack from "./QueuedTrack";
 
@@ -21,15 +19,11 @@ function Queue() {
           >
             {({ index, style }) => (
               <div style={style}>
-                <PlayingTrackProvider>
-                  <AudioSourceProvider>
-                    <QueuedTrack
-                      key={queue[index].id}
-                      index={index}
-                      track={queue[index]}
-                    />
-                  </AudioSourceProvider>
-                </PlayingTrackProvider>
+                <QueuedTrack
+                  key={queue[index].id}
+                  index={index}
+                  track={queue[index]}
+                />
               </div>
             )}
           </FixedSizeList>

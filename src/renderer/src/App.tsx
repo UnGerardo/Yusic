@@ -1,15 +1,10 @@
 import { useState } from "react";
 
-import { TracksProvider } from "@contexts/TracksContext";
-import { AudioSourceProvider } from "@contexts/AudioSourceContext";
-import { QueueProvider } from "./contexts/QueueContext";
-import { PlayingTrackProvider } from "./contexts/PlayingTrackContext";
-
-import CurrentSong from "./components/CurrentSong";
 import PlayerControls from "./components/PlayerControls";
 import Queue from "./components/Queue";
 import ReadMusicFolder from "./components/ReadMusicFolder/ReadMusicFolder";
 import TrackList from "./components/TrackList/TrackList";
+import PlayingTrack from "./components/PlayingTrack/PlayingTrack";
 
 function App(): JSX.Element {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -36,9 +31,7 @@ function App(): JSX.Element {
         </section>
         <section id="tracks" className="scrollbar">
           <section>
-            <TracksProvider>
-              <ReadMusicFolder />
-            </TracksProvider>
+            <ReadMusicFolder />
             <input type="text" id="search" onChange={(event) => setSearchQuery(event.target.value)} />
           </section>
           <section className="track-component">
@@ -47,23 +40,13 @@ function App(): JSX.Element {
             <p className="track-album">Album</p>
             <p className="track-duration">Time</p>
           </section>
-          <TracksProvider>
-            <TrackList />
-          </TracksProvider>
+          <TrackList />
         </section>
-        <QueueProvider>
-          <Queue />
-        </QueueProvider>
+        <Queue />
       </main>
       <section id="bottom-panel">
-        {currentTrack ? <CurrentSong track={currentTrack} /> : <div></div>}
-        <AudioSourceProvider>
-          <QueueProvider>
-            <PlayingTrackProvider>
-              <PlayerControls />
-            </PlayingTrackProvider>
-          </QueueProvider>
-        </AudioSourceProvider>
+        <PlayingTrack />
+        <PlayerControls />
       </section>
     </>
   )

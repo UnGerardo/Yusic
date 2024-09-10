@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import formatSeconds from "@renderer/utils/formatSeconds";
 import { QueueContext } from "@contexts/QueueContext";
 import { PlayingTrackContext } from "@contexts/PlayingTrackContext";
@@ -6,7 +6,7 @@ import { AudioSourceContext } from "@contexts/AudioSourceContext";
 import { TracksContext } from "@contexts/TracksContext";
 import Track from "@classes/Track";
 
-const TrackComponent = React.memo(({ track, index } : { track: Track, index: number }): JSX.Element => {
+const TrackComponent = ({ track, index } : { track: Track, index: number }): JSX.Element => {
   const { tracks } = useContext(TracksContext);
   const { setQueue, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext);
@@ -31,6 +31,6 @@ const TrackComponent = React.memo(({ track, index } : { track: Track, index: num
       <p className="track-duration">{formatSeconds(track.duration!)}</p>
     </section>
   );
-});
+};
 
 export default TrackComponent;

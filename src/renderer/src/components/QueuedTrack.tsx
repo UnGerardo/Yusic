@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { QueueContext } from "@contexts/QueueContext";
 import { PlayingTrackContext } from "@contexts/PlayingTrackContext";
 import { AudioSourceContext } from "@contexts/AudioSourceContext";
 import Track from "@classes/Track";
 
-const QueuedTrack = React.memo(({ index, track } : { index: number, track: Track }): JSX.Element => {
+const QueuedTrack = ({ index, track } : { index: number, track: Track }): JSX.Element => {
   const { queueIndex, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext)
   const { setAudioSource } = useContext(AudioSourceContext);
@@ -28,6 +28,6 @@ const QueuedTrack = React.memo(({ index, track } : { index: number, track: Track
       </section>
     </section>
   );
-});
+};
 
 export default QueuedTrack;

@@ -3,7 +3,7 @@ import { useContext } from "react";
 import Track from "@classes/Track";
 import addFolderIcon from '@resources/icons/add-folder.svg';
 
-import { TracksContext } from "@contexts/TracksContext/TracksContext";
+import { TracksContext } from "@contexts/TracksContext";
 
 const ReadMusicFolder = () => {
   const { setTracks } = useContext(TracksContext);

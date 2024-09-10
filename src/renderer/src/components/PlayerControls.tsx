@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 
 import formatSeconds from "@renderer/utils/formatSeconds";
 import playIcon from '@resources/icons/play-solid.svg';
@@ -11,7 +11,7 @@ import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 
 import Track from "src/classes/Track";
 
-const PlayerControls = React.memo((): JSX.Element => {
+const PlayerControls = (): JSX.Element => {
   const $audioRef = useRef<HTMLAudioElement>(null);
   const { audioSource, setAudioSource } = useContext(AudioSourceContext);
   const { queue, queueIndex, setQueueIndex } = useContext(QueueContext);
@@ -132,6 +132,6 @@ const PlayerControls = React.memo((): JSX.Element => {
       </section>
     </section>
   );
-});
+};
 
 export default PlayerControls;
