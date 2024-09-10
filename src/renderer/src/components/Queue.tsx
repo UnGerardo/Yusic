@@ -1,15 +1,13 @@
-import Track from "src/classes/Track";
-import QueuedTrack from "./QueuedTrack";
+import { useContext } from "react";
 import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
+import { PlayingTrackProvider } from '@contexts/PlayingTrackContext';
+import { AudioSourceProvider } from '@contexts/AudioSourceContext';
+import { QueueContext } from "@contexts/QueueContext";
+import QueuedTrack from "./QueuedTrack";
 
-function Queue(
-  { queue, queueIndex, playTrackInQueue }:
-  {
-    queue: Track[],
-    queueIndex: number,
-    playTrackInQueue: (index: number) => void
-  }) {
+function Queue() {
+  const { queue } = useContext(QueueContext);
 
   return (
     <section id="queue" className="scrollbar" style={{ display: queue.length > 0 ? 'flex' : 'none' }}>
@@ -23,13 +21,15 @@ function Queue(
           >
             {({ index, style }) => (
               <div style={style}>
-                <QueuedTrack
-                  key={queue[index].id}
-                  i={index}
-                  track={queue[index]}
-                  queueIndex={queueIndex}
-                  playTrackInQueue={playTrackInQueue}
-                />
+                <PlayingTrackProvider>
+                  <AudioSourceProvider>
+                    <QueuedTrack
+                      key={queue[index].id}
+                      index={index}
+                      track={queue[index]}
+                    />
+                  </AudioSourceProvider>
+                </PlayingTrackProvider>
               </div>
             )}
           </FixedSizeList>

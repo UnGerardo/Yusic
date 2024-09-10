@@ -6,32 +6,24 @@ import pauseIcon from '@resources/icons/pause-solid.svg';
 import backwardStepIcon from '@resources/icons/backward-step-solid.svg';
 import forwardStepIcon from '@resources/icons/forward-step-solid.svg';
 import { AudioSourceContext } from "@contexts/AudioSourceContext";
+import { QueueContext } from "@renderer/contexts/QueueContext";
+import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 
 import Track from "src/classes/Track";
 
-const PlayerControls = React.memo((
-  { queue, queueIndex, setQueueIndex, setCurrentTrack, updateProgressInterval, setUpdateProgressInterval }
-  :
-  {
-    queue: Track[],
-    queueIndex: number,
-    setQueueIndex: React.Dispatch<React.SetStateAction<number>>,
-    currentTrack: Track | undefined,
-    setCurrentTrack: React.Dispatch<React.SetStateAction<Track | undefined>>,
-    updateProgressInterval: NodeJS.Timeout | undefined,
-    setUpdateProgressInterval: React.Dispatch<React.SetStateAction<NodeJS.Timeout | undefined>>
-  })
-  : JSX.Element => {
-  const { audioSource, setAudioSource } = useContext(AudioSourceContext);
-
+const PlayerControls = React.memo((): JSX.Element => {
   const $audioRef = useRef<HTMLAudioElement>(null);
+  const { audioSource, setAudioSource } = useContext(AudioSourceContext);
+  const { queue, queueIndex, setQueueIndex } = useContext(QueueContext);
+  const { setPlayingTrack } = useContext(PlayingTrackContext);
+
+  const [updateProgressInterval, setUpdateProgressInterval] = useState<NodeJS.Timeout | undefined>(undefined);
   const [playerIcon, setPlayerIcon] = useState<string>(playIcon);
   const [currentTime, setCurrentTime] = useState(0);
   const [maxTime, setMaxTime] = useState(0);
 
   const playPauseTrack = () => {
     const audio = $audioRef.current as HTMLAudioElement;
-
     if (!audio || audio.readyState !== 4) return;
 
     if (playerIcon === playIcon) {
@@ -97,7 +89,7 @@ const PlayerControls = React.memo((
     const queueIndexInc = queueIndex + 1;
     setQueueIndex(queueIndexInc);
     const nextTrack: Track = queue[queueIndexInc];
-    setCurrentTrack(nextTrack);
+    setPlayingTrack(nextTrack);
     setAudioSource(nextTrack!.path);
   }
 
@@ -107,7 +99,7 @@ const PlayerControls = React.memo((
     const queueIndexDec = queueIndex - 1;
     setQueueIndex(queueIndexDec);
     const previousTrack: Track = queue[queueIndexDec];
-    setCurrentTrack(previousTrack);
+    setPlayingTrack(previousTrack);
     setAudioSource(previousTrack!.path);
   }
 
@@ -117,7 +109,7 @@ const PlayerControls = React.memo((
     const queueIndexInc = queueIndex + 1;
     setQueueIndex(queueIndexInc);
     const nextTrack: Track = queue[queueIndexInc];
-    setCurrentTrack(nextTrack);
+    setPlayingTrack(nextTrack);
     setAudioSource(nextTrack!.path);
   }
 

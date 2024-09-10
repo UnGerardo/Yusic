@@ -1,9 +1,9 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 
-import Track from "@classes/Track";
-
-import { TracksContext, TracksProvider } from "@contexts/TracksContext";
-import { AudioSourceContext, AudioSourceProvider } from "@contexts/AudioSourceContext";
+import { TracksProvider } from "@contexts/TracksContext";
+import { AudioSourceProvider } from "@contexts/AudioSourceContext";
+import { QueueProvider } from "./contexts/QueueContext";
+import { PlayingTrackProvider } from "./contexts/PlayingTrackContext";
 
 import CurrentSong from "./components/CurrentSong";
 import PlayerControls from "./components/PlayerControls";
@@ -11,46 +11,22 @@ import Queue from "./components/Queue";
 import ReadMusicFolder from "./components/ReadMusicFolder/ReadMusicFolder";
 import TrackList from "./components/TrackList/TrackList";
 
-import shuffleArray from "./utils/shuffleArray";
-
 function App(): JSX.Element {
-  const { tracks } = useContext(TracksContext);
-  const { setAudioSource } = useContext(AudioSourceContext);
-
-  const [queue, setQueue] = useState<Track[]>([]);
-  const [queueIndex, setQueueIndex] = useState<number>(0);
-  const [updateProgressInterval, setUpdateProgressInterval] = useState<NodeJS.Timeout | undefined>(undefined);
-  const [currentTrack, setCurrentTrack] = useState<Track>();
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const shuffle = (): void => {
-    const newQueue: Track[] = shuffleArray([...tracks]);
-    setQueue(newQueue);
-    setQueueIndex(0);
-    setCurrentTrack(newQueue[0]);
+  // const shuffle = (): void => {
+  //   const newQueue: Track[] = shuffleArray([...tracks]);
+  //   setQueue(newQueue);
+  //   setQueueIndex(0);
+  //   setCurrentTrack(newQueue[0]);
 
-    setAudioSource(newQueue[0].path);
-  }
-
-  const playTrackInQueue = (index: number) => {
-    setQueueIndex(index);
-    const thisTrack: Track = queue[index];
-    setCurrentTrack(thisTrack);
-    setAudioSource(thisTrack!.path);
-  }
-
-  const playStartingAtTrack = (tracks: Track[], track: Track, i: number) => {
-    setAudioSource(track.path);
-
-    setCurrentTrack(track);
-    setQueueIndex(i);
-    setQueue(tracks);
-  }
+  //   setAudioSource(newQueue[0].path);
+  // }
 
   return (
     <>
       <section id="options">
-        <button onClick={shuffle}>Shuffle Tracks</button>
+        {/* <button onClick={shuffle}>Shuffle Tracks</button> */}
       </section>
       <main>
         <section id="groups">
@@ -72,27 +48,25 @@ function App(): JSX.Element {
             <p className="track-duration">Time</p>
           </section>
           <TracksProvider>
-            <TrackList handleOnClick={playStartingAtTrack} />
+            <TrackList />
           </TracksProvider>
         </section>
-        <Queue queue={queue} queueIndex={queueIndex} playTrackInQueue={playTrackInQueue} />
+        <QueueProvider>
+          <Queue />
+        </QueueProvider>
       </main>
       <section id="bottom-panel">
         {currentTrack ? <CurrentSong track={currentTrack} /> : <div></div>}
         <AudioSourceProvider>
-          <PlayerControls
-            queue={queue}
-            queueIndex={queueIndex}
-            setQueueIndex={setQueueIndex}
-            currentTrack={currentTrack}
-            setCurrentTrack={setCurrentTrack}
-            updateProgressInterval={updateProgressInterval}
-            setUpdateProgressInterval={setUpdateProgressInterval}
-          />
+          <QueueProvider>
+            <PlayingTrackProvider>
+              <PlayerControls />
+            </PlayingTrackProvider>
+          </QueueProvider>
         </AudioSourceProvider>
       </section>
     </>
   )
 }
 
-export default App
+export default App;

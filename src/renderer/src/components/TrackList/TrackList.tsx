@@ -4,9 +4,12 @@ import AutoSizer from "react-virtualized-auto-sizer";
 
 import Track from "@classes/Track";
 import { TracksContext } from "@contexts/TracksContext";
+import { QueueProvider } from '@contexts/QueueContext';
+import { PlayingTrackProvider } from '@contexts/PlayingTrackContext';
+import { AudioSourceProvider } from '@contexts/AudioSourceContext';
 import TrackComponent from "../TrackComponent";
 
-const TrackList = ({ handleOnClick }) => {
+const TrackList = () => {
   const { tracks, setTracks } = useContext(TracksContext);
 
   useEffect(() => {
@@ -26,11 +29,17 @@ const TrackList = ({ handleOnClick }) => {
         >
           {({ index, style }) => (
             <div style={style}>
-              <TrackComponent
-                key={tracks[index].id}
-                track={tracks[index]}
-                onClick={() => handleOnClick(tracks, tracks[index], index)}
-              />
+              <QueueProvider>
+                <PlayingTrackProvider>
+                  <AudioSourceProvider>
+                    <TrackComponent
+                      key={tracks[index].id}
+                      index={index}
+                      track={tracks[index]}
+                    />
+                  </AudioSourceProvider>
+                </PlayingTrackProvider>
+              </QueueProvider>
             </div>
           )}
         </FixedSizeList>
