@@ -5,24 +5,13 @@ import Queue from "./components/Queue";
 import ReadMusicFolder from "./components/ReadMusicFolder/ReadMusicFolder";
 import TrackList from "./components/TrackList/TrackList";
 import PlayingTrack from "./components/PlayingTrack/PlayingTrack";
+import Shuffle from "./components/Shuffle/Shuffle";
 
 function App(): JSX.Element {
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // const shuffle = (): void => {
-  //   const newQueue: Track[] = shuffleArray([...tracks]);
-  //   setQueue(newQueue);
-  //   setQueueIndex(0);
-  //   setCurrentTrack(newQueue[0]);
-
-  //   setAudioSource(newQueue[0].path);
-  // }
-
   return (
     <>
-      <section id="options">
-        {/* <button onClick={shuffle}>Shuffle Tracks</button> */}
-      </section>
       <main>
         <section id="groups">
           <span className="group">Tracks</span>
@@ -33,6 +22,7 @@ function App(): JSX.Element {
           <section>
             <ReadMusicFolder />
             <input type="text" id="search" onChange={(event) => setSearchQuery(event.target.value)} />
+            <Shuffle />
           </section>
           <section className="track-component">
             <p>Image</p>
