@@ -8,6 +8,7 @@ import { TracksProvider } from "@contexts/TracksContext";
 import { AudioSourceProvider } from "@contexts/AudioSourceContext";
 import { QueueProvider } from "@contexts/QueueContext";
 import { PlayingTrackProvider } from "@contexts/PlayingTrackContext";
+import { SearchQueryProvider } from './contexts/SearchQueryContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <QueueProvider>
       <PlayingTrackProvider>
         <TracksProvider>
-          <App />
+          <SearchQueryProvider>
+            <App />
+          </SearchQueryProvider>
         </TracksProvider>
       </PlayingTrackProvider>
     </QueueProvider>

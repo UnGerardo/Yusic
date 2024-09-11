@@ -1,15 +1,12 @@
-import { useState } from "react";
-
 import PlayerControls from "./components/PlayerControls";
 import Queue from "./components/Queue";
 import ReadMusicFolder from "./components/ReadMusicFolder/ReadMusicFolder";
 import TrackList from "./components/TrackList/TrackList";
 import PlayingTrack from "./components/PlayingTrack/PlayingTrack";
 import Shuffle from "./components/Shuffle/Shuffle";
+import SearchQuery from "./components/SearchQuery/SearchQuery";
 
 function App(): JSX.Element {
-  const [searchQuery, setSearchQuery] = useState<string>('');
-
   return (
     <>
       <main>
@@ -21,7 +18,7 @@ function App(): JSX.Element {
         <section id="tracks" className="scrollbar">
           <section>
             <ReadMusicFolder />
-            <input type="text" id="search" onChange={(event) => setSearchQuery(event.target.value)} />
+            <SearchQuery />
             <Shuffle />
           </section>
           <section className="track-component">

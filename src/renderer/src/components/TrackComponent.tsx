@@ -3,11 +3,9 @@ import formatSeconds from "@renderer/utils/formatSeconds";
 import { QueueContext } from "@contexts/QueueContext";
 import { PlayingTrackContext } from "@contexts/PlayingTrackContext";
 import { AudioSourceContext } from "@contexts/AudioSourceContext";
-import { TracksContext } from "@contexts/TracksContext";
 import Track from "@classes/Track";
 
-const TrackComponent = ({ track, index } : { track: Track, index: number }): JSX.Element => {
-  const { tracks } = useContext(TracksContext);
+const TrackComponent = ({ tracks, track, index } : { tracks: Track[], track: Track, index: number }): JSX.Element => {
   const { setQueue, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext);
   const { setAudioSource } = useContext(AudioSourceContext);
