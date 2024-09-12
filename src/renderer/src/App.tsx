@@ -16,7 +16,7 @@ function App(): JSX.Element {
           <span className="group">Albums</span>
         </section>
         <section id="tracks" className="scrollbar">
-          <section>
+          <section className="flex-cc">
             <ReadMusicFolder />
             <SearchQuery />
             <Shuffle />

@@ -1,5 +1,7 @@
-import { useContext } from "react"
-import { SearchQueryContext } from "@contexts/SearchQueryContext"
+import "./search-query.css";
+
+import { useContext } from "react";
+import { SearchQueryContext } from "@contexts/SearchQueryContext";
 
 const SearchQuery = (): JSX.Element =>{
   const { setSearchQuery } = useContext(SearchQueryContext);

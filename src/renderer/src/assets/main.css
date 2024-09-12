@@ -112,6 +112,12 @@ main {
   margin-bottom: 5px;
 }
 
+.flex-cc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #queue {
   border-left: 1px white solid;
   display: none;
