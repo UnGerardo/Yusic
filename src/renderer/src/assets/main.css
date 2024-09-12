@@ -205,26 +205,11 @@ main {
   user-select: none;
 }
 
-#current-song {
-  display: grid;
-  grid-template-columns: 60px 1fr;
-  gap: 15px;
-  align-items: center;
-}
-
 #bottom-panel {
   background-color: black;
   display: grid;
   grid-template-columns: 1fr 1.15fr 1fr;
   padding: 15px;
-}
-
-.current-song-track {
-  font-size: 15px;
-}
-.current-song-artist {
-  color: #a5a5a5;
-  font-size: 12px;
 }
 
 .icon-big {
