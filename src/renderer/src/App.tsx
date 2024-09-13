@@ -1,10 +1,10 @@
 import PlayerControls from "./components/PlayerControls";
 import Queue from "./components/Queue";
-import ReadMusicFolder from "./components/ReadMusicFolder/ReadMusicFolder";
-import TrackList from "./components/TrackList/TrackList";
-import PlayingTrack from "./components/PlayingTrack/PlayingTrack";
-import Shuffle from "./components/Shuffle/Shuffle";
-import SearchQuery from "./components/SearchQuery/SearchQuery";
+import ReadMusicFolder from "./components/ReadMusicFolder";
+import TrackList from "./components/TrackList";
+import PlayingTrack from "./components/PlayingTrack";
+import Shuffle from "./components/Shuffle";
+import SearchQuery from "./components/SearchQuery";
 
 function App(): JSX.Element {
   return (

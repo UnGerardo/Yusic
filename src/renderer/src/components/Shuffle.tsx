@@ -6,7 +6,7 @@ import { QueueContext } from "@renderer/contexts/QueueContext";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import { AudioSourceContext } from "@renderer/contexts/AudioSourceContext";
 import { TracksContext } from "@renderer/contexts/TracksContext";
-import shuffleArray from "../../utils/shuffleArray";
+import shuffleArray from "../utils/shuffleArray";
 
 const Shuffle = () => {
   const { tracks } = useContext(TracksContext);

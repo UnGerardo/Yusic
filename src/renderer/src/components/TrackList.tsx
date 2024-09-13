@@ -5,7 +5,7 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import Track from "@classes/Track";
 import { TracksContext } from "@contexts/TracksContext";
 import { SearchQueryContext } from '@contexts/SearchQueryContext';
-import TrackComponent from "../TrackComponent";
+import TrackComponent from "./TrackComponent";
 
 const isSubstrIgnoreCase = (string: string, substr: string): boolean => {
   return string.toLocaleLowerCase().includes(substr.toLocaleLowerCase());
