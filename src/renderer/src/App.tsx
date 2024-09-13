@@ -1,4 +1,4 @@
-import PlayerControls from "./components/PlayerControls";
+import Player from "./components/Player";
 import Queue from "./components/Queue";
 import ReadMusicFolder from "./components/ReadMusicFolder";
 import TrackList from "./components/TrackList";
@@ -33,7 +33,7 @@ function App(): JSX.Element {
       </main>
       <section id="bottom-panel">
         <PlayingTrack />
-        <PlayerControls />
+        <Player />
       </section>
     </>
   )

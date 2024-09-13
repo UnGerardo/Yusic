@@ -1,4 +1,5 @@
 import { useContext, useRef, useState } from "react";
+import styled from "styled-components";
 
 import formatSeconds from "@renderer/utils/formatSeconds";
 import playIcon from '@resources/icons/play-solid.svg';
@@ -11,7 +12,7 @@ import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 
 import Track from "src/classes/Track";
 
-const PlayerControls = (): JSX.Element => {
+const Player = (): JSX.Element => {
   const $audioRef = useRef<HTMLAudioElement>(null);
   const { audioSource, setAudioSource } = useContext(AudioSourceContext);
   const { queue, queueIndex, setQueueIndex } = useContext(QueueContext);
@@ -23,10 +24,10 @@ const PlayerControls = (): JSX.Element => {
   const [maxTime, setMaxTime] = useState(0);
 
   const playPauseTrack = () => {
-    const audio = $audioRef.current as HTMLAudioElement;
+    const { current: audio } = $audioRef;
     if (!audio || audio.readyState !== 4) return;
 
-    if (playerIcon === playIcon) {
+    if (audio.paused) {
       audio.play();
       setPlayerIcon(pauseIcon);
 
@@ -41,19 +42,15 @@ const PlayerControls = (): JSX.Element => {
     }
   }
 
-  const resetTrackProgress = () => {
-    const audio = $audioRef.current as HTMLAudioElement;
-
+  const resetTrackProgress = (event) => {
+    const audio = event.target as HTMLAudioElement;
     setMaxTime(audio.duration);
     setCurrentTime(0);
-
-    if (playerIcon === pauseIcon) {
-      audio.play();
-    }
+    if (playerIcon === pauseIcon) audio.play();
   }
 
   const seeking = (event) => {
-    const audio = $audioRef.current as HTMLAudioElement;
+    const { current: audio } = $audioRef;
 
     if (!audio || audio.readyState !== 4) return;
 
@@ -64,11 +61,12 @@ const PlayerControls = (): JSX.Element => {
   }
 
   const seekTo = (event) => {
-    const audio = $audioRef.current as HTMLAudioElement;
+    const { current: audio } = $audioRef;
+    const input = event.target as HTMLInputElement;
 
     if (!audio || audio.readyState !== 4) return;
 
-    const seekToTime = event.target.value as number;
+    const seekToTime: number = parseFloat(input.value);
 
     audio.currentTime = seekToTime;
     if (!audio.paused) {
@@ -114,8 +112,8 @@ const PlayerControls = (): JSX.Element => {
   }
 
   return (
-    <section id="player-controls">
-      <audio id="player" src={audioSource} ref={$audioRef} onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd} />
+    <PlayerSection>
+      <audio src={audioSource} ref={$audioRef} onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd} />
       <section id="controls" className="no-select">
         <img src={backwardStepIcon} onClick={backwardStep} alt="Previous" id="previous-song-icon" height={15} />
         <section id="play-pause-icon-bg" onClick={playPauseTrack} >
@@ -130,8 +128,19 @@ const PlayerControls = (): JSX.Element => {
         }} max={maxTime} />
         <span id="total-time" className="no-select slider-times">{formatSeconds(maxTime)}</span>
       </section>
-    </section>
+    </PlayerSection>
   );
 };
 
-export default PlayerControls;
+export default Player;
+
+const PlayerSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+`;
+
+const 

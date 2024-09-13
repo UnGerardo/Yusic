@@ -143,15 +143,6 @@ main {
   background-color: #3d3d3f;
 }
 
-#player-controls {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 600px;
-}
-
 #track-progress {
   -webkit-appearance: none;
   background: linear-gradient(to right, white 0%, white 50%, #555 50%, #555 100%);
