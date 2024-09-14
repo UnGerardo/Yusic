@@ -2,10 +2,6 @@ import { useContext, useRef, useState } from "react";
 import styled from "styled-components";
 
 import formatSeconds from "@renderer/utils/formatSeconds";
-import playIcon from '@resources/icons/play-solid.svg';
-import pauseIcon from '@resources/icons/pause-solid.svg';
-import backwardStepIcon from '@resources/icons/backward-step-solid.svg';
-import forwardStepIcon from '@resources/icons/forward-step-solid.svg';
 import { AudioSourceContext } from "@contexts/AudioSourceContext";
 import { QueueContext } from "@renderer/contexts/QueueContext";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
@@ -19,7 +15,7 @@ const Player = (): JSX.Element => {
   const { setPlayingTrack } = useContext(PlayingTrackContext);
 
   const [updateProgressInterval, setUpdateProgressInterval] = useState<NodeJS.Timeout | undefined>(undefined);
-  const [playerIcon, setPlayerIcon] = useState<string>(playIcon);
+  const [isPaused, setIsPaused] = useState<boolean>(true);
   const [currentTime, setCurrentTime] = useState(0);
   const [maxTime, setMaxTime] = useState(0);
 
@@ -29,7 +25,7 @@ const Player = (): JSX.Element => {
 
     if (audio.paused) {
       audio.play();
-      setPlayerIcon(pauseIcon);
+      setIsPaused(false);
 
       setUpdateProgressInterval((oldInterval) => {
         clearInterval(oldInterval);
@@ -37,7 +33,7 @@ const Player = (): JSX.Element => {
       });
     } else {
       audio.pause();
-      setPlayerIcon(playIcon);
+      setIsPaused(true);
       clearInterval(updateProgressInterval);
     }
   }
@@ -46,7 +42,7 @@ const Player = (): JSX.Element => {
     const audio = event.target as HTMLAudioElement;
     setMaxTime(audio.duration);
     setCurrentTime(0);
-    if (playerIcon === pauseIcon) audio.play();
+    if (!isPaused) audio.play();
   }
 
   const seeking = (event) => {
@@ -79,7 +75,7 @@ const Player = (): JSX.Element => {
 
   const onAudioEnd = () => {
     if (queueIndex === queue.length - 1) {
-      setPlayerIcon(playIcon);
+      setIsPaused(true);
       clearInterval(updateProgressInterval);
       return;
     }
@@ -114,20 +110,30 @@ const Player = (): JSX.Element => {
   return (
     <PlayerSection>
       <audio src={audioSource} ref={$audioRef} onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd} />
-      <section id="controls" className="no-select">
-        <img src={backwardStepIcon} onClick={backwardStep} alt="Previous" id="previous-song-icon" height={15} />
-        <section id="play-pause-icon-bg" onClick={playPauseTrack} >
-          <img src={playerIcon} alt="Play" id="play-pause-icon" />
-        </section>
-        <img src={forwardStepIcon} onClick={forwardStep} alt="Next" id="next-song-icon" height={15} />
-      </section>
-      <section id="slider">
-        <span id="current-time" className="no-select slider-times">{formatSeconds(currentTime)}</span>
-        <input type="range" id="track-progress" onChange={seeking} onMouseUp={seekTo} style={{
-          background: `linear-gradient(to right, white 0%, white ${(currentTime/maxTime) * 100}%, #555 ${(currentTime/maxTime) * 100}%, #555 100%)`
-        }} max={maxTime} />
-        <span id="total-time" className="no-select slider-times">{formatSeconds(maxTime)}</span>
-      </section>
+      <Controls>
+        <MiscIcon onClick={backwardStep} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39.5 38">
+          <rect width="8" height="38" rx="1.03" ry="1.03"/>
+          <path d="M8.03,19.88l29.95,17.25c.68.39,1.52-.1,1.52-.88V1.75c0-.78-.84-1.27-1.52-.88L8.03,18.12c-.68.39-.68,1.37,0,1.76Z"/>
+        </MiscIcon>
+        <PlayerIconBackground onClick={playPauseTrack}>
+          <Icon data-name="play" display={isPaused ? '' : 'none'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43.07 47.45">
+            <path d="M42.13,22.13L2.71.23C1.49-.44,0,.44,0,1.83v43.8c0,1.39,1.49,2.27,2.71,1.6l39.42-21.9c1.25-.7,1.25-2.5,0-3.19Z"/>
+          </Icon>
+          <Icon data-name="pause" display={isPaused ? 'none' : ''} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 50">
+            <rect width="15" height="50"/>
+            <rect x="31" y="0" width="15" height="50"/>
+          </Icon>
+        </PlayerIconBackground>
+        <MiscIcon onClick={forwardStep} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39.5 38">
+          <rect x="31.5" width="8" height="38" rx="1.03" ry="1.03"/>
+          <path d="M31.47,19.88L1.52,37.13c-.68.39-1.52-.1-1.52-.88V1.75C0,.97.84.49,1.52.87l29.95,17.25c.68.39.68,1.37,0,1.76Z"/>
+        </MiscIcon>
+      </Controls>
+      <SliderSection>
+        <SliderTimes>{formatSeconds(currentTime)}</SliderTimes>
+        <Slider type="range" onChange={seeking} onMouseUp={seekTo} currentTime={currentTime} max={maxTime} />
+        <SliderTimes>{formatSeconds(maxTime)}</SliderTimes>
+      </SliderSection>
     </PlayerSection>
   );
 };
@@ -143,4 +149,86 @@ const PlayerSection = styled.section`
   max-width: 600px;
 `;
 
-const 
+const Controls = styled.section`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 5px 10px;
+  width: 100%;
+  max-width: 300px;
+  user-select: none;
+`;
+
+const Icon = styled.svg`
+  height: 15px;
+  width: 15px;
+`;
+
+const MiscIcon = styled(Icon)`
+  fill: gray;
+
+  &:hover {
+    fill: white;
+    transform: scale(1.05);
+  }
+`;
+
+const PlayerIconBackground = styled.section`
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35px;
+  width: 35px;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const SliderSection = styled.section`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+`;
+
+const SliderTimes = styled.span`
+  color: #a5a5a5;
+  font-size: 14px;
+  user-select: none;
+`;
+
+const Slider = styled.input<{ currentTime: number, max: number }>`
+  appearance: none;
+  background: linear-gradient(
+    to right,
+    white 0%,
+    white ${(props) => (props.currentTime/props.max) * 100}%,
+    #555 ${(props) => (props.currentTime/props.max) * 100}%,
+    #555 100%
+  );
+  border-radius: 5px;
+  margin: 0 5px;
+  outline: none;
+  height: 4px;
+  width: 100%;
+
+  &:hover {
+    background: linear-gradient(
+      to right,
+      #AAA 0%,
+      #AAA ${(props) => (props.currentTime/props.max) * 100}%,
+      #555 ${(props) => (props.currentTime/props.max) * 100}%,
+      #555 100%
+    );
+  }
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    border-radius: 100%;
+    width: 5px;
+    height: 5px;
+  }
+`;

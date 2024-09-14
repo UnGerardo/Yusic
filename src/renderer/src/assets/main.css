@@ -143,59 +143,6 @@ main {
   background-color: #3d3d3f;
 }
 
-#track-progress {
-  -webkit-appearance: none;
-  background: linear-gradient(to right, white 0%, white 50%, #555 50%, #555 100%);
-  border-radius: 5px;
-  margin: 0 5px;
-  outline: none;
-  height: 4px;
-  width: 100%;
-}
-#track-progress::-webkit-slider-thumb {
-  appearance: none;
-  border-radius: 100%;
-  width: 5px;
-  height: 5px;
-}
-
-#controls {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  margin: 5px 10px;
-  width: 100%;
-  max-width: 300px;
-}
-#play-pause-icon-bg {
-  background-color: #fff;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 35px;
-  width: 35px;
-}
-#play-pause-icon {
-  height: 18px;
-}
-
-#slider {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 100%;
-}
-
-.slider-times {
-  color: #a5a5a5;
-  font-size: 14px;
-}
-
-.no-select {
-  user-select: none;
-}
-
 #bottom-panel {
   background-color: black;
   display: grid;
