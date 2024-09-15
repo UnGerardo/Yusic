@@ -18,6 +18,7 @@ const Player = (): JSX.Element => {
   const [isPaused, setIsPaused] = useState<boolean>(true);
   const [currentTime, setCurrentTime] = useState(0);
   const [maxTime, setMaxTime] = useState(0);
+  const [volume, setVolume] = useState(1);
 
   const playPauseTrack = () => {
     const { current: audio } = $audioRef;
@@ -107,34 +108,52 @@ const Player = (): JSX.Element => {
     setAudioSource(nextTrack!.path);
   }
 
+  const adjustVolume = (event) => {
+    const { current: audio } = $audioRef;
+    setVolume(event.target.value);
+    audio!.volume = event.target.value;
+  }
+
   return (
-    <PlayerSection>
-      <audio src={audioSource} ref={$audioRef} onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd} />
-      <Controls>
-        <MiscIcon onClick={backwardStep} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39.5 38">
-          <rect width="8" height="38" rx="1.03" ry="1.03"/>
-          <path d="M8.03,19.88l29.95,17.25c.68.39,1.52-.1,1.52-.88V1.75c0-.78-.84-1.27-1.52-.88L8.03,18.12c-.68.39-.68,1.37,0,1.76Z"/>
-        </MiscIcon>
-        <PlayerIconBackground onClick={playPauseTrack}>
-          <Icon data-name="play" display={isPaused ? '' : 'none'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43.07 47.45">
-            <path d="M42.13,22.13L2.71.23C1.49-.44,0,.44,0,1.83v43.8c0,1.39,1.49,2.27,2.71,1.6l39.42-21.9c1.25-.7,1.25-2.5,0-3.19Z"/>
-          </Icon>
-          <Icon data-name="pause" display={isPaused ? 'none' : ''} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 50">
-            <rect width="15" height="50"/>
-            <rect x="31" y="0" width="15" height="50"/>
-          </Icon>
-        </PlayerIconBackground>
-        <MiscIcon onClick={forwardStep} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39.5 38">
-          <rect x="31.5" width="8" height="38" rx="1.03" ry="1.03"/>
-          <path d="M31.47,19.88L1.52,37.13c-.68.39-1.52-.1-1.52-.88V1.75C0,.97.84.49,1.52.87l29.95,17.25c.68.39.68,1.37,0,1.76Z"/>
-        </MiscIcon>
-      </Controls>
-      <SliderSection>
-        <SliderTimes>{formatSeconds(currentTime)}</SliderTimes>
-        <Slider type="range" onChange={seeking} onMouseUp={seekTo} value={currentTime} max={maxTime} />
-        <SliderTimes>{formatSeconds(maxTime)}</SliderTimes>
-      </SliderSection>
-    </PlayerSection>
+    <>
+      <PlayerSection>
+        <audio src={audioSource} ref={$audioRef} onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd}/>
+        <Controls>
+          <MiscIcon onClick={backwardStep} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39.5 38">
+            <rect width="8" height="38" rx="1.03" ry="1.03"/>
+            <path d="M8.03,19.88l29.95,17.25c.68.39,1.52-.1,1.52-.88V1.75c0-.78-.84-1.27-1.52-.88L8.03,18.12c-.68.39-.68,1.37,0,1.76Z"/>
+          </MiscIcon>
+          <PlayerIconBackground onClick={playPauseTrack}>
+            <Icon data-name="play" display={isPaused ? '' : 'none'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43.07 47.45">
+              <path d="M42.13,22.13L2.71.23C1.49-.44,0,.44,0,1.83v43.8c0,1.39,1.49,2.27,2.71,1.6l39.42-21.9c1.25-.7,1.25-2.5,0-3.19Z"/>
+            </Icon>
+            <Icon data-name="pause" display={isPaused ? 'none' : ''} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 50">
+              <rect width="15" height="50"/>
+              <rect x="31" y="0" width="15" height="50"/>
+            </Icon>
+          </PlayerIconBackground>
+          <MiscIcon onClick={forwardStep} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39.5 38">
+            <rect x="31.5" width="8" height="38" rx="1.03" ry="1.03"/>
+            <path d="M31.47,19.88L1.52,37.13c-.68.39-1.52-.1-1.52-.88V1.75C0,.97.84.49,1.52.87l29.95,17.25c.68.39.68,1.37,0,1.76Z"/>
+          </MiscIcon>
+        </Controls>
+        <SliderSection>
+          <SliderTimes>{formatSeconds(currentTime)}</SliderTimes>
+          <Slider type="range" onChange={seeking} onMouseUp={seekTo} value={currentTime} max={maxTime}/>
+          <SliderTimes>{formatSeconds(maxTime)}</SliderTimes>
+        </SliderSection>
+      </PlayerSection>
+      <ExtraControls>
+        <Volume>
+          <VolumeIcon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 49 45.25">
+            <path d="M30.31,44.82h0c-.68-.67-.69-1.74-.07-2.47,4.07-4.75,6.26-10.74,6.19-17.06-.06-6.32-2.37-12.27-6.53-16.93-.63-.71-.65-1.78.01-2.46h0c.72-.75,1.91-.7,2.6.07,4.75,5.31,7.38,12.09,7.45,19.28.07,7.19-2.43,14.02-7.06,19.43-.67.78-1.86.86-2.6.13Z"/>
+            <path d="M37.5,49.37h0c-.85-.84-.86-2.18-.08-3.09,5.09-5.94,7.83-13.44,7.75-21.35-.08-7.91-2.96-15.35-8.17-21.19-.79-.89-.81-2.23.02-3.08h0c.9-.93,2.39-.87,3.25.09,5.94,6.64,9.23,15.13,9.32,24.13.09,9-3.04,17.55-8.84,24.31-.84.98-2.33,1.07-3.25.17Z"/>
+            <path d="M23.07,2.87l-11.35,11.13H1.74c-.96,0-1.74.78-1.74,1.74v18.52c0,.96.78,1.74,1.74,1.74h9.98l11.35,11.13c1.09,1.07,2.93.3,2.93-1.23V4.1c0-1.53-1.84-2.3-2.93-1.23Z"/>
+          </VolumeIcon>
+          <VolumeSlider type="range" onChange={adjustVolume} value={volume} max={1} step={0.01} />
+        </Volume>
+      </ExtraControls>
+    </>
   );
 };
 
@@ -236,8 +255,27 @@ const Slider = styled.input<{ value: number, max: number }>`
   &::-webkit-slider-thumb {
     appearance: none;
   }
+`;
 
-  &::ms-tooltip {
-    display: none;
-  }
+const ExtraControls = styled.section`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Volume = styled.section`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const VolumeIcon = styled(Icon)`
+  fill: gray;
+  height: 20px;
+  width: 20px;
+  padding: 0 5px 0 0;
+`;
+
+const VolumeSlider = styled(Slider)`
+  width: 100px;
 `;
