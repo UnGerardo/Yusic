@@ -131,7 +131,7 @@ const Player = (): JSX.Element => {
       </Controls>
       <SliderSection>
         <SliderTimes>{formatSeconds(currentTime)}</SliderTimes>
-        <Slider type="range" onChange={seeking} onMouseUp={seekTo} currentTime={currentTime} max={maxTime} />
+        <Slider type="range" onChange={seeking} onMouseUp={seekTo} value={currentTime} max={maxTime} />
         <SliderTimes>{formatSeconds(maxTime)}</SliderTimes>
       </SliderSection>
     </PlayerSection>
@@ -200,13 +200,13 @@ const SliderTimes = styled.span`
   user-select: none;
 `;
 
-const Slider = styled.input<{ currentTime: number, max: number }>`
+const Slider = styled.input<{ value: number, max: number }>`
   appearance: none;
   background: linear-gradient(
     to right,
     white 0%,
-    white ${(props) => (props.currentTime/props.max) * 100}%,
-    #555 ${(props) => (props.currentTime/props.max) * 100}%,
+    white ${(props) => (props.value/props.max) * 100}%,
+    #555 ${(props) => (props.value/props.max) * 100}%,
     #555 100%
   );
   border-radius: 5px;
@@ -219,16 +219,25 @@ const Slider = styled.input<{ currentTime: number, max: number }>`
     background: linear-gradient(
       to right,
       #AAA 0%,
-      #AAA ${(props) => (props.currentTime/props.max) * 100}%,
-      #555 ${(props) => (props.currentTime/props.max) * 100}%,
+      #AAA ${(props) => (props.value/props.max) * 100}%,
+      #555 ${(props) => (props.value/props.max) * 100}%,
       #555 100%
     );
+
+    &::-webkit-slider-thumb {
+      appearance: initial;
+      background-color: white;
+      border-radius: 100%;
+      width: 10px;
+      height: 10px;
+    }
   }
 
   &::-webkit-slider-thumb {
     appearance: none;
-    border-radius: 100%;
-    width: 5px;
-    height: 5px;
+  }
+
+  &::ms-tooltip {
+    display: none;
   }
 `;
