@@ -127,22 +127,6 @@ main {
   max-width: 300px;
 }
 
-.queued-track {
-  display: grid;
-  grid-template-columns: 50px 1fr ;
-  align-items: center;
-  gap: 10px;
-  padding: 5px 5px 5px 10px;
-}
-.queued-track:hover{
-  background-color: #3d3d3f;
-  cursor: pointer;
-}
-
-#current-track {
-  background-color: #3d3d3f;
-}
-
 #bottom-panel {
   background-color: black;
   display: grid;
