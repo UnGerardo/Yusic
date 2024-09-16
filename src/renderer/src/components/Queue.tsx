@@ -20,13 +20,12 @@ function Queue() {
             width={width}
           >
             {({ index, style }) => (
-              <div style={style}>
-                <QueuedTrack
-                  key={queue[index].id}
-                  index={index}
-                  track={queue[index]}
-                />
-              </div>
+              <QueuedTrack
+                key={queue[index].id}
+                index={index}
+                track={queue[index]}
+                style={style}
+              />
             )}
           </FixedSizeList>
         )}

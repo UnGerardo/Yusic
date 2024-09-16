@@ -6,7 +6,7 @@ import Track from "@classes/Track";
 import styled from "styled-components";
 import { TrackArtist, TrackImage, TrackInfo, TrackTitle } from "@renderer/assets/Misc.styled";
 
-const QueuedTrack = ({ index, track } : { index: number, track: Track }): JSX.Element => {
+const QueuedTrack = ({ index, track, style } : { index: number, track: Track, style: React.CSSProperties }): JSX.Element => {
   const { queueIndex, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext)
   const { setAudioSource } = useContext(AudioSourceContext);
@@ -18,7 +18,7 @@ const QueuedTrack = ({ index, track } : { index: number, track: Track }): JSX.El
   }
 
   return (
-    <QueuedTrackSection isCurrentTrack={index === queueIndex} onClick={jumpToTrack}>
+    <QueuedTrackSection isCurrentTrack={index === queueIndex} onClick={jumpToTrack} style={style}>
       <TrackImage src={`data:${track.imgFormat};base64,${track.imgData}`} />
       <TrackInfo>
         <TrackTitle>{track.title}</TrackTitle>
