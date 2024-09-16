@@ -3,15 +3,17 @@ import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
 import { QueueContext } from "@contexts/QueueContext";
 import QueuedTrack from "./QueuedTrack";
+import styled from "styled-components";
 
 function Queue() {
   const { queue } = useContext(QueueContext);
 
   return (
-    <section id="queue" className="scrollbar" style={{ display: queue.length > 0 ? 'flex' : 'none' }}>
+    <QueueSection style={{ display: queue.length > 0 ? 'flex' : 'none' }}>
       <AutoSizer>
         {({ height, width }) => (
           <FixedSizeList
+            className="scrollbar"
             height={height}
             itemCount={queue.length}
             itemSize={60}
@@ -29,8 +31,17 @@ function Queue() {
           </FixedSizeList>
         )}
       </AutoSizer>
-    </section>
+    </QueueSection>
   )
 }
 
 export default Queue;
+
+const QueueSection = styled.section`
+  border-left: 1px white solid;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 300px;
+  max-width: 300px;
+`;

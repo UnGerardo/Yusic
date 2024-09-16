@@ -5,17 +5,18 @@ import TrackList from "./components/TrackList";
 import PlayingTrack from "./components/PlayingTrack";
 import Shuffle from "./components/Shuffle";
 import SearchQuery from "./components/SearchQuery";
+import styled from "styled-components";
 
 function App(): JSX.Element {
   return (
     <>
-      <main>
+      <Main>
         <section id="groups">
           <span className="group">Tracks</span>
           <span className="group">Artists</span>
           <span className="group">Albums</span>
         </section>
-        <section id="tracks" className="scrollbar">
+        <Tracks className="scrollbar">
           <section className="flex-cc">
             <ReadMusicFolder />
             <SearchQuery />
@@ -28,9 +29,9 @@ function App(): JSX.Element {
             <p className="track-duration">Time</p>
           </section>
           <TrackList />
-        </section>
+        </Tracks>
         <Queue />
-      </main>
+      </Main>
       <section id="bottom-panel">
         <PlayingTrack />
         <Player />
@@ -40,3 +41,14 @@ function App(): JSX.Element {
 }
 
 export default App;
+
+const Main = styled.main`
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+`;
+
+const Tracks = styled.section`
+  height: 100%;
+  width: 100%;
+`;

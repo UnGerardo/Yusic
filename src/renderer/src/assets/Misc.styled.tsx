@@ -1,9 +1,14 @@
 import styled from "styled-components";
 
-export const EllipsisOverflow = styled.div`
+export const EllipsisOverflow = styled.section`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+`;
+
+export const Scrollbar = styled.section`
+  scrollbar-color: gray rgb(43, 43, 43);
+  scrollbar-width: thin;
 `;
 
 export const TrackImage = styled.img`

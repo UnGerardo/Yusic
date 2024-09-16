@@ -21,12 +21,6 @@ body {
   border-bottom: 1px white solid;
 }
 
-main {
-  display: flex;
-  height: 100%;
-  overflow-y: hidden;
-}
-
 .scrollbar {
   scrollbar-color: gray rgb(43, 43, 43);
   scrollbar-width: thin;
@@ -49,12 +43,6 @@ main {
   cursor: pointer;
   padding: 10px 0;
   width: 100%;
-}
-
-#tracks {
-  height: 100%;
-  width: 100%;
-  overflow-y: auto;
 }
 
 .track-component {
@@ -116,15 +104,6 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-#queue {
-  border-left: 1px white solid;
-  display: none;
-  flex-direction: column;
-  overflow-y: auto;
-  min-width: 300px;
-  max-width: 300px;
 }
 
 #bottom-panel {

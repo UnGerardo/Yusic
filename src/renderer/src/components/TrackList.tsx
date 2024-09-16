@@ -32,6 +32,7 @@ const TrackList = () => {
     <AutoSizer>
       {({ height, width }) => (
         <FixedSizeList
+          className='scrollbar'
           height={height}
           itemCount={filteredTracks.length}
           itemSize={91}
