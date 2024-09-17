@@ -1,12 +1,12 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-export const EllipsisOverflow = styled.section`
+export const ellipsisOverflow = css`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 `;
 
-export const Scrollbar = styled.section`
+export const scrollbar = css`
   scrollbar-color: gray rgb(43, 43, 43);
   scrollbar-width: thin;
 `;
@@ -16,13 +16,17 @@ export const TrackImage = styled.img`
   width: 100%;
 `;
 
-export const TrackInfo = styled(EllipsisOverflow)``;
+export const TrackInfo = styled.section`
+  ${ellipsisOverflow};
+`;
 
-export const TrackTitle = styled(EllipsisOverflow)`
+export const TrackTitle = styled.p`
+  ${ellipsisOverflow};
   font-size: 15px;
 `;
 
-export const TrackArtist = styled(EllipsisOverflow)`
+export const TrackArtist = styled.p`
+  ${ellipsisOverflow};
   color: #a5a5a5;
   font-size: 12px;
 `;

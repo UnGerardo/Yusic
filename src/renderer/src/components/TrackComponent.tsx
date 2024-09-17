@@ -4,6 +4,8 @@ import { QueueContext } from "@contexts/QueueContext";
 import { PlayingTrackContext } from "@contexts/PlayingTrackContext";
 import { AudioSourceContext } from "@contexts/AudioSourceContext";
 import Track from "@classes/Track";
+import styled from "styled-components";
+import { ellipsisOverflow, TrackArtist, TrackImage, TrackInfo, TrackTitle } from "@renderer/assets/Misc.styled";
 
 const TrackComponent = ({ tracks, track, index } : { tracks: Track[], track: Track, index: number }): JSX.Element => {
   const { setQueue, setQueueIndex } = useContext(QueueContext);
@@ -12,23 +14,59 @@ const TrackComponent = ({ tracks, track, index } : { tracks: Track[], track: Tra
 
   const playAtTrack = () => {
     setAudioSource(track.path);
-
     setPlayingTrack(track);
     setQueueIndex(index);
     setQueue(tracks);
   }
 
   return (
-    <section className="track-component track-hover" onClick={playAtTrack}>
-      <img className="track-img" src={track.imgData ? `data:${track.imgFormat};base64,${track.imgData}` : ''} />
-      <section className="track-title-artist ellip-overflow">
-        <p className="ellip-overflow m-b-5">{track.title}</p>
-        <p className="track-artist ellip-overflow">{track.artists}</p>
-      </section>
-      <p className="track-album ellip-overflow">{track.album}</p>
-      <p className="track-duration">{formatSeconds(track.duration!)}</p>
-    </section>
+    <TrackSection onClick={playAtTrack}>
+      <TrackImage src={`data:${track.imgFormat};base64,${track.imgData}`}/>
+      <TrackInfo>
+        <TrackTitle>{track.title}</TrackTitle>
+        <TrackArtist>{track.artists}</TrackArtist>
+      </TrackInfo>
+      <TrackAlbum>{track.album}</TrackAlbum>
+      <TrackDuration>{formatSeconds(track.duration!)}</TrackDuration>
+    </TrackSection>
   );
 };
 
 export default TrackComponent;
+
+const TrackSection = styled.section`
+  display: grid;
+  grid-template-columns: 80px 2fr 2fr 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  margin: 10px 10px 0;
+  border-bottom: 1px whitesmoke solid;
+
+  &:hover {
+    background-color: #3d3d3f;
+    cursor: pointer;
+  }
+
+  @media (max-width: 920px) {
+    grid-template-columns: 60px 2fr 1fr;
+  }
+
+  @media (max-width: 820px) {
+    grid-template-columns: 50px 1fr;
+  }
+`;
+
+const TrackAlbum = styled.p`
+  ${ellipsisOverflow};
+
+  @media (max-width: 920px) {
+    display: none;
+  }
+`;
+
+const TrackDuration = styled.p`
+  @media (max-width: 820px) {
+    display: none;
+  }
+`;
