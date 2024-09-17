@@ -21,11 +21,6 @@ body {
   border-bottom: 1px white solid;
 }
 
-.scrollbar {
-  scrollbar-color: gray rgb(43, 43, 43);
-  scrollbar-width: thin;
-}
-
 #groups {
   border-right: 1px white solid;
   display: flex;
@@ -43,21 +38,6 @@ body {
   cursor: pointer;
   padding: 10px 0;
   width: 100%;
-}
-
-.track-component {
-  display: grid;
-  grid-template-columns: 80px 2fr 2fr 1fr;
-  align-items: center;
-  gap: 10px;
-  padding: 5px;
-  margin: 10px 10px 0;
-  border-bottom: 1px whitesmoke solid;
-}
-
-.track-hover:hover {
-  background-color: #3d3d3f;
-  cursor: pointer;
 }
 
 @media (max-width: 920px) {
@@ -78,22 +58,6 @@ body {
   .track-album {
     display: none;
   }
-}
-
-.track-artist {
-  font-size: 15px;
-  color: #BBB;
-}
-
-.track-img {
-  border-radius: 5px;
-  width: 100%;
-}
-
-.ellip-overflow {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
 }
 
 .m-b-5 {

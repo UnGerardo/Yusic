@@ -1,3 +1,4 @@
+import { FixedSizeList } from "react-window";
 import styled, { css } from "styled-components";
 
 export const ellipsisOverflow = css`
@@ -9,6 +10,10 @@ export const ellipsisOverflow = css`
 export const scrollbar = css`
   scrollbar-color: gray rgb(43, 43, 43);
   scrollbar-width: thin;
+`;
+
+export const WindowList = styled(FixedSizeList)`
+  ${scrollbar};
 `;
 
 export const TrackImage = styled.img`

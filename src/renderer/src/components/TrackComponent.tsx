@@ -7,7 +7,7 @@ import Track from "@classes/Track";
 import styled from "styled-components";
 import { ellipsisOverflow, TrackArtist, TrackImage, TrackInfo, TrackTitle } from "@renderer/assets/Misc.styled";
 
-const TrackComponent = ({ tracks, track, index } : { tracks: Track[], track: Track, index: number }): JSX.Element => {
+const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], track: Track, index: number, style: React.CSSProperties }): JSX.Element => {
   const { setQueue, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext);
   const { setAudioSource } = useContext(AudioSourceContext);
@@ -20,7 +20,7 @@ const TrackComponent = ({ tracks, track, index } : { tracks: Track[], track: Tra
   }
 
   return (
-    <TrackSection onClick={playAtTrack}>
+    <TrackSection onClick={playAtTrack} style={style}>
       <TrackImage src={`data:${track.imgFormat};base64,${track.imgData}`}/>
       <TrackInfo>
         <TrackTitle>{track.title}</TrackTitle>

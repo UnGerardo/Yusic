@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
 import { QueueContext } from "@contexts/QueueContext";
 import QueuedTrack from "./QueuedTrack";
 import styled from "styled-components";
+import { WindowList } from "@renderer/assets/Misc.styled";
 
 function Queue() {
   const { queue } = useContext(QueueContext);
@@ -12,8 +12,7 @@ function Queue() {
     <QueueSection style={{ display: queue.length > 0 ? 'flex' : 'none' }}>
       <AutoSizer>
         {({ height, width }) => (
-          <FixedSizeList
-            className="scrollbar"
+          <WindowList
             height={height}
             itemCount={queue.length}
             itemSize={60}
@@ -27,7 +26,7 @@ function Queue() {
                 style={style}
               />
             )}
-          </FixedSizeList>
+          </WindowList>
         )}
       </AutoSizer>
     </QueueSection>
