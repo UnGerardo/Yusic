@@ -35,3 +35,21 @@ export const TrackArtist = styled.p`
   color: #a5a5a5;
   font-size: 12px;
 `;
+
+export const BigIcon = styled.section`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+  padding: 8px;
+  height: 50px;
+  width: 50px;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;

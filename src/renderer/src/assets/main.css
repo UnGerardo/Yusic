@@ -40,30 +40,6 @@ body {
   width: 100%;
 }
 
-@media (max-width: 920px) {
-  .track-component {
-    grid-template-columns: 60px 2fr 1fr;
-  }
-
-  .track-duration {
-    display: none;
-  }
-}
-
-@media (max-width: 820px) {
-  .track-component {
-    grid-template-columns: 50px 2fr;
-  }
-
-  .track-album {
-    display: none;
-  }
-}
-
-.m-b-5 {
-  margin-bottom: 5px;
-}
-
 .flex-cc {
   display: flex;
   justify-content: center;
@@ -75,22 +51,4 @@ body {
   display: grid;
   grid-template-columns: 1fr 1.15fr 1fr;
   padding: 15px;
-}
-
-.icon-big {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 30px;
-  padding: 8px;
-  height: 50px;
-  width: 50px;
-  transition: transform 0.3s;
-}
-.icon-big:hover {
-  background-color: rgba(255, 255, 255, .4);
-  transform: scale(1.1);
-}
-.icon-big:active {
-  transform: scale(0.95);
 }
