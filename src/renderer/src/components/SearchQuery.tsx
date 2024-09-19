@@ -1,5 +1,3 @@
-import "./search-query.css";
-
 import { useContext } from "react";
 import { SearchQueryContext } from "@contexts/SearchQueryContext";
 import styled from "styled-components";
