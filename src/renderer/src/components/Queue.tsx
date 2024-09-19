@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { QueueContext } from "@contexts/QueueContext";
 import QueuedTrack from "./QueuedTrack";
@@ -6,7 +6,18 @@ import styled from "styled-components";
 import { WindowList } from "@renderer/assets/Misc.styled";
 
 function Queue() {
-  const { queue } = useContext(QueueContext);
+  const $listRef = useRef(null);
+  const { queue, queueIndex } = useContext(QueueContext);
+
+  useEffect(() => {
+    if ($listRef.current) {
+      ($listRef.current as HTMLElement).scrollTo({
+        top: queueIndex * 60,
+        left: 0,
+        behavior: "smooth"
+      });
+    }
+  }, [queueIndex]);
 
   return (
     <QueueSection style={{ display: queue.length > 0 ? 'flex' : 'none' }}>
@@ -17,6 +28,7 @@ function Queue() {
             itemCount={queue.length}
             itemSize={60}
             width={width}
+            outerRef={$listRef}
           >
             {({ index, style }) => (
               <QueuedTrack
