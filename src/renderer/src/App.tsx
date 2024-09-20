@@ -10,6 +10,7 @@ import { scrollbar } from "./assets/Misc.styled";
 const App = (): JSX.Element => (
   <>
     <AppContainer>
+      <BackgroundImage path="" />
       <SidePanel />
       <Main>
         <ActionBar />
@@ -30,6 +31,22 @@ const AppContainer = styled.section`
   background-color: black;
   overflow: hidden;
   position: relative;
+`;
+
+const BackgroundImage = styled.div<{ path: string }>`
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0.15;
+  background-image: ${props => `url(${props.path})`};
+  background-size: cover;
+  background-position: center;
+  user-select: none;
+  pointer-events: none;
 `;
 
 const Main = styled.main`
