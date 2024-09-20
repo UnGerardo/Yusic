@@ -1,0 +1,38 @@
+import styled from "styled-components";
+
+export const TrackHeader = (): JSX.Element => (
+  <Header>
+    <p>Image</p>
+    <p>Title & Artist</p>
+    <Album>Album</Album>
+    <Duration>Time</Duration>
+  </Header>
+);
+
+const Header = styled.section`
+  display: grid;
+  grid-template-columns: 80px 2fr 2fr 1fr;
+  align-items: center;
+  margin: 0 10px 0;
+  border-bottom: 1px gray solid;
+
+  @media (max-width: 920px) {
+    grid-template-columns: 60px 2fr 1fr;
+  }
+
+  @media (max-width: 820px) {
+    grid-template-columns: 50px 1fr;
+  }
+`;
+
+const Album = styled.p`
+  @media (max-width: 920px) {
+    display: none;
+  }
+`;
+
+const Duration = styled.p`
+  @media (max-width: 820px) {
+    display: none;
+  }
+`;

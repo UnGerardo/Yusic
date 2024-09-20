@@ -33,7 +33,7 @@ export const TrackTitle = styled.p`
 export const TrackArtist = styled.p`
   ${ellipsisOverflow};
   color: #a5a5a5;
-  font-size: 12px;
+  font-size: 14px;
 `;
 
 export const BigIcon = styled.section`

@@ -1,54 +1,40 @@
-import Player from "./components/Player";
 import Queue from "./components/Queue";
-import ReadMusicFolder from "./components/ReadMusicFolder";
 import TrackList from "./components/TrackList";
-import PlayingTrack from "./components/PlayingTrack";
-import Shuffle from "./components/Shuffle";
-import SearchQuery from "./components/SearchQuery";
 import styled from "styled-components";
+import { TrackHeader } from "./components/TrackHeader";
+import { BottomPanel } from "./components/BottomPanel";
+import { SidePanel } from "./components/SidePanel";
+import { ActionBar } from "./components/ActionBar";
+import { scrollbar } from "./assets/Misc.styled";
 
-function App(): JSX.Element {
-  return (
-    <>
+const App = (): JSX.Element => (
+  <>
+    <AppContainer>
+      <SidePanel />
       <Main>
-        <section id="groups">
-          <span className="group">Tracks</span>
-          <span className="group">Artists</span>
-          <span className="group">Albums</span>
-        </section>
-        <Tracks className="scrollbar">
-          <section className="flex-cc">
-            <ReadMusicFolder />
-            <SearchQuery />
-            <Shuffle />
-          </section>
-          <section className="track-component">
-            <p>Image</p>
-            <p>Title & Artist</p>
-            <p className="track-album">Album</p>
-            <p className="track-duration">Time</p>
-          </section>
-          <TrackList />
-        </Tracks>
-        <Queue />
+        <ActionBar />
+        <TrackHeader />
+        <TrackList />
       </Main>
-      <section id="bottom-panel">
-        <PlayingTrack />
-        <Player />
-      </section>
-    </>
-  )
-}
+      <Queue />
+    </AppContainer>
+    <BottomPanel />
+  </>
+);
 
 export default App;
 
-const Main = styled.main`
+const AppContainer = styled.section`
   display: flex;
   height: 100%;
+  background-color: black;
   overflow: hidden;
+  position: relative;
 `;
 
-const Tracks = styled.section`
+const Main = styled.main`
+  ${scrollbar};
+
   height: 100%;
   width: 100%;
 `;

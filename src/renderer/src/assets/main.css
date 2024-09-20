@@ -4,14 +4,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* background-image: url('./wavy-lines.svg');
-  background-size: cover; */
 }
 
 #root {
   display: flex;
-  /* align-items: center; */
-  /* justify-content: center; */
   flex-direction: column;
   height: 100vh;
   width: 100vw;
@@ -19,36 +15,4 @@ body {
 
 #options {
   border-bottom: 1px white solid;
-}
-
-#groups {
-  border-right: 1px white solid;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  width: 10%;
-  max-width: 200px;
-}
-
-.group {
-  border-bottom: 1px white solid;
-  display: flex;
-  justify-content: center;
-  cursor: pointer;
-  padding: 10px 0;
-  width: 100%;
-}
-
-.flex-cc {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#bottom-panel {
-  background-color: black;
-  display: grid;
-  grid-template-columns: 1fr 1.15fr 1fr;
-  padding: 15px;
 }

@@ -40,8 +40,8 @@ const TrackSection = styled.section`
   align-items: center;
   gap: 10px;
   padding: 5px;
-  margin: 10px 10px 0;
-  border-bottom: 1px whitesmoke solid;
+  margin: 0 10px 0;
+  border-bottom: 1px gray solid;
 
   &:hover {
     background-color: #3d3d3f;
