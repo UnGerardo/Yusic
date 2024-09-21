@@ -37,6 +37,7 @@ const TrackList = () => {
           itemCount={filteredTracks.length}
           itemSize={91}
           width={width}
+          style={{ overflowX: 'hidden' }}
         >
           {({ index, style }) => (
             <TrackComponent

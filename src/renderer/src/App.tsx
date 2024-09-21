@@ -5,7 +5,6 @@ import { TrackHeader } from "./components/TrackHeader";
 import { BottomPanel } from "./components/BottomPanel";
 import { SidePanel } from "./components/SidePanel";
 import { ActionBar } from "./components/ActionBar";
-import { scrollbar } from "./assets/Misc.styled";
 
 const App = (): JSX.Element => (
   <>
@@ -15,7 +14,9 @@ const App = (): JSX.Element => (
       <Main>
         <ActionBar />
         <TrackHeader />
-        <TrackList />
+        <div>
+          <TrackList />
+        </div>
       </Main>
       <Queue />
     </AppContainer>
@@ -50,7 +51,8 @@ const BackgroundImage = styled.div<{ path: string }>`
 `;
 
 const Main = styled.main`
-  ${scrollbar};
+  display: grid;
+  grid-template-rows: 50px 27px 1fr;
 
   height: 100%;
   width: 100%;
