@@ -1,35 +1,40 @@
+import { useContext } from "react";
+import { BackgroundColorContext } from "./contexts/BackgroundColorContext";
+import styled from "styled-components";
 import Queue from "./components/Queue";
 import TrackList from "./components/TrackList";
-import styled from "styled-components";
 import { TrackHeader } from "./components/TrackHeader";
 import { BottomPanel } from "./components/BottomPanel";
 import { SidePanel } from "./components/SidePanel";
 import { ActionBar } from "./components/ActionBar";
 
-const App = (): JSX.Element => (
-  <>
-    <AppContainer>
-      <BackgroundImage path="" />
-      <SidePanel />
-      <Main>
-        <ActionBar />
-        <TrackHeader />
-        <div>
-          <TrackList />
-        </div>
-      </Main>
-      <Queue />
-    </AppContainer>
-    <BottomPanel />
-  </>
-);
+const App = (): JSX.Element => {
+  const { backgroundColor } = useContext(BackgroundColorContext);
 
+  return (
+    <>
+      <AppContainer backgroundColor={backgroundColor}>
+        <BackgroundImage path=""/>
+        <SidePanel />
+        <Main>
+          <ActionBar />
+          <TrackHeader />
+          <div>
+            <TrackList />
+          </div>
+        </Main>
+        <Queue />
+      </AppContainer>
+      <BottomPanel />
+    </>
+  );
+}
 export default App;
 
-const AppContainer = styled.section`
+const AppContainer = styled.section<{ backgroundColor: string }>`
   display: flex;
   height: 100%;
-  background-color: black;
+  background-color: ${props => props.backgroundColor};
   overflow: hidden;
   position: relative;
 `;
