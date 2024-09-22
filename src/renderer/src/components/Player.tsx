@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import formatSeconds from "@renderer/utils/formatSeconds";
@@ -19,6 +19,10 @@ const Player = (): JSX.Element => {
   const [currentTime, setCurrentTime] = useState(0);
   const [maxTime, setMaxTime] = useState(0);
   const [volume, setVolume] = useState(1);
+
+  useEffect(() => {
+    if (audioSource === '') setIsPaused(true);
+  }, [audioSource]);
 
   const playPauseTrack = () => {
     const { current: audio } = $audioRef;
