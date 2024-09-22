@@ -43,7 +43,12 @@ const Player = (): JSX.Element => {
     const audio = event.target as HTMLAudioElement;
     setMaxTime(audio.duration);
     setCurrentTime(0);
-    if (!isPaused) audio.play();
+    audio.play();
+    setIsPaused(false);
+    setUpdateProgressInterval((oldInterval) => {
+      clearInterval(oldInterval);
+      return setInterval(() => setCurrentTime(audio.currentTime), 499);
+    });
   }
 
   const seeking = (event) => {
