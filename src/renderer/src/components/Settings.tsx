@@ -1,10 +1,12 @@
 import { BigIcon } from "@renderer/assets/Misc.styled";
 import { BackgroundColorContext } from "@renderer/contexts/BackgroundColorContext";
+import { BackgroundImageContext } from "@renderer/contexts/BackgroundImageContext";
 import { useContext, useState } from "react";
 import styled from "styled-components";
 
 export const Settings = (): JSX.Element => {
   const { setBackgroundColor } = useContext(BackgroundColorContext);
+  const { setBackgroundImage } = useContext(BackgroundImageContext);
   const [isOpen, setisOpen] = useState(false);
 
   const openSettings = (): void => {
@@ -13,6 +15,23 @@ export const Settings = (): JSX.Element => {
 
   const changeBackgroundColor = (event): void => {
     setBackgroundColor(event.target.value);
+  }
+
+  const changeBackgroundImage = (event): void => {
+    const filePath: string = event.target.files[0].path;
+    const splitPath = filePath.split('.');
+    const fileExtension = splitPath[splitPath.length - 1];
+
+    switch (fileExtension) {
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'webp':
+        setBackgroundImage(filePath.replaceAll('\\', '/'));
+        break;
+      default:
+        alert("Only the following file extensions are allowed: 'jpg', 'jpeg', 'png', 'webp'");
+    }
   }
 
   return (
@@ -31,6 +50,7 @@ export const Settings = (): JSX.Element => {
             </li>
             <li>
               <p>Set Background Image</p>
+              <input type="file" name="bg-image" onChange={changeBackgroundImage}/>
             </li>
           </ul>
         </SettingsMenu>

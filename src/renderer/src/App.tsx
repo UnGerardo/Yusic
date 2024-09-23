@@ -7,14 +7,16 @@ import { TrackHeader } from "./components/TrackHeader";
 import { BottomPanel } from "./components/BottomPanel";
 import { SidePanel } from "./components/SidePanel";
 import { ActionBar } from "./components/ActionBar";
+import { BackgroundImageContext } from "./contexts/BackgroundImageContext";
 
 const App = (): JSX.Element => {
   const { backgroundColor } = useContext(BackgroundColorContext);
+  const { backgroundImage } = useContext(BackgroundImageContext);
 
   return (
     <>
       <AppContainer backgroundColor={backgroundColor}>
-        <BackgroundImage path=""/>
+        <BackgroundImage path={backgroundImage}/>
         <SidePanel />
         <Main>
           <ActionBar />

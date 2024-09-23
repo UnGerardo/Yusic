@@ -10,6 +10,7 @@ import { QueueProvider } from "@contexts/QueueContext";
 import { PlayingTrackProvider } from "@contexts/PlayingTrackContext";
 import { SearchQueryProvider } from './contexts/SearchQueryContext';
 import { BackgroundColorProvider } from './contexts/BackgroundColorContext';
+import { BackgroundImageProvider } from './contexts/BackgroundImageContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -19,7 +20,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <TracksProvider>
             <SearchQueryProvider>
               <BackgroundColorProvider>
-                <App />
+                <BackgroundImageProvider>
+                  <App />
+                </BackgroundImageProvider>
               </BackgroundColorProvider>
             </SearchQueryProvider>
           </TracksProvider>
