@@ -99,6 +99,13 @@ const Player = (): JSX.Element => {
   }
 
   const backwardStep = () => {
+    if (currentTime > 20) {
+      setCurrentTime(0);
+      const { current: audio } = $audioRef;
+      audio!.currentTime = 0;
+      return;
+    }
+
     if (queueIndex === 0) return;
 
     const queueIndexDec = queueIndex - 1;
