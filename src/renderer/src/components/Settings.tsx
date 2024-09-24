@@ -19,19 +19,7 @@ export const Settings = (): JSX.Element => {
 
   const changeBackgroundImage = (event): void => {
     const filePath: string = event.target.files[0].path;
-    const splitPath = filePath.split('.');
-    const fileExtension = splitPath[splitPath.length - 1];
-
-    switch (fileExtension) {
-      case 'jpg':
-      case 'jpeg':
-      case 'png':
-      case 'webp':
-        setBackgroundImage(filePath.replaceAll('\\', '/'));
-        break;
-      default:
-        alert("Only the following file extensions are allowed: 'jpg', 'jpeg', 'png', 'webp'");
-    }
+    setBackgroundImage(encodeURI(filePath).replaceAll('%5C', '/').replace('%3A', ':'));
   }
 
   return (
@@ -43,16 +31,14 @@ export const Settings = (): JSX.Element => {
       </BigIcon>
       {isOpen &&
         <SettingsMenu>
-          <ul>
-            <li>
-              <label htmlFor="background-color">Background Color:</label>
-              <input type="color" name="background-color" onChange={changeBackgroundColor}/>
-            </li>
-            <li>
-              <p>Set Background Image</p>
-              <input type="file" name="bg-image" onChange={changeBackgroundImage}/>
-            </li>
-          </ul>
+          <Setting>
+            <label htmlFor="background-color">Background Color:</label>
+            <input type="color" name="background-color" onChange={changeBackgroundColor}/>
+          </Setting>
+          <Setting>
+            <p>Background Image:</p>
+            <input type="file" name="bg-image" onChange={changeBackgroundImage} accept="image/*"/>
+          </Setting>
         </SettingsMenu>
       }
     </SettingsContainer>
@@ -70,18 +56,27 @@ const SettingsIcon = styled.svg`
   position: relative;
 `;
 
-const SettingsMenu = styled.section`
+const SettingsMenu = styled.ul`
   background-color: white;
   border: 1px solid black;
   border-radius: 5px;
   color: black;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  list-style: none;
+  padding: 10px;
+  margin: 0;
   position: absolute;
   top: 50px;
-  left: -25px;
-  height: 200px;
-  width: 200px;
+  left: -120px;
+  width: 300px;
   z-index: 100;
+`;
+
+const Setting = styled.li`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 5px;
 `;

@@ -50,7 +50,7 @@ const BackgroundImage = styled.div<{ path: string }>`
   top: 0;
   bottom: 0;
   opacity: 0.15;
-  background-image: ${props => `url(${props.path})`};
+  background-image: ${props => `url("${props.path}")`};
   background-size: cover;
   background-position: center;
   user-select: none;
