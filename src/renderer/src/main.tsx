@@ -11,6 +11,7 @@ import { PlayingTrackProvider } from "@contexts/PlayingTrackContext";
 import { SearchQueryProvider } from './contexts/SearchQueryContext';
 import { BackgroundColorProvider } from './contexts/BackgroundColorContext';
 import { BackgroundImageProvider } from './contexts/BackgroundImageContext';
+import { BackgroundImageOpacityProvider } from './contexts/BackgroundImageOpacity';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -21,7 +22,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             <SearchQueryProvider>
               <BackgroundColorProvider>
                 <BackgroundImageProvider>
-                  <App />
+                  <BackgroundImageOpacityProvider>
+                    <App />
+                  </BackgroundImageOpacityProvider>
                 </BackgroundImageProvider>
               </BackgroundColorProvider>
             </SearchQueryProvider>

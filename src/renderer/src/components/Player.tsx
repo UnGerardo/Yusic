@@ -7,6 +7,7 @@ import { QueueContext } from "@renderer/contexts/QueueContext";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 
 import Track from "src/classes/Track";
+import { Slider } from "@renderer/assets/Misc.styled";
 
 const Player = (): JSX.Element => {
   const $audioRef = useRef<HTMLAudioElement>(null);
@@ -244,45 +245,6 @@ const SliderTimes = styled.span`
   color: #a5a5a5;
   font-size: 14px;
   user-select: none;
-`;
-
-const Slider = styled.input<{ value: number, max: number }>`
-  appearance: none;
-  background: linear-gradient(
-    to right,
-    white 0%,
-    white ${(props) => (props.value/props.max) * 100}%,
-    #555 ${(props) => (props.value/props.max) * 100}%,
-    #555 100%
-  );
-  border-radius: 5px;
-  margin: 0 5px;
-  outline: none;
-  height: 4px;
-  width: 100%;
-
-  &:hover {
-    cursor: pointer;
-    background: linear-gradient(
-      to right,
-      #AAA 0%,
-      #AAA ${(props) => (props.value/props.max) * 100}%,
-      #555 ${(props) => (props.value/props.max) * 100}%,
-      #555 100%
-    );
-
-    &::-webkit-slider-thumb {
-      appearance: initial;
-      background-color: white;
-      border-radius: 100%;
-      width: 10px;
-      height: 10px;
-    }
-  }
-
-  &::-webkit-slider-thumb {
-    appearance: none;
-  }
 `;
 
 const ExtraControls = styled.section`

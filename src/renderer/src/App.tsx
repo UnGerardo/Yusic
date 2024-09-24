@@ -8,15 +8,17 @@ import { BottomPanel } from "./components/BottomPanel";
 import { SidePanel } from "./components/SidePanel";
 import { ActionBar } from "./components/ActionBar";
 import { BackgroundImageContext } from "./contexts/BackgroundImageContext";
+import { BackgroundImageOpacityContext } from "./contexts/BackgroundImageOpacity";
 
 const App = (): JSX.Element => {
   const { backgroundColor } = useContext(BackgroundColorContext);
   const { backgroundImage } = useContext(BackgroundImageContext);
+  const { backgroundImageOpacity } = useContext(BackgroundImageOpacityContext)
 
   return (
     <>
       <AppContainer backgroundColor={backgroundColor}>
-        <BackgroundImage path={backgroundImage}/>
+        <BackgroundImage path={backgroundImage} opacity={backgroundImageOpacity}/>
         <SidePanel />
         <Main>
           <ActionBar />
@@ -41,7 +43,7 @@ const AppContainer = styled.section<{ backgroundColor: string }>`
   position: relative;
 `;
 
-const BackgroundImage = styled.div<{ path: string }>`
+const BackgroundImage = styled.div<{ path: string, opacity: number }>`
   content: '';
   display: block;
   position: absolute;
@@ -49,7 +51,7 @@ const BackgroundImage = styled.div<{ path: string }>`
   right: 0;
   top: 0;
   bottom: 0;
-  opacity: 0.15;
+  opacity: ${props => props.opacity};
   background-image: ${props => `url("${props.path}")`};
   background-size: cover;
   background-position: center;
