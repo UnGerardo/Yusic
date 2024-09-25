@@ -68,6 +68,7 @@ export const Slider = styled.input<{ value: number, max: number }>`
   outline: none;
   height: 4px;
   width: 100%;
+  max-width: 600px;
 
   &:hover {
     cursor: pointer;
