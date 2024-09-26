@@ -8,6 +8,7 @@ import { IAudioMetadata, parseFile } from 'music-metadata';
 import Database from 'better-sqlite3';
 
 import Track from '../classes/Track';
+import Setting from '../classes/Setting';
 
 function createWindow(): void {
   // Create the browser window.
@@ -72,6 +73,36 @@ app.whenReady().then(() => {
       imgData TEXT
     )
   `).run();
+
+  db.prepare(`
+    CREATE TABLE IF NOT EXISTS AppSettings (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL UNIQUE,
+      value TEXT NOT NULL
+    )
+  `).run();
+
+  const appSettings = db.prepare('SELECT * FROM AppSettings').all();
+  if (appSettings.length === 0) {
+    const settings = {
+      'bg-color': 'gray',
+      'bg-image': '',
+      'bg-image-opacity': '1',
+    }
+    const insertQuery = db.prepare('INSERT INTO AppSettings (name, value) VALUES (?, ?)');
+
+    for (const setting in settings) {
+      insertQuery.run(setting, settings[setting]);
+    }
+  }
+
+  ipcMain.handle('get-app-settings', () => {
+    return db.prepare('SELECT * FROM AppSettings').all() as Setting[];
+  });
+
+  ipcMain.handle('set-app-setting', (_event, name: string, value: string) => {
+    db.prepare('UPDATE AppSettings SET value = ? WHERE name = ?').run(value, name);
+  });
 
   const insertMusicFile = db.prepare(`
     INSERT INTO MusicFiles (path, title, artists, album, duration, imgFormat, imgData)

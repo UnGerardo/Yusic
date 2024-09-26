@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 
 import Track from '../classes/Track';
+import Setting from '../classes/Setting';
 import DatabaseApi from './DatabaseApi';
 import DirApi from './DirApi';
 import MusicMetadataApi from './MusicMetadataApi';
@@ -21,6 +22,8 @@ const databaseApi: DatabaseApi = {
   getAllMusicFiles: (): Promise<Track[]> => ipcRenderer.invoke('get-all-music-files'),
   getTrackIds: (): Promise<number[]> => ipcRenderer.invoke('get-track-ids'),
   getTrackById: (id: number) => ipcRenderer.invoke('get-track-by-id', id),
+  getAppSettings: (): Promise<Setting[]> => ipcRenderer.invoke('get-app-settings'),
+  setAppSetting: (name: string, value: string): Promise<void> => ipcRenderer.invoke('set-app-setting', name, value),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
