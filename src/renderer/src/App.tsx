@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { BackgroundColorContext } from "./contexts/BackgroundColorContext";
 import styled from "styled-components";
+
 import Queue from "./components/Queue";
 import TrackList from "./components/TrackList";
 import { TrackHeader } from "./components/TrackHeader";
@@ -13,7 +14,7 @@ import { BackgroundImageOpacityContext } from "./contexts/BackgroundImageOpacity
 const App = (): JSX.Element => {
   const { backgroundColor } = useContext(BackgroundColorContext);
   const { backgroundImage } = useContext(BackgroundImageContext);
-  const { backgroundImageOpacity } = useContext(BackgroundImageOpacityContext)
+  const { backgroundImageOpacity } = useContext(BackgroundImageOpacityContext);
 
   return (
     <>

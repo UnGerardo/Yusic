@@ -1,5 +1,6 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import Setting from "../../../classes/Setting";
 import { BigIcon, Slider } from "@renderer/assets/Misc.styled";
 import { BackgroundColorContext } from "@renderer/contexts/BackgroundColorContext";
 import { BackgroundImageContext } from "@renderer/contexts/BackgroundImageContext";
@@ -8,26 +9,57 @@ import { BackgroundImageOpacityContext } from "@renderer/contexts/BackgroundImag
 export const Settings = (): JSX.Element => {
   const { setBackgroundColor } = useContext(BackgroundColorContext);
   const { setBackgroundImage } = useContext(BackgroundImageContext);
-  const { setBackgroundImageOpacity } = useContext(BackgroundImageOpacityContext);
+  const { backgroundImageOpacity, setBackgroundImageOpacity } = useContext(BackgroundImageOpacityContext);
   const [isOpen, setisOpen] = useState(false);
-  const [opacity, setOpacity] = useState(1);
+
+  const $menuRef = useRef(null);
+
+  useEffect(() => {
+    window.databaseApi.getAppSettings().then((settings: Setting[]) => {
+      const settingHandlers = {
+        'bg-color': setBackgroundColor,
+        'bg-image': setBackgroundImage,
+        'bg-image-opacity': setBackgroundImageOpacity,
+      }
+
+      for (const setting of settings) {
+        settingHandlers[setting.name](setting.value);
+      }
+    });
+
+    document.addEventListener('mousedown', closeSettings);
+
+    return () => {
+      document.removeEventListener('mousedown', closeSettings);
+    }
+  }, []);
 
   const openSettings = (): void => {
     setisOpen((isOpen) => !isOpen);
   }
 
+  const closeSettings = (event): void => {
+    const menu = $menuRef.current as unknown as HTMLElement;
+    if (menu && !menu.contains(event.target)) {
+      setisOpen(false);
+    }
+  }
+
   const changeBackgroundColor = (event): void => {
     setBackgroundColor(event.target.value);
+    window.databaseApi.setAppSetting('bg-color', `${event.target.value}`);
   }
 
   const changeBackgroundImage = (event): void => {
     const filePath: string = event.target.files[0].path;
-    setBackgroundImage(encodeURI(filePath).replaceAll('%5C', '/').replace('%3A', ':'));
+    const sanitizedPath = encodeURI(filePath).replaceAll('%5C', '/').replace('%3A', ':');
+    setBackgroundImage(sanitizedPath);
+    window.databaseApi.setAppSetting('bg-image', sanitizedPath);
   }
 
   const changeBackgroundImageOpacity = (event): void => {
-    setOpacity(event.target.value);
     setBackgroundImageOpacity(event.target.value);
+    window.databaseApi.setAppSetting('bg-image-opacity', `${event.target.value}`);
   }
 
   return (
@@ -38,19 +70,19 @@ export const Settings = (): JSX.Element => {
         </SettingsIcon>
       </BigIcon>
       {isOpen &&
-        <SettingsMenu>
-          <Setting>
+        <SettingsMenu ref={$menuRef}>
+          <Option>
             <label htmlFor="background-color">Background Color:</label>
             <input type="color" name="background-color" onChange={changeBackgroundColor}/>
-          </Setting>
-          <Setting>
+          </Option>
+          <Option>
             <label htmlFor="bg-image">Background Image:</label>
             <input type="file" name="bg-image" onChange={changeBackgroundImage} accept="image/*"/>
-          </Setting>
-          <Setting>
+          </Option>
+          <Option>
             <label htmlFor="bg-opactiy">BG Image Opacity:</label>
-            <Slider type="range" name="bg-opacity" onChange={changeBackgroundImageOpacity} value={opacity} max={1} step={0.01} />
-          </Setting>
+            <Slider type="range" name="bg-opacity" onChange={changeBackgroundImageOpacity} value={backgroundImageOpacity} max={1} step={0.01} />
+          </Option>
         </SettingsMenu>
       }
     </SettingsContainer>
@@ -87,7 +119,7 @@ const SettingsMenu = styled.ul`
   z-index: 100;
 `;
 
-const Setting = styled.li`
+const Option = styled.li`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 5px;
