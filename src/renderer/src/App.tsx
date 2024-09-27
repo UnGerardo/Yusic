@@ -42,6 +42,7 @@ const AppContainer = styled.section<{ backgroundColor: string }>`
   background-color: ${props => props.backgroundColor};
   overflow: hidden;
   position: relative;
+  z-index: 1;
 `;
 
 const BackgroundImage = styled.div<{ path: string, opacity: number }>`
@@ -58,6 +59,7 @@ const BackgroundImage = styled.div<{ path: string, opacity: number }>`
   background-position: center;
   user-select: none;
   pointer-events: none;
+  z-index: 2;
 `;
 
 const Main = styled.main`
@@ -66,4 +68,5 @@ const Main = styled.main`
 
   height: 100%;
   width: 100%;
+  z-index: 3;
 `;

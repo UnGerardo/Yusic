@@ -54,4 +54,5 @@ const QueueSection = styled.section`
   overflow: hidden;
   min-width: 300px;
   max-width: 300px;
+  z-index: 3;
 `;

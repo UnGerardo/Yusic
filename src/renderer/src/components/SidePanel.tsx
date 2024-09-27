@@ -16,6 +16,7 @@ const Panel = styled.section`
   height: 100%;
   width: 10%;
   max-width: 200px;
+  z-index: 3;
 `;
 
 const Group = styled.section`
