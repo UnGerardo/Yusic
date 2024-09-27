@@ -1,10 +1,11 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Setting from "../../../classes/Setting";
 import { BigIcon, Slider } from "@renderer/assets/Misc.styled";
 import { BackgroundColorContext } from "@renderer/contexts/BackgroundColorContext";
 import { BackgroundImageContext } from "@renderer/contexts/BackgroundImageContext";
 import { BackgroundImageOpacityContext } from "@renderer/contexts/BackgroundImageOpacity";
+import { debounce } from "@renderer/utils/debounce";
 
 export const Settings = (): JSX.Element => {
   const { setBackgroundColor } = useContext(BackgroundColorContext);
@@ -45,9 +46,15 @@ export const Settings = (): JSX.Element => {
     }
   }
 
+  const saveBgColorToDb = useCallback(
+    debounce((color: string) => {
+      window.databaseApi.setAppSetting('bg-color', `${color}`);
+    }, 1000), []
+  );
+
   const changeBackgroundColor = (event): void => {
     setBackgroundColor(event.target.value);
-    window.databaseApi.setAppSetting('bg-color', `${event.target.value}`);
+    saveBgColorToDb(event.target.value);
   }
 
   const changeBackgroundImage = (event): void => {
@@ -57,9 +64,16 @@ export const Settings = (): JSX.Element => {
     window.databaseApi.setAppSetting('bg-image', sanitizedPath);
   }
 
+  const saveBgImgOpacityToDb = useCallback(
+    debounce((opacity: number) => {
+      window.dirApi.log(`Opacity: ${opacity} saved!`)
+      window.databaseApi.setAppSetting('bg-image-opacity', `${opacity}`);
+    }, 1000), []
+  );
+
   const changeBackgroundImageOpacity = (event): void => {
     setBackgroundImageOpacity(event.target.value);
-    window.databaseApi.setAppSetting('bg-image-opacity', `${event.target.value}`);
+    saveBgImgOpacityToDb(event.target.value);
   }
 
   return (
