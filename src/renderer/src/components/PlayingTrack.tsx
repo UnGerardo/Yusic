@@ -1,10 +1,10 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 
 import styled from "styled-components";
 import { TrackArtist, TrackImage, TrackInfo, TrackTitle } from "@renderer/assets/Misc.styled";
 
-export default function PlayingTrack(): JSX.Element {
+const PlayingTrack = React.memo((): JSX.Element => {
   const { playingTrack } = useContext(PlayingTrackContext);
 
   return playingTrack ?
@@ -15,7 +15,9 @@ export default function PlayingTrack(): JSX.Element {
         <TrackArtist>{playingTrack.artists}</TrackArtist>
       </TrackInfo>
     </PlayingTrackSection> : <div></div>
-}
+});
+
+export default PlayingTrack;
 
 const PlayingTrackSection = styled.section`
   display: grid;

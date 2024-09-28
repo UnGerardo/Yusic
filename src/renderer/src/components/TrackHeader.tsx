@@ -1,13 +1,14 @@
+import React from "react";
 import styled from "styled-components";
 
-export const TrackHeader = (): JSX.Element => (
+export const TrackHeader = React.memo((): JSX.Element => (
   <Header>
     <p>Image</p>
     <p>Title & Artist</p>
     <Album>Album</Album>
     <Duration>Time</Duration>
   </Header>
-);
+));
 
 const Header = styled.section`
   display: grid;

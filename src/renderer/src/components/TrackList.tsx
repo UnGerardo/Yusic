@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import AutoSizer from "react-virtualized-auto-sizer";
 
 import Track from "@classes/Track";
@@ -11,7 +11,7 @@ const isSubstrIgnoreCase = (string: string, substr: string): boolean => {
   return string.toLocaleLowerCase().includes(substr.toLocaleLowerCase());
 }
 
-const TrackList = () => {
+const TrackList = React.memo(() => {
   const { tracks, setTracks } = useContext(TracksContext);
   const { searchQuery } = useContext(SearchQueryContext);
 
@@ -52,6 +52,6 @@ const TrackList = () => {
       )}
     </AutoSizer>
   )
-}
+});
 
 export default TrackList;

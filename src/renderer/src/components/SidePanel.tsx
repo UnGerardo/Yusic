@@ -1,12 +1,13 @@
+import React from "react";
 import styled from "styled-components";
 
-export const SidePanel = (): JSX.Element => (
+export const SidePanel = React.memo((): JSX.Element => (
   <Panel>
     <Group>Tracks</Group>
     <Group>Artists</Group>
     <Group>Ablum</Group>
   </Panel>
-);
+));
 
 const Panel = styled.section`
   border-right: 1px white solid;
