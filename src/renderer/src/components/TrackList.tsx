@@ -6,6 +6,7 @@ import { TracksContext } from "@contexts/TracksContext";
 import { SearchQueryContext } from '@contexts/SearchQueryContext';
 import TrackComponent from "./TrackComponent";
 import { WindowList } from '@renderer/assets/Misc.styled';
+import TrackHeader from './TrackHeader';
 
 const isSubstrIgnoreCase = (string: string, substr: string): boolean => {
   return string.toLocaleLowerCase().includes(substr.toLocaleLowerCase());
@@ -30,28 +31,33 @@ const TrackList = React.memo(() => {
   });
 
   return (
-    <AutoSizer>
-      {({ height, width }) => (
-        <WindowList
-          height={height}
-          itemCount={filteredTracks.length}
-          itemSize={91}
-          width={width}
-          style={{ overflowX: 'hidden' }}
-        >
-          {({ index, style }) => (
-            <TrackComponent
-              key={filteredTracks[index].id}
-              index={index}
-              track={filteredTracks[index]}
-              tracks={filteredTracks}
-              style={style}
-            />
+    <>
+      <TrackHeader />
+      <div>
+        <AutoSizer>
+          {({ height, width }) => (
+            <WindowList
+              height={height}
+              itemCount={filteredTracks.length}
+              itemSize={91}
+              width={width}
+              style={{ overflowX: 'hidden' }}
+            >
+              {({ index, style }) => (
+                <TrackComponent
+                  key={filteredTracks[index].id}
+                  index={index}
+                  track={filteredTracks[index]}
+                  tracks={filteredTracks}
+                  style={style}
+                />
+              )}
+            </WindowList>
           )}
-        </WindowList>
-      )}
-    </AutoSizer>
-  )
+        </AutoSizer>
+      </div>
+    </>
+  );
 });
 
 export default TrackList;

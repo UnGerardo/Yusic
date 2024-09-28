@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-export const TrackHeader = React.memo((): JSX.Element => (
+const TrackHeader = React.memo((): JSX.Element => (
   <Header>
     <p>Image</p>
     <p>Title & Artist</p>
@@ -9,6 +9,8 @@ export const TrackHeader = React.memo((): JSX.Element => (
     <Duration>Time</Duration>
   </Header>
 ));
+
+export default TrackHeader;
 
 const Header = styled.section`
   display: grid;
