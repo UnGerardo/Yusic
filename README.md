@@ -1,34 +1,33 @@
-# yusic
+# Yusic
 
-An Electron application with React and TypeScript
+A desktop music player created with Electron, React, Typescript, and SQLite3.
 
-## Recommended IDE Setup
+## Set up
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- Clone repo
+- CD into repo dir
+- Run:
+  - ```bash
+    $ npm i
+    ```
+  - ```bash
+    $ npm start
+    ```
 
-## Project Setup
+## Features
 
-### Install
+- Load music files from selected folders
+- Click on a track to start playing from that track
+- Click Shuffle button to create a randomized queue
+- Click Eraser button to clear the queue
+- Click a track in the queue to move to it
+- Search track names, artists, and albums
+- Functional audio player, volume, and slider controls
 
-```bash
-$ npm install
-```
+## Personalize
 
-### Development
+- Click Settings to:
+  - Change background color
+  - Change background image
+  - Change background image opacity
 
-```bash
-$ npm run dev
-```
-
-### Build
-
-```bash
-# For windows
-$ npm run build:win
-
-# For macOS
-$ npm run build:mac
-
-# For Linux
-$ npm run build:linux
-```

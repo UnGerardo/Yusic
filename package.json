@@ -1,11 +1,11 @@
 {
   "name": "yusic",
   "version": "1.0.0",
-  "description": "An Electron music player.",
+  "description": "A desktop music player created with Electron, React, Typescript, and SQLite3.",
   "main": "./out/main/index.js",
   "type": "module",
   "author": "ungerardo",
-  "homepage": "https://electron-vite.org",
+  "homepage": "https://github.com/UnGerardo/Yusic",
   "scripts": {
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
