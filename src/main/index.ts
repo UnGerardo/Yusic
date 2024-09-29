@@ -9,6 +9,7 @@ import Database from 'better-sqlite3';
 
 import Track from '../classes/Track';
 import Setting from '../classes/Setting';
+import Playlist from '../classes/Playlist';
 
 function createWindow(): void {
   // Create the browser window.
@@ -73,6 +74,46 @@ app.whenReady().then(() => {
       imgData TEXT
     )
   `).run();
+
+  db.prepare(`
+    CREATE TABLE IF NOT EXISTS Playlists (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL UNIQUE
+    )
+  `).run();
+
+  ipcMain.handle('get-playlists', (): Playlist[] => {
+    return db.prepare('SELECT * FROM Playlists').all() as Playlist[];
+  });
+
+  ipcMain.handle('create-playlist', (_event, name: string): void => {
+    db.prepare('INSERT INTO Playlists (name) VALUES (?)').run(name);
+  });
+
+  db.prepare(`
+    CREATE TABLE IF NOT EXISTS PlaylistTracks (
+      playlistId INTEGER,
+      musicFileId INTEGER,
+      addedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (playlistId, trackId),
+      FOREIGN KEY (playlistId) REFERENCES Playlists(id) ON DELETE CASCADE,
+      FOREIGN KEY (musicFileId) REFERENCES MusicFiles(id) ON DELETE CASCADE
+    )
+  `).run();
+
+  ipcMain.handle('get-playlist-tracks', (_event, playlistId: number): Track[] => {
+    return db.prepare(`
+      SELECT mf.id, mf.path, mf.title, mf.artists, mf.album, mf.duration, mf.imgFormat, mf.imgData
+      FROM MusicFiles mf
+      INNER JOIN playlist_tracks pt ON t.id = pt.track_id
+      WHERE pt.playlist_id = ?
+      ORDER BY pt.order_index
+    `).all(playlistId) as Track[];
+  });
+
+  ipcMain.handle('add-track-to-playlist', (_event, playlistId: number, trackId: number): void => {
+    db.prepare('INSERT INTO PlaylistTracks (playlistId, trackId) VALUES (?, ?)').run(playlistId, trackId);
+  });
 
   db.prepare(`
     CREATE TABLE IF NOT EXISTS AppSettings (

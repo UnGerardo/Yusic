@@ -34,6 +34,11 @@ const router = createMemoryRouter([
         // element: <ArtistList />,
         errorElement: <div>Something went wrong.</div>,
       },
+      {
+        path: '/playlist/:playlistId',
+        element: <div>Playlist</div>,
+        errorElement: <div>Something went wrong.</div>,
+      }
     ]
   }
 ]);
