@@ -1,11 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const SidePanel = React.memo((): JSX.Element => (
   <Panel>
-    <Group>Tracks</Group>
-    <Group>Artists</Group>
-    <Group>Ablum</Group>
+    <Group to={'/'}>Tracks</Group>
+    <Group to={'/artists'}>Artists</Group>
+    <Group to={'/albums'}>Ablum</Group>
   </Panel>
 ));
 
@@ -20,11 +21,13 @@ const Panel = styled.section`
   z-index: 3;
 `;
 
-const Group = styled.section`
+const Group = styled(Link)`
   border-bottom: 1px white solid;
+  color: white;
   display: flex;
   justify-content: center;
   cursor: pointer;
   padding: 10px 0;
   width: 100%;
+  text-decoration: none;
 `;

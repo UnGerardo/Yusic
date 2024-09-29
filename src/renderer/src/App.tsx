@@ -3,25 +3,12 @@ import { BackgroundColorContext } from "./contexts/BackgroundColorContext";
 import styled from "styled-components";
 
 import Queue from "./components/Queue";
-import TrackList from "./components/TrackList";
 import { BottomPanel } from "./components/BottomPanel";
 import { SidePanel } from "./components/SidePanel";
 import { ActionBar } from "./components/ActionBar";
 import { BackgroundImageContext } from "./contexts/BackgroundImageContext";
 import { BackgroundImageOpacityContext } from "./contexts/BackgroundImageOpacity";
-import { createMemoryRouter, RouterProvider } from "react-router-dom";
-
-const router = createMemoryRouter([
-  {
-    path: '/',
-    element: <TrackList />,
-    errorElement: <div>Something went wrong.</div>
-  },
-  {
-    path: '/artists',
-    element: <div></div>
-  }
-])
+import { Outlet } from "react-router-dom";
 
 const App = (): JSX.Element => {
   const { backgroundColor } = useContext(BackgroundColorContext);
@@ -35,7 +22,7 @@ const App = (): JSX.Element => {
         <SidePanel />
         <Main>
           <ActionBar />
-          <RouterProvider router={router} />
+          <Outlet />
         </Main>
         <Queue />
       </AppContainer>

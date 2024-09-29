@@ -13,6 +13,29 @@ import { BackgroundColorProvider } from './contexts/BackgroundColorContext';
 import { BackgroundImageProvider } from './contexts/BackgroundImageContext';
 import { BackgroundImageOpacityProvider } from './contexts/BackgroundImageOpacity';
 
+import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import TrackList from './components/TrackList';
+
+const router = createMemoryRouter([
+  {
+    path: '/',
+    element: <App />,
+    errorElement: <div>Something went wrong.</div>,
+    children: [
+      {
+        path: '/',
+        element: <TrackList />,
+        errorElement: <div>Something went wrong.</div>,
+      },
+      {
+        path: '/artists',
+        element: <div>ARTISTS</div>,
+        errorElement: <div>Something went wrong.</div>,
+      },
+    ]
+  }
+]);
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <AudioSourceProvider>
@@ -23,7 +46,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
               <BackgroundColorProvider>
                 <BackgroundImageProvider>
                   <BackgroundImageOpacityProvider>
-                    <App />
+                    <RouterProvider router={router} />
                   </BackgroundImageOpacityProvider>
                 </BackgroundImageProvider>
               </BackgroundColorProvider>
