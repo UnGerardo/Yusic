@@ -95,7 +95,7 @@ app.whenReady().then(() => {
       playlistId INTEGER,
       musicFileId INTEGER,
       addedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-      PRIMARY KEY (playlistId, trackId),
+      PRIMARY KEY (playlistId, musicFileId),
       FOREIGN KEY (playlistId) REFERENCES Playlists(id) ON DELETE CASCADE,
       FOREIGN KEY (musicFileId) REFERENCES MusicFiles(id) ON DELETE CASCADE
     )
@@ -111,8 +111,8 @@ app.whenReady().then(() => {
     `).all(playlistId) as Track[];
   });
 
-  ipcMain.handle('add-track-to-playlist', (_event, playlistId: number, trackId: number): void => {
-    db.prepare('INSERT INTO PlaylistTracks (playlistId, trackId) VALUES (?, ?)').run(playlistId, trackId);
+  ipcMain.handle('add-track-to-playlist', (_event, playlistId: number, musicFileId: number): void => {
+    db.prepare('INSERT INTO PlaylistTracks (playlistId, musicFileId) VALUES (?, ?)').run(playlistId, musicFileId);
   });
 
   db.prepare(`
