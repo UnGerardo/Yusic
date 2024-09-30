@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import AutoSizer from "react-virtualized-auto-sizer";
 
 import Track from "@classes/Track";
@@ -7,20 +7,22 @@ import { SearchQueryContext } from '@contexts/SearchQueryContext';
 import TrackComponent from "./TrackComponent";
 import { WindowList } from '@renderer/assets/Misc.styled';
 import TrackHeader from './TrackHeader';
+import { useLoaderData } from 'react-router-dom';
 
 const isSubstrIgnoreCase = (string: string, substr: string): boolean => {
   return string.toLocaleLowerCase().includes(substr.toLocaleLowerCase());
 }
 
-const TrackList = React.memo(() => {
-  const { tracks, setTracks } = useContext(TracksContext);
-  const { searchQuery } = useContext(SearchQueryContext);
+export async function loader(): Promise<Track[]> {
+  const musicFiles: Track[] = await window.databaseApi.getAllMusicFiles();
+  return musicFiles;
+}
 
-  useEffect(() => {
-    window.databaseApi.getAllMusicFiles().then((musicFiles: Track[]) => {
-      setTracks([...musicFiles]);
-    });
-  }, []);
+const TrackList = React.memo(() => {
+  const { setTracks } = useContext(TracksContext);
+  const { searchQuery } = useContext(SearchQueryContext);
+  const tracks = useLoaderData() as Track[];
+  setTracks(tracks);
 
   let filteredTracks = tracks.filter(track => {
     return (

@@ -14,7 +14,7 @@ import { BackgroundImageProvider } from './contexts/BackgroundImageContext';
 import { BackgroundImageOpacityProvider } from './contexts/BackgroundImageOpacity';
 
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
-import TrackList from './components/TrackList';
+import TrackList, { loader as trackLoader } from './components/TrackList';
 // import ArtistList from './components/ArtistList';
 
 const router = createMemoryRouter([
@@ -27,6 +27,7 @@ const router = createMemoryRouter([
         path: '/',
         element: <TrackList />,
         errorElement: <div>Something went wrong.</div>,
+        loader: trackLoader,
       },
       {
         path: '/artists',
