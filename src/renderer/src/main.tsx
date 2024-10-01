@@ -14,31 +14,31 @@ import { BackgroundImageProvider } from './contexts/BackgroundImageContext';
 import { BackgroundImageOpacityProvider } from './contexts/BackgroundImageOpacity';
 
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
-import TrackList, { loader as trackLoader } from './components/TrackList';
+import TrackList from './components/TrackList';
+import ErrorPage from './components/ErrorPage';
 // import ArtistList from './components/ArtistList';
 
 const router = createMemoryRouter([
   {
     path: '/',
     element: <App />,
-    errorElement: <div>Something went wrong.</div>,
+    errorElement: <ErrorPage />,
     children: [
       {
-        path: '/',
+        index: true,
         element: <TrackList />,
-        errorElement: <div>Something went wrong.</div>,
-        loader: trackLoader,
+        errorElement: <ErrorPage />,
       },
       {
         path: '/artists',
         element: <div>Artists</div>,
         // element: <ArtistList />,
-        errorElement: <div>Something went wrong.</div>,
+        errorElement: <ErrorPage />,
       },
       {
         path: '/playlist/:playlistId',
         element: <div>Playlist</div>,
-        errorElement: <div>Something went wrong.</div>,
+        errorElement: <ErrorPage />,
       }
     ]
   }

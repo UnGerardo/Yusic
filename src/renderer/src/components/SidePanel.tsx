@@ -7,6 +7,8 @@ export const SidePanel = React.memo((): JSX.Element => (
     <Group to={'/'}>Tracks</Group>
     <Group to={'/artists'}>Artists</Group>
     <Group to={'/albums'}>Ablum</Group>
+    <input type="text" placeholder="Playlist name..." />
+    <button type="submit">Create</button>
   </Panel>
 ));
 
