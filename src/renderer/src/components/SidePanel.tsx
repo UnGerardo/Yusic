@@ -1,16 +1,44 @@
+import Playlist from "@classes/Playlist";
+import { WindowList } from "@renderer/assets/Misc.styled";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useRouteLoaderData } from "react-router-dom";
+import AutoSizer from "react-virtualized-auto-sizer";
 import styled from "styled-components";
 
-export const SidePanel = React.memo((): JSX.Element => (
-  <Panel>
-    <Group to={'/'}>Tracks</Group>
-    <Group to={'/artists'}>Artists</Group>
-    <Group to={'/albums'}>Ablum</Group>
-    <input type="text" placeholder="Playlist name..." />
-    <button type="submit">Create</button>
-  </Panel>
-));
+export const SidePanel = React.memo((): JSX.Element => {
+  const playlists = useRouteLoaderData('root') as Playlist[];
+
+  return (
+    <Panel>
+      <Group to={'/'}>Tracks</Group>
+      <Group to={'/artists'}>Artists</Group>
+      <Group to={'/albums'}>Ablum</Group>
+      <PlaylistContainer>
+        <AutoSizer>
+          {({ height, width }) => (
+            <WindowList
+              height={height}
+              itemCount={playlists.length}
+              itemSize={30}
+              width={width}
+              style={{ overflowX: 'hidden' }}
+            >
+              {({ index, style }) => (
+                <Group
+                  key={playlists[index]?.id}
+                  to={`/playlist/${playlists[index]?.id}`}
+                  style={style}
+                >
+                  {playlists[index]?.name}
+                </Group>
+              )}
+            </WindowList>
+          )}
+        </AutoSizer>
+      </PlaylistContainer>
+    </Panel>
+  );
+});
 
 const Panel = styled.section`
   border-right: 1px white solid;
@@ -29,7 +57,13 @@ const Group = styled(Link)`
   display: flex;
   justify-content: center;
   cursor: pointer;
-  padding: 10px 0;
+  /* padding: 10px 0; */
+  height: 30px;
   width: 100%;
   text-decoration: none;
+`;
+
+const PlaylistContainer = styled.div`
+  flex: 1;
+  width: 100%;
 `;
