@@ -3,7 +3,7 @@ import './assets/main.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import App from './App';
+import App, { loader as appLoader } from './App';
 import { TracksProvider } from "@contexts/TracksContext";
 import { AudioSourceProvider } from "@contexts/AudioSourceContext";
 import { QueueProvider } from "@contexts/QueueContext";
@@ -23,6 +23,7 @@ const router = createMemoryRouter([
     path: '/',
     element: <App />,
     errorElement: <ErrorPage />,
+    loader: appLoader,
     children: [
       {
         index: true,

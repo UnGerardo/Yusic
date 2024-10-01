@@ -10,6 +10,11 @@ import { BackgroundImageContext } from "./contexts/BackgroundImageContext";
 import { BackgroundImageOpacityContext } from "./contexts/BackgroundImageOpacity";
 import { Outlet } from "react-router-dom";
 
+export async function loader() {
+  const playlists = await window.databaseApi.getPlaylists();
+  return playlists;
+}
+
 const App = (): JSX.Element => {
   const { backgroundColor } = useContext(BackgroundColorContext);
   const { backgroundImage } = useContext(BackgroundImageContext);
