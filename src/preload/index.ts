@@ -4,16 +4,16 @@ import { electronAPI } from '@electron-toolkit/preload';
 import Track from '../classes/Track';
 import Setting from '../classes/Setting';
 import DatabaseApi from './DatabaseApi';
-import DirApi from './DirApi';
+import Api from './Api';
 import Playlist from '../classes/Playlist';
 
 // Custom APIs for renderer
-const dirApi: DirApi = {
-  readDir: (): Promise<Track[]> => ipcRenderer.invoke('read-dir'),
+const api: Api = {
   log: (s: string): Promise<void> => ipcRenderer.invoke('log', s)
 }
 
 const databaseApi: DatabaseApi = {
+  addTracks: (initialPath: string): Promise<Track[]> => ipcRenderer.invoke('add-tracks', initialPath),
   getAllMusicFiles: (): Promise<Track[]> => ipcRenderer.invoke('get-all-music-files'),
   getTrackIds: (): Promise<number[]> => ipcRenderer.invoke('get-track-ids'),
   getTrackById: (id: number) => ipcRenderer.invoke('get-track-by-id', id),
@@ -31,7 +31,7 @@ const databaseApi: DatabaseApi = {
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI);
-    contextBridge.exposeInMainWorld('dirApi', dirApi);
+    contextBridge.exposeInMainWorld('api', api);
     contextBridge.exposeInMainWorld('databaseApi', databaseApi);
   } catch (error) {
     console.error(error);

@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
@@ -183,13 +183,9 @@ app.whenReady().then(() => {
 
   ipcMain.handle('log', (_event, s: string): void => console.log(s));
 
-  ipcMain.handle('read-dir', async (): Promise<Track[]> => {
-    const selectedDirs = dialog.showOpenDialogSync({ properties: ['openDirectory'] });
-
-    if (!selectedDirs || selectedDirs.length === 0) return [];
-
+  ipcMain.handle('add-tracks', async (_event, initialPath: string): Promise<Track[]> => {
     const audioFiles: string[] = [];
-    const dirStack: string[] = [...selectedDirs];
+    const dirStack: string[] = [initialPath];
 
     while (dirStack.length > 0) {
       const dirPath: string = dirStack.pop()!;

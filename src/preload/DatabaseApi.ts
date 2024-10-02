@@ -3,6 +3,7 @@ import Setting from "../classes/Setting";
 import Playlist from "../classes/Playlist";
 
 export default interface DatabaseApi {
+  addTracks: (initialPath: string) => Promise<Track[]>;
   getAllMusicFiles: () => Promise<Track[]>;
   getTrackIds: () => Promise<number[]>;
   getTrackById: (id: number) => Promise<Track>;
