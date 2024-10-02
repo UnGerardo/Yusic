@@ -5,21 +5,15 @@ import Track from '../classes/Track';
 import Setting from '../classes/Setting';
 import DatabaseApi from './DatabaseApi';
 import DirApi from './DirApi';
-import MusicMetadataApi from './MusicMetadataApi';
 import Playlist from '../classes/Playlist';
 
 // Custom APIs for renderer
 const dirApi: DirApi = {
-  readDir: (): Promise<string[]> => ipcRenderer.invoke('read-dir'),
+  readDir: (): Promise<Track[]> => ipcRenderer.invoke('read-dir'),
   log: (s: string): Promise<void> => ipcRenderer.invoke('log', s)
 }
 
-const musicMetadataApi: MusicMetadataApi = {
-  getTrackInfo: (filePath: string): Promise<Track> => ipcRenderer.invoke('get-track-info', filePath),
-}
-
 const databaseApi: DatabaseApi = {
-  writeMusicFiles: (tracks: Track[]): Promise<void> => ipcRenderer.invoke('write-music-files', tracks),
   getAllMusicFiles: (): Promise<Track[]> => ipcRenderer.invoke('get-all-music-files'),
   getTrackIds: (): Promise<number[]> => ipcRenderer.invoke('get-track-ids'),
   getTrackById: (id: number) => ipcRenderer.invoke('get-track-by-id', id),
@@ -38,7 +32,6 @@ if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI);
     contextBridge.exposeInMainWorld('dirApi', dirApi);
-    contextBridge.exposeInMainWorld('musicMetadataApi', musicMetadataApi);
     contextBridge.exposeInMainWorld('databaseApi', databaseApi);
   } catch (error) {
     console.error(error);

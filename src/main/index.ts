@@ -164,10 +164,6 @@ app.whenReady().then(() => {
     }
   });
 
-  ipcMain.handle('write-music-files', (_event, tracks: Track[]) => {
-    insertMusicFiles(tracks);
-  });
-
   const getAllMusicFiles = () => {
     return db.prepare('SELECT * from MusicFiles').all() as Track[];
   }
@@ -187,7 +183,7 @@ app.whenReady().then(() => {
 
   ipcMain.handle('log', (_event, s: string): void => console.log(s));
 
-  ipcMain.handle('read-dir', (): string[] => {
+  ipcMain.handle('read-dir', async (): Promise<Track[]> => {
     const selectedDirs = dialog.showOpenDialogSync({ properties: ['openDirectory'] });
 
     if (!selectedDirs || selectedDirs.length === 0) return [];
@@ -219,15 +215,18 @@ app.whenReady().then(() => {
       }
     }
 
-    return audioFiles;
-  });
+    const tracks: Track[] = [];
 
-  ipcMain.handle('get-track-info', async (_event, filePath): Promise<Track> => {
-    const metadata: IAudioMetadata = await parseFile(filePath);
-    let pictureData = metadata.common.picture?.at(0)?.data || new Uint8Array();
-    const track = new Track(metadata, filePath, Buffer.from(pictureData).toString('base64'));
+    for (const file of audioFiles) {
+      const metadata: IAudioMetadata = await parseFile(file);
+      let pictureData = metadata.common.picture?.at(0)?.data || new Uint8Array();
+      const track = new Track(metadata, file, Buffer.from(pictureData).toString('base64'));
+      tracks.push(track);
+    }
 
-    return track;
+    insertMusicFiles(tracks);
+
+    return getAllMusicFiles();
   });
 
   createWindow();

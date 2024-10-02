@@ -10,18 +10,11 @@ const ReadMusicFolder = () => {
   const { setTracks } = useContext(TracksContext);
 
   const readFolder = async (): Promise<void> => {
-    const filePaths: string[] = await window.dirApi.readDir();
+    const tracks: Track[] = await window.dirApi.readDir();
 
-    if (filePaths.length === 0) return alert('No files found.');
+    if (tracks.length === 0) return alert('No files found.');
 
-    const newTracks: Track[] = [];
-    for (const filePath of filePaths) {
-      newTracks.push(await window.musicMetadataApi.getTrackInfo(filePath));
-    }
-
-    await window.databaseApi.writeMusicFiles(newTracks);
-    const allFiles = await window.databaseApi.getAllMusicFiles();
-    setTracks(allFiles);
+    setTracks(tracks);
   }
 
   return (
