@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { BackgroundColorContext } from "./contexts/BackgroundColorContext";
 import styled from "styled-components";
 
@@ -9,6 +9,8 @@ import { ActionBar } from "./components/ActionBar";
 import { BackgroundImageContext } from "./contexts/BackgroundImageContext";
 import { BackgroundImageOpacityContext } from "./contexts/BackgroundImageOpacity";
 import { Outlet } from "react-router-dom";
+import { TracksContext } from "./contexts/TracksContext";
+import Track from "@classes/Track";
 
 export async function loader() {
   const playlists = await window.databaseApi.getPlaylists();
@@ -19,6 +21,14 @@ const App = (): JSX.Element => {
   const { backgroundColor } = useContext(BackgroundColorContext);
   const { backgroundImage } = useContext(BackgroundImageContext);
   const { backgroundImageOpacity } = useContext(BackgroundImageOpacityContext);
+
+  const { setTracks } = useContext(TracksContext);
+
+  useEffect(() => {
+    window.databaseApi.getAllMusicFiles().then((musicFiles: Track[]) => {
+      setTracks([...musicFiles]);
+    });
+  }, []);
 
   return (
     <>

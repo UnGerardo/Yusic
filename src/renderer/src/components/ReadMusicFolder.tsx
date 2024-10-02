@@ -19,8 +19,9 @@ const ReadMusicFolder = () => {
       newTracks.push(await window.musicMetadataApi.getTrackInfo(filePath));
     }
 
-    setTracks((oldTracks) => [ ...oldTracks, ...newTracks]);
     await window.databaseApi.writeMusicFiles(newTracks);
+    const allFiles = await window.databaseApi.getAllMusicFiles();
+    setTracks(allFiles);
   }
 
   return (
