@@ -15,15 +15,18 @@ import { BackgroundImageOpacityProvider } from './contexts/BackgroundImageOpacit
 
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import TrackList from './components/TrackList';
+import { action as createPlaylistAction } from './components/SidePanel';
 import ErrorPage from './components/ErrorPage';
 // import ArtistList from './components/ArtistList';
 
 const router = createMemoryRouter([
   {
     path: '/',
+    id: 'root',
     element: <App />,
     errorElement: <ErrorPage />,
     loader: appLoader,
+    action: createPlaylistAction,
     children: [
       {
         index: true,

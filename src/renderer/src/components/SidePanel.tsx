@@ -1,9 +1,16 @@
 import Playlist from "@classes/Playlist";
 import { WindowList } from "@renderer/assets/Misc.styled";
 import React from "react";
-import { Link, useRouteLoaderData } from "react-router-dom";
+import { Form, Link, useRouteLoaderData } from "react-router-dom";
 import AutoSizer from "react-virtualized-auto-sizer";
 import styled from "styled-components";
+
+export async function action({ request }) {
+  const formData = await request.formData();
+  const name = formData.get('name');
+  await window.databaseApi.createPlaylist(name);
+  return null;
+}
 
 export const SidePanel = React.memo((): JSX.Element => {
   const playlists = useRouteLoaderData('root') as Playlist[];
@@ -13,6 +20,10 @@ export const SidePanel = React.memo((): JSX.Element => {
       <Group to={'/'}>Tracks</Group>
       <Group to={'/artists'}>Artists</Group>
       <Group to={'/albums'}>Ablum</Group>
+      <Form method="post">
+        <PlaylistInput name="name" type="text" placeholder="Playlist name..." required />
+        <button type="submit">Create</button>
+      </Form>
       <PlaylistContainer>
         <AutoSizer>
           {({ height, width }) => (
@@ -61,6 +72,10 @@ const Group = styled(Link)`
   height: 30px;
   width: 100%;
   text-decoration: none;
+`;
+
+const PlaylistInput = styled.input`
+  width: 90%;
 `;
 
 const PlaylistContainer = styled.div`
