@@ -3,8 +3,7 @@ import './assets/main.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import App, { loader as appLoader } from './App';
-import { TracksProvider } from "@contexts/TracksContext";
+import App, { loader as appLoader, action as appAction } from './App';
 import { AudioSourceProvider } from "@contexts/AudioSourceContext";
 import { QueueProvider } from "@contexts/QueueContext";
 import { PlayingTrackProvider } from "@contexts/PlayingTrackContext";
@@ -15,7 +14,6 @@ import { BackgroundImageOpacityProvider } from './contexts/BackgroundImageOpacit
 
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import TrackList from './components/TrackList';
-import { action as createPlaylistAction } from './components/SidePanel';
 import ErrorPage from './components/ErrorPage';
 // import ArtistList from './components/ArtistList';
 
@@ -26,7 +24,7 @@ const router = createMemoryRouter([
     element: <App />,
     errorElement: <ErrorPage />,
     loader: appLoader,
-    action: createPlaylistAction,
+    action: appAction,
     children: [
       {
         index: true,
@@ -53,17 +51,15 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <AudioSourceProvider>
       <QueueProvider>
         <PlayingTrackProvider>
-          <TracksProvider>
-            <SearchQueryProvider>
-              <BackgroundColorProvider>
-                <BackgroundImageProvider>
-                  <BackgroundImageOpacityProvider>
-                    <RouterProvider router={router} />
-                  </BackgroundImageOpacityProvider>
-                </BackgroundImageProvider>
-              </BackgroundColorProvider>
-            </SearchQueryProvider>
-          </TracksProvider>
+          <SearchQueryProvider>
+            <BackgroundColorProvider>
+              <BackgroundImageProvider>
+                <BackgroundImageOpacityProvider>
+                  <RouterProvider router={router} />
+                </BackgroundImageOpacityProvider>
+              </BackgroundImageProvider>
+            </BackgroundColorProvider>
+          </SearchQueryProvider>
         </PlayingTrackProvider>
       </QueueProvider>
     </AudioSourceProvider>

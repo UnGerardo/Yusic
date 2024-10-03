@@ -1,18 +1,19 @@
 import React, { useContext } from 'react';
 import AutoSizer from "react-virtualized-auto-sizer";
 
-import { TracksContext } from "@contexts/TracksContext";
 import { SearchQueryContext } from '@contexts/SearchQueryContext';
 import TrackComponent from "./TrackComponent";
 import { WindowList } from '@renderer/assets/Misc.styled';
 import TrackHeader from './TrackHeader';
+import Track from '@classes/Track';
+import { useRouteLoaderData } from 'react-router-dom';
 
 const isSubstrIgnoreCase = (string: string, substr: string): boolean => {
   return string.toLocaleLowerCase().includes(substr.toLocaleLowerCase());
 }
 
 const TrackList = React.memo(() => {
-  const { tracks } = useContext(TracksContext);
+  const { tracks }: { tracks: Track[] } = useRouteLoaderData('root') as any;
   const { searchQuery } = useContext(SearchQueryContext);
 
   let filteredTracks = tracks.filter(track => {

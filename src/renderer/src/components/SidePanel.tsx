@@ -5,15 +5,8 @@ import { Form, Link, useRouteLoaderData } from "react-router-dom";
 import AutoSizer from "react-virtualized-auto-sizer";
 import styled from "styled-components";
 
-export async function action({ request }) {
-  const formData = await request.formData();
-  const name = formData.get('name');
-  await window.databaseApi.createPlaylist(name);
-  return null;
-}
-
 export const SidePanel = React.memo((): JSX.Element => {
-  const playlists = useRouteLoaderData('root') as Playlist[];
+  const { playlists }: { playlists: Playlist[] } = useRouteLoaderData('root') as any;
 
   return (
     <Panel>
@@ -21,6 +14,7 @@ export const SidePanel = React.memo((): JSX.Element => {
       <Group to={'/artists'}>Artists</Group>
       <Group to={'/albums'}>Ablum</Group>
       <Form method="post">
+        <input type="hidden" name="action" value='new-playlist' />
         <PlaylistInput name="name" type="text" placeholder="Playlist name..." required />
         <button type="submit">Create</button>
       </Form>

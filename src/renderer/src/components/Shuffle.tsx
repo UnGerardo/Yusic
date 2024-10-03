@@ -4,13 +4,13 @@ import Track from "@classes/Track";
 import { QueueContext } from "@renderer/contexts/QueueContext";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import { AudioSourceContext } from "@renderer/contexts/AudioSourceContext";
-import { TracksContext } from "@renderer/contexts/TracksContext";
 import shuffleArray from "../utils/shuffleArray";
 import { BigIcon } from "@renderer/assets/Misc.styled";
 import styled from "styled-components";
+import { useRouteLoaderData } from "react-router-dom";
 
 const Shuffle = () => {
-  const { tracks } = useContext(TracksContext);
+  const { tracks }: { tracks: Track[] } = useRouteLoaderData('root') as any;
   const { setQueue, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext)
   const { setAudioSource } = useContext(AudioSourceContext);

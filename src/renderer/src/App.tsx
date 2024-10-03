@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { BackgroundColorContext } from "./contexts/BackgroundColorContext";
 import styled from "styled-components";
 
@@ -9,26 +9,40 @@ import { ActionBar } from "./components/ActionBar";
 import { BackgroundImageContext } from "./contexts/BackgroundImageContext";
 import { BackgroundImageOpacityContext } from "./contexts/BackgroundImageOpacity";
 import { Outlet } from "react-router-dom";
-import { TracksContext } from "./contexts/TracksContext";
-import Track from "@classes/Track";
 
 export async function loader() {
   const playlists = await window.databaseApi.getPlaylists();
-  return playlists;
+  const tracks = await window.databaseApi.getAllMusicFiles();
+  return { playlists, tracks };
+}
+
+export async function action({ request }) {
+  const formData = await request.formData();
+  const action = formData.get('action');
+
+  if (action === 'new-playlist') {
+    const name = formData.get('name');
+    await window.databaseApi.createPlaylist(name);
+    return null;
+  } else if (action === 'add-tracks') {
+    const filePath = formData.get('file') as string;
+
+    if (!filePath || filePath.length === 0) {
+      alert('No file selected.');
+    } else {
+      await window.databaseApi.addTracks(filePath)
+    }
+
+    return null;
+  }
+  alert(`Unknown form action: ${action}`);
+  return null;
 }
 
 const App = (): JSX.Element => {
   const { backgroundColor } = useContext(BackgroundColorContext);
   const { backgroundImage } = useContext(BackgroundImageContext);
   const { backgroundImageOpacity } = useContext(BackgroundImageOpacityContext);
-
-  const { setTracks } = useContext(TracksContext);
-
-  useEffect(() => {
-    window.databaseApi.getAllMusicFiles().then((musicFiles: Track[]) => {
-      setTracks([...musicFiles]);
-    });
-  }, []);
 
   return (
     <>
