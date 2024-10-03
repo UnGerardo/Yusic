@@ -1,12 +1,12 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import DirApi from './DirApi'
+import Api from './Api'
 import MusicMetadataApi from './MusicMetadataApi'
 import DatabaseApi from './DatabaseApi'
 
 declare global {
   interface Window {
     electron: ElectronAPI,
-    dirApi: DirApi,
+    api: Api,
     musicMetadataApi: MusicMetadataApi,
     databaseApi: DatabaseApi
   }
