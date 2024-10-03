@@ -9,7 +9,8 @@ import Playlist from '../classes/Playlist';
 
 // Custom APIs for renderer
 const api: Api = {
-  log: (s: string): Promise<void> => ipcRenderer.invoke('log', s)
+  selectDir: (): Promise<string> => ipcRenderer.invoke('select-dir'),
+  log: (s: string): Promise<void> => ipcRenderer.invoke('log', s),
 }
 
 const databaseApi: DatabaseApi = {
