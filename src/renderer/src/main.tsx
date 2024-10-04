@@ -15,6 +15,7 @@ import { BackgroundImageOpacityProvider } from './contexts/BackgroundImageOpacit
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import TrackList from './components/TrackList';
 import ErrorPage from './components/ErrorPage';
+import PlaylistTracks, { loader as playlistTracksLoader } from './components/PlaylistTracks';
 // import ArtistList from './components/ArtistList';
 
 const router = createMemoryRouter([
@@ -39,8 +40,9 @@ const router = createMemoryRouter([
       },
       {
         path: '/playlist/:playlistId',
-        element: <div>Playlist</div>,
+        element: <PlaylistTracks />,
         errorElement: <ErrorPage />,
+        loader: playlistTracksLoader,
       }
     ]
   }
