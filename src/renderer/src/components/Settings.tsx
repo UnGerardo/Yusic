@@ -66,7 +66,6 @@ export const Settings = (): JSX.Element => {
 
   const saveBgImgOpacityToDb = useCallback(
     debounce((opacity: number) => {
-      window.dirApi.log(`Opacity: ${opacity} saved!`)
       window.databaseApi.setAppSetting('bg-image-opacity', `${opacity}`);
     }, 1000), []
   );

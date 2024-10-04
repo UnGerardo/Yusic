@@ -105,9 +105,9 @@ app.whenReady().then(() => {
     return db.prepare(`
       SELECT mf.id, mf.path, mf.title, mf.artists, mf.album, mf.duration, mf.imgFormat, mf.imgData
       FROM MusicFiles mf
-      INNER JOIN playlist_tracks pt ON t.id = pt.track_id
-      WHERE pt.playlist_id = ?
-      ORDER BY pt.order_index
+      INNER JOIN PlaylistTracks pt ON mf.id = pt.musicFileId
+      WHERE pt.playlistId = ?
+      ORDER BY pt.addedAt
     `).all(playlistId) as Track[];
   });
 

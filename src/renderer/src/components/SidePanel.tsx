@@ -51,8 +51,8 @@ const Panel = styled.section`
   flex-direction: column;
   align-items: center;
   height: 100%;
-  width: 10%;
-  max-width: 200px;
+  min-width: 100px;
+  max-width: 100px;
   z-index: 3;
 `;
 
