@@ -10,7 +10,7 @@ import Playlist from "@classes/Playlist";
 import { useRouteLoaderData } from "react-router-dom";
 
 const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], track: Track, index: number, style: React.CSSProperties }): JSX.Element => {
-  const { setQueue, setQueueIndex } = useContext(QueueContext);
+  const { setQueue, queueIndex, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext);
   const { setAudioSource } = useContext(AudioSourceContext);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -21,6 +21,14 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], tra
     setPlayingTrack(track);
     setQueueIndex(index);
     setQueue(tracks);
+  }
+
+  const addToQueue = (e) => {
+    e.stopPropagation();
+    setQueue((oldQueue) => {
+      oldQueue.splice(queueIndex + 1, 0, track);
+      return [...oldQueue];
+    });
   }
 
   return (
@@ -53,6 +61,17 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], tra
           </PlaylistMenu>
         }
       </div>
+      <div style={{ position: 'relative' }}>
+        <AddIcon style={{ zIndex: 10 }} onClick={addToQueue} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 43.6">
+          <rect width="46.51" height="6.98"/>
+          <rect y="12.21" width="35.47" height="6.98"/>
+          <rect y="24.42" width="46.51" height="6.98"/>
+          <rect y="36.63" width="46.51" height="6.98"/>
+          <rect x="43.02" y="9.88" width="2.33" height="11.63"/>
+          <rect x="43.02" y="9.88" width="2.33" height="11.63" transform="translate(59.88 -28.49) rotate(90)"/>
+        </AddIcon>
+      </div>
+
     </TrackSection>
   );
 };

@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { QueueContext } from "@contexts/QueueContext";
 import QueuedTrack from "./QueuedTrack";
 import styled from "styled-components";
 import { WindowList } from "@renderer/assets/Misc.styled";
 
-const Queue = React.memo((): JSX.Element => {
+const Queue = (): JSX.Element => {
   const $listRef = useRef(null);
   const { queue, queueIndex } = useContext(QueueContext);
 
@@ -43,7 +43,7 @@ const Queue = React.memo((): JSX.Element => {
       </AutoSizer>
     </QueueSection>
   )
-});
+};
 
 export default Queue;
 
