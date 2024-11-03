@@ -1,44 +1,17 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext } from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { QueueContext } from "@contexts/QueueContext";
-import QueuedTrack from "./QueuedTrack";
 import styled from "styled-components";
-import { WindowList } from "@renderer/assets/Misc.styled";
+import QueueList from "./QueueList";
 
 const Queue = (): JSX.Element => {
-  const $listRef = useRef(null);
-  const { queue, queueIndex } = useContext(QueueContext);
-
-  useEffect(() => {
-    if ($listRef.current) {
-      ($listRef.current as HTMLElement).scrollTo({
-        top: queueIndex * 60,
-        left: 0,
-        behavior: "smooth"
-      });
-    }
-  }, [queueIndex]);
+  const { queue } = useContext(QueueContext);
 
   return (
     <QueueSection style={{ display: queue.length > 0 ? 'flex' : 'none' }}>
       <AutoSizer>
         {({ height, width }) => (
-          <WindowList
-            height={height}
-            itemCount={queue.length}
-            itemSize={60}
-            width={width}
-            outerRef={$listRef}
-          >
-            {({ index, style }) => (
-              <QueuedTrack
-                key={queue[index].id}
-                index={index}
-                track={queue[index]}
-                style={style}
-              />
-            )}
-          </WindowList>
+          <QueueList height={height} width={width} />
         )}
       </AutoSizer>
     </QueueSection>
