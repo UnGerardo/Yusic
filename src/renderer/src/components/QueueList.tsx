@@ -2,9 +2,11 @@ import { useContext, useEffect, useRef } from "react";
 import { WindowList } from "@renderer/assets/Misc.styled";
 import { QueueContext } from "@contexts/QueueContext";
 import QueuedTrack from "./QueuedTrack";
+import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 
 const QueueList = ({ height, width }: { height: number, width: number }): JSX.Element => {
   const { queue, queueIndex } = useContext(QueueContext);
+  const { playingTrack } = useContext(PlayingTrackContext);
   const $listRef = useRef(null);
 
   useEffect(() => {
@@ -15,7 +17,7 @@ const QueueList = ({ height, width }: { height: number, width: number }): JSX.El
         behavior: "smooth"
       });
     }
-  }, [queueIndex]);
+  }, [playingTrack]);
 
   return (
     <WindowList
