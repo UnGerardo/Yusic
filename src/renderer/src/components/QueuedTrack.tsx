@@ -5,11 +5,20 @@ import { AudioSourceContext } from "@contexts/AudioSourceContext";
 import Track from "@classes/Track";
 import styled from "styled-components";
 import { TrackArtist, TrackImage, TrackInfo, TrackTitle } from "@renderer/assets/Misc.styled";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 const QueuedTrack = ({ index, track, style } : { index: number, track: Track, style: React.CSSProperties }): JSX.Element => {
   const { queueIndex, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext)
   const { setAudioSource } = useContext(AudioSourceContext);
+
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: track.id });
+  const itemStyle = {
+    ...style,
+    transform: CSS.Transform.toString(transform),
+    transition,
+  }
 
   const jumpToTrack = () => {
     setQueueIndex(index);
@@ -18,7 +27,14 @@ const QueuedTrack = ({ index, track, style } : { index: number, track: Track, st
   }
 
   return (
-    <QueuedTrackSection isCurrentTrack={index === queueIndex} onClick={jumpToTrack} style={style}>
+    <QueuedTrackSection
+      isCurrentTrack={index === queueIndex}
+      onClick={jumpToTrack}
+      style={itemStyle}
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+    >
       <TrackImage src={`data:${track.imgFormat};base64,${track.imgData}`} />
       <TrackInfo>
         <TrackTitle>{track.title}</TrackTitle>
