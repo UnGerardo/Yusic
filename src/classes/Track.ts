@@ -1,7 +1,7 @@
 import { IAudioMetadata } from "music-metadata";
 
 export default class Track {
-  id: number | undefined;
+  id: number;
   path: string;
   title: string;
   artists: string;
@@ -11,6 +11,7 @@ export default class Track {
   imgData: string;
 
   constructor(metadata: IAudioMetadata = {} as IAudioMetadata, path: string = '', pictureData: string = '') {
+    this.id = -1;
     this.path = path;
     this.title = metadata.common.title ?? 'None';
     this.artists = metadata.common.artist ?? 'None';
