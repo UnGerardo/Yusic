@@ -8,7 +8,7 @@ import { TrackArtist, TrackImage, TrackInfo, TrackTitle } from "@renderer/assets
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-const QueuedTrack = ({ index, track, style } : { index: number, track: Track, style: React.CSSProperties }): JSX.Element => {
+const QueuedTrack = ({ index, track, style, activeTrack } : { index: number, track: Track, style: React.CSSProperties, activeTrack: Track | null }): JSX.Element => {
   const { queueIndex, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext)
   const { setAudioSource } = useContext(AudioSourceContext);
@@ -30,7 +30,7 @@ const QueuedTrack = ({ index, track, style } : { index: number, track: Track, st
     <QueuedTrackSection
       isCurrentTrack={index === queueIndex}
       onClick={jumpToTrack}
-      style={itemStyle}
+      style={{ ...itemStyle, opacity: activeTrack === track ? 0 : 1 }}
       ref={setNodeRef}
     >
       <DragHandler {...attributes} {...listeners}>
