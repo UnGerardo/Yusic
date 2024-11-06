@@ -47,7 +47,7 @@ const QueueList = ({ height, width, activeTrack }: { height: number, width: numb
             index={-1}
             track={activeTrack}
             activeTrack={null}
-            style={{}}
+            style={{ cursor: "grabbing" }}
           />
         ) : <></>}
       </DragOverlay>
