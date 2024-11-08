@@ -13,7 +13,7 @@ const Player = (): JSX.Element => {
   const $audioRef = useRef<HTMLAudioElement>(null);
   const { audioSource, setAudioSource } = useContext(AudioSourceContext);
   const { queue, queueIndex, setQueueIndex } = useContext(QueueContext);
-  const { setPlayingTrack } = useContext(PlayingTrackContext);
+  const { playingTrack, setPlayingTrack } = useContext(PlayingTrackContext);
 
   const [updateProgressInterval, setUpdateProgressInterval] = useState<NodeJS.Timeout | undefined>(undefined);
   const [isPaused, setIsPaused] = useState<boolean>(true);
@@ -23,7 +23,35 @@ const Player = (): JSX.Element => {
   const [prevVolume, setPrevVolume] = useState(1);
 
   useEffect(() => {
-    if (audioSource === '') setIsPaused(true);
+    if (audioSource === '') return setIsPaused(true);
+
+    if ('mediaSession' in navigator) {
+      const image = `data:${playingTrack!.imgFormat};base64,${playingTrack!.imgData}`;
+
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: playingTrack?.title,
+        artist: playingTrack?.artists,
+        album: playingTrack?.album,
+        artwork: [
+          { src: image, sizes: '96x96', type: playingTrack?.imgFormat },
+          { src: image, sizes: '512x512', type: playingTrack?.imgFormat },
+        ]
+      });
+
+      navigator.mediaSession.setActionHandler('play', playPauseTrack);
+      navigator.mediaSession.setActionHandler('pause', playPauseTrack);
+      navigator.mediaSession.setActionHandler('previoustrack', backwardStep);
+      navigator.mediaSession.setActionHandler('nexttrack', forwardStep);
+    }
+
+    return () => {
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.setActionHandler('play', null);
+        navigator.mediaSession.setActionHandler('pause', null);
+        navigator.mediaSession.setActionHandler('previoustrack', null);
+        navigator.mediaSession.setActionHandler('nexttrack', null);
+      }
+    };
   }, [audioSource]);
 
   const playPauseTrack = () => {
