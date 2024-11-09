@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import formatSeconds from "@renderer/utils/formatSeconds";
 import { QueueContext } from "@contexts/QueueContext";
 import { PlayingTrackContext } from "@contexts/PlayingTrackContext";
@@ -10,6 +10,8 @@ import Playlist from "@classes/Playlist";
 import { useRouteLoaderData } from "react-router-dom";
 
 const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], track: Track, index: number, style: React.CSSProperties }): JSX.Element => {
+  const $playlistBtnRef = useRef<SVGSVGElement>(null);
+  const $playlistMenuRef = useRef<HTMLUListElement>(null);
   const { setQueue, queueIndex, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext);
   const { setAudioSource } = useContext(AudioSourceContext);
@@ -31,6 +33,21 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], tra
     });
   }
 
+  const closePlaylistMenu = (event): void => {
+    const $playlistBtn = $playlistBtnRef.current as unknown as HTMLElement
+    const $playlistMenu = $playlistMenuRef.current as unknown as HTMLElement;
+    if ($playlistMenu && !$playlistMenu.contains(event.target) && !$playlistBtn.contains(event.target)) {
+      setIsOpen(false);
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('mousedown', closePlaylistMenu);
+    return () => {
+      document.removeEventListener('mousedown', closePlaylistMenu);
+    }
+  }, []);
+
   return (
     <TrackSection onClick={playAtTrack} style={style}>
       <TrackImage src={`data:${track.imgFormat};base64,${track.imgData}`}/>
@@ -40,16 +57,16 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], tra
       </TrackInfo>
       <TrackAlbum>{track.album}</TrackAlbum>
       <TrackDuration>{formatSeconds(track.duration!)}</TrackDuration>
-      <div style={{ position: 'relative' }}>
-        <AddIcon style={{ zIndex: 10 }} onClick={(e) => {
+      <div style={{ position: 'relative', height: '18px', width: '18px' }}>
+        <AddIcon ref={$playlistBtnRef} onClick={(e) => {
           setIsOpen((prev) => !prev);
           e.stopPropagation();
-        }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+        }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 48">
           <path d="M36.19,23.22h-9.33v-9.41c0-.45-.36-.81-.81-.81h-1.58c-.45,0-.81.36-.81.81v9.41h-9.85c-.45,0-.81.36-.81.81v1.58c0,.45.36.81.81.81h9.85v9.77c0,.45.36.81.81.81h1.58c.45,0,.81-.36.81-.81v-9.77h9.33c.45,0,.81-.36.81-.81v-1.58c0-.45-.36-.81-.81-.81Z"/>
           <path d="M25,0C11.19,0,0,11.19,0,25s11.19,25,25,25,25-11.19,25-25S38.81,0,25,0ZM25,45c-12.15,0-20-7.85-20-20S12.85,5,25,5s20,7.85,20,20-7.85,20-20,20Z"/>
         </AddIcon>
         {isOpen &&
-          <PlaylistMenu>
+          <PlaylistMenu ref={$playlistMenuRef}>
             {
               playlists.map((playlist) =>
                 <p onClick={(e) => {
@@ -61,16 +78,13 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], tra
           </PlaylistMenu>
         }
       </div>
-      <div style={{ position: 'relative' }}>
-        <AddIcon style={{ zIndex: 10 }} onClick={addToQueue} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 43.6">
-          <rect width="46.51" height="6.98"/>
-          <rect y="12.21" width="35.47" height="6.98"/>
-          <rect y="24.42" width="46.51" height="6.98"/>
-          <rect y="36.63" width="46.51" height="6.98"/>
-          <rect x="43.02" y="9.88" width="2.33" height="11.63"/>
-          <rect x="43.02" y="9.88" width="2.33" height="11.63" transform="translate(59.88 -28.49) rotate(90)"/>
-        </AddIcon>
-      </div>
+      <AddIcon onClick={addToQueue} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 42">
+        <rect width="34" height="6"/>
+        <rect y="13" width="26" height="6"/>
+        <rect y="26" width="34" height="6"/>
+        <rect y="39" width="34" height="6"/>
+        <polygon points="50 12.85 43.12 12.85 43.12 6 36.88 6 36.88 12.85 30 12.85 30 19.15 36.88 19.15 36.88 26 43.12 26 43.12 19.15 50 19.15 50 12.85"/>
+      </AddIcon>
 
     </TrackSection>
   );
@@ -81,11 +95,11 @@ export default TrackComponent;
 const TrackSection = styled.section`
   border-bottom: 1px gray solid;
   display: grid;
-  grid-template-columns: 80px 2fr 2fr 1fr 20px 0.3fr;
+  grid-template-columns: 80px 1fr 1fr 40px 18px 18px;
   align-items: center;
-  gap: 10px;
-  padding: 5px;
-  margin: 0 10px 0;
+  gap: 20px;
+  padding: 5px 20px 5px 5px;
+  margin: 0 10px;
 
   &:hover {
     background-color: #3d3d3f;
@@ -93,11 +107,11 @@ const TrackSection = styled.section`
   }
 
   @media (max-width: 920px) {
-    grid-template-columns: 60px 2fr 1fr 20px 0.3fr;
+    grid-template-columns: 60px 1fr 40px 18px 18px;
   }
 
   @media (max-width: 820px) {
-    grid-template-columns: 50px 1fr 20px 0.3fr;
+    grid-template-columns: 50px 1fr 18px 18px;
   }
 `;
 
@@ -117,8 +131,9 @@ const TrackDuration = styled.p`
 
 const AddIcon = styled.svg`
   fill: gray;
-  height: 15px;
-  width: 15px;
+  height: 18px;
+  width: 18px;
+  z-index: 10px;
 
   &:hover {
     fill: #fff;
@@ -145,7 +160,7 @@ const PlaylistMenu = styled.ul`
   margin: 0;
   position: absolute;
   top: 50px;
-  left: -120px;
+  left: -64px;
   width: 150px;
-  z-index: 100;
+  z-index: 11;
 `;

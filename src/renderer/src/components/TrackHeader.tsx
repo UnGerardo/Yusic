@@ -13,18 +13,20 @@ const TrackHeader = React.memo((): JSX.Element => (
 export default TrackHeader;
 
 const Header = styled.section`
-  display: grid;
-  grid-template-columns: 80px 2fr 2fr 1fr 20px 0.3fr;
-  align-items: center;
-  margin: 0 10px 0;
   border-bottom: 1px gray solid;
+  display: grid;
+  grid-template-columns: 80px 1fr 1fr 40px 20px 20px;
+  align-items: center;
+  gap: 20px;
+  padding: 0 20px 5px 5px;
+  margin: 0 10px;
 
   @media (max-width: 920px) {
-    grid-template-columns: 60px 2fr 1fr 20px 0.3fr;
+    grid-template-columns: 60px 1fr 40px 20px 20px;
   }
 
   @media (max-width: 820px) {
-    grid-template-columns: 50px 1fr 20px 0.3fr;
+    grid-template-columns: 50px 1fr 20px 20px;
   }
 `;
 
