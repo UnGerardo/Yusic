@@ -7,6 +7,7 @@ import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from 
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import Track from "@classes/Track";
+import { ClearQueue } from "./ClearQueue";
 
 const Queue = (): JSX.Element => {
   const [activeTrack, setActiveTrack] = useState<Track | null>(null);
@@ -45,15 +46,21 @@ const Queue = (): JSX.Element => {
 
   return (
     <QueueSection style={{ display: queue.length > 0 ? 'flex' : 'none' }}>
-      <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
-        <SortableContext items={queue.map(track => track.id)} strategy={verticalListSortingStrategy}>
-          <AutoSizer>
-            {({ height, width }) => (
-              <QueueList height={height} width={width} activeTrack={activeTrack} />
-            )}
-          </AutoSizer>
-        </SortableContext>
-      </DndContext>
+      <Header>
+        <p>Queue:</p>
+        <ClearQueue />
+      </Header>
+      <Content>
+        <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
+          <SortableContext items={queue.map(track => track.id)} strategy={verticalListSortingStrategy}>
+            <AutoSizer>
+              {({ height, width }) => (
+                <QueueList height={height} width={width} activeTrack={activeTrack} />
+              )}
+            </AutoSizer>
+          </SortableContext>
+        </DndContext>
+      </Content>
     </QueueSection>
   )
 };
@@ -68,4 +75,15 @@ const QueueSection = styled.section`
   min-width: 300px;
   max-width: 300px;
   z-index: 3;
+`;
+
+const Header = styled.section`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 10px;
+`;
+
+const Content = styled.section`
+  flex-grow: 1;
 `;
