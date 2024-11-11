@@ -5,11 +5,12 @@ import { Form, Link, useRouteLoaderData } from "react-router-dom";
 import AutoSizer from "react-virtualized-auto-sizer";
 import styled from "styled-components";
 
-export const SidePanel = React.memo((): JSX.Element => {
+export const SidePanel = React.memo(({ openSettings }: { openSettings: () => void }): JSX.Element => {
   const { playlists }: { playlists: Playlist[] } = useRouteLoaderData('root') as any;
 
   return (
     <Panel>
+      <button onClick={openSettings}>Settings</button>
       <Group to={'/'}>Tracks</Group>
       <Group to={'/artists'}>Artists</Group>
       <Group to={'/albums'}>Ablum</Group>

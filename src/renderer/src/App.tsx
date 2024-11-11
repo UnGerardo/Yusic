@@ -1,14 +1,16 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BackgroundColorContext } from "./contexts/BackgroundColorContext";
 import styled from "styled-components";
 
 import Queue from "./components/Queue";
+import Setting from '../../classes/Setting';
 import { BottomPanel } from "./components/BottomPanel";
 import { SidePanel } from "./components/SidePanel";
 import { ActionBar } from "./components/ActionBar";
 import { BackgroundImageContext } from "./contexts/BackgroundImageContext";
 import { BackgroundImageOpacityContext } from "./contexts/BackgroundImageOpacity";
 import { Outlet } from "react-router-dom";
+import SettingsApp from "./SettingsApp";
 
 export async function loader() {
   const playlists = await window.databaseApi.getPlaylists();
@@ -40,20 +42,49 @@ export async function action({ request }) {
 }
 
 const App = (): JSX.Element => {
-  const { backgroundColor } = useContext(BackgroundColorContext);
-  const { backgroundImage } = useContext(BackgroundImageContext);
-  const { backgroundImageOpacity } = useContext(BackgroundImageOpacityContext);
+  const [display, setDisplay] = useState('none');
+  const [opacity, setOpacity] = useState(100);
+  const { backgroundColor, setBackgroundColor } = useContext(BackgroundColorContext);
+  const { backgroundImage, setBackgroundImage } = useContext(BackgroundImageContext);
+  const { backgroundImageOpacity, setBackgroundImageOpacity } = useContext(BackgroundImageOpacityContext);
+
+  useEffect(() => {
+    window.databaseApi.getAppSettings().then((settings: Setting[]) => {
+      const settingHandlers = {
+        'bg-color': setBackgroundColor,
+        'bg-image': setBackgroundImage,
+        'bg-image-opacity': setBackgroundImageOpacity,
+      }
+
+      for (const setting of settings) {
+        settingHandlers[setting.name](setting.value);
+      }
+    });
+  }, []);
+
+  const openSettings = (): void => {
+    setDisplay('flex');
+    setOpacity(0);
+  }
+
+  const closeSettings = (): void => {
+    setDisplay('none');
+    setOpacity(100);
+  }
 
   return (
     <>
       <AppContainer backgroundColor={backgroundColor}>
-        <BackgroundImage path={backgroundImage} opacity={backgroundImageOpacity}/>
-        <SidePanel />
-        <Main>
-          <ActionBar />
-          <Outlet />
-        </Main>
-        <Queue />
+        <BackgroundImage path={backgroundImage} opacity={backgroundImageOpacity} />
+        <div style={{opacity: opacity, display: 'flex', height: '100%', overflow: "hidden", width: "100%"}}>
+          <SidePanel openSettings={openSettings} />
+          <Main>
+            <ActionBar />
+            <Outlet />
+          </Main>
+          <Queue />
+        </div>
+        <SettingsApp display={display} closeHandler={closeSettings} />
       </AppContainer>
       <BottomPanel />
     </>
@@ -90,7 +121,6 @@ const BackgroundImage = styled.div<{ path: string, opacity: number }>`
 const Main = styled.main`
   display: grid;
   grid-template-rows: 50px 27px 1fr;
-
   height: 100%;
   width: 100%;
   z-index: 3;
