@@ -48,7 +48,7 @@ const QueuedTrack = ({ index, track, style, activeTrack } : { index: number, tra
 export default QueuedTrack;
 
 const QueuedTrackSection = styled.section<{ isCurrentTrack: boolean }>`
-  background-color: ${(props) => props.isCurrentTrack ? '#3d3d3d' : 'none'};
+  background-color: ${(props) => props.isCurrentTrack ? 'rgba(61, 61, 61, 0.5)' : 'none'};
   display: grid;
   grid-template-columns: 18px 50px 1fr ;
   align-items: center;
@@ -57,7 +57,7 @@ const QueuedTrackSection = styled.section<{ isCurrentTrack: boolean }>`
   user-select: none;
 
   &:hover {
-    background-color: #3d3d3f;
+    background-color: rgba(61, 61, 61, 0.5);
     cursor: pointer;
   }
 `;

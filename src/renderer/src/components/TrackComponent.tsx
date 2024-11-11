@@ -93,16 +93,15 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], tra
 export default TrackComponent;
 
 const TrackSection = styled.section`
-  border-bottom: 1px gray solid;
   display: grid;
   grid-template-columns: 80px 1fr 1fr 40px 18px 18px;
   align-items: center;
   gap: 20px;
-  padding: 5px 20px 5px 5px;
-  margin: 0 10px;
+  padding: 5px 28px 5px 5px;
+  margin: 0 0 0 10px;
 
   &:hover {
-    background-color: #3d3d3f;
+    background-color: rgba(61, 61, 61, 0.5);
     cursor: pointer;
   }
 
