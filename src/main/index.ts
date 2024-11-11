@@ -29,12 +29,12 @@ function createWindow(): void {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show();
-  })
+  });
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url);
     return { action: 'deny' };
-  })
+  });
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
@@ -47,16 +47,29 @@ function createWindow(): void {
 
 function createSettingsWindow() {
   const settingsWindow = new BrowserWindow({
-    width: 600,
-    height: 400,
+    minWidth: 815,
+    width: 1000,
+    minHeight: 550,
+    height: 700,
+    show: false,
+    autoHideMenuBar: true,
+    ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: false,
-      contextIsolation: true,
+      sandbox: false,
     },
   });
 
-  settingsWindow.loadFile(join(__dirname, '../renderer/settings.html')); // URL path for the secondary window
+  settingsWindow.on('ready-to-show', () => {
+    settingsWindow.show();
+  });
+
+  settingsWindow.webContents.setWindowOpenHandler((details) => {
+    shell.openExternal(details.url);
+    return { action: 'deny' };
+  });
+
+  settingsWindow.loadFile(join(__dirname, '../renderer/settings.html'));
 }
 
 ipcMain.handle('open-settings', (): void => {
