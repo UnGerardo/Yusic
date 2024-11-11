@@ -45,37 +45,6 @@ function createWindow(): void {
   }
 }
 
-function createSettingsWindow() {
-  const settingsWindow = new BrowserWindow({
-    minWidth: 815,
-    width: 1000,
-    minHeight: 550,
-    height: 700,
-    show: false,
-    autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      sandbox: false,
-    },
-  });
-
-  settingsWindow.on('ready-to-show', () => {
-    settingsWindow.show();
-  });
-
-  settingsWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url);
-    return { action: 'deny' };
-  });
-
-  settingsWindow.loadFile(join(__dirname, '../renderer/settings.html'));
-}
-
-ipcMain.handle('open-settings', (): void => {
-  createSettingsWindow();
-});
-
 app.commandLine.appendSwitch('disable-features', 'DnsOverHttps');
 
 app.whenReady().then(() => {
@@ -170,6 +139,10 @@ app.whenReady().then(() => {
 
   ipcMain.handle('get-app-settings', () => {
     return db.prepare('SELECT * FROM AppSettings').all() as Setting[];
+  });
+
+  ipcMain.handle('get-app-setting', (_event, name: string): Setting => {
+    return db.prepare('SELECT * FROM AppSettings WHERE name = ?').get(name) as Setting;
   });
 
   ipcMain.handle('set-app-setting', (_event, name: string, value: string) => {

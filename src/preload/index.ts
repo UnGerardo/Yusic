@@ -11,7 +11,6 @@ import Playlist from '../classes/Playlist';
 const api: Api = {
   selectDir: (): Promise<string> => ipcRenderer.invoke('select-dir'),
   log: (s: string): Promise<void> => ipcRenderer.invoke('log', s),
-  openSettings: (): Promise<void> => ipcRenderer.invoke('open-settings'),
 }
 
 const databaseApi: DatabaseApi = {
@@ -20,6 +19,7 @@ const databaseApi: DatabaseApi = {
   getTrackIds: (): Promise<number[]> => ipcRenderer.invoke('get-track-ids'),
   getTrackById: (id: number) => ipcRenderer.invoke('get-track-by-id', id),
   getAppSettings: (): Promise<Setting[]> => ipcRenderer.invoke('get-app-settings'),
+  getAppSetting: (name: string): Promise<Setting> => ipcRenderer.invoke('get-app-setting', name),
   setAppSetting: (name: string, value: string): Promise<void> => ipcRenderer.invoke('set-app-setting', name, value),
   getPlaylists: (): Promise<Playlist[]> => ipcRenderer.invoke('get-playlists'),
   createPlaylist: (name: string): Promise<void> => ipcRenderer.invoke('create-playlist', name),

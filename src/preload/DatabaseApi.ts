@@ -8,6 +8,7 @@ export default interface DatabaseApi {
   getTrackIds: () => Promise<number[]>;
   getTrackById: (id: number) => Promise<Track>;
   getAppSettings: () => Promise<Setting[]>;
+  getAppSetting: (name: string) => Promise<Setting>;
   setAppSetting: (name: string, value: string) => Promise<void>;
   getPlaylists: () => Promise<Playlist[]>;
   createPlaylist: (name: string) => Promise<void>;
