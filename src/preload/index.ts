@@ -11,6 +11,7 @@ import Playlist from '../classes/Playlist';
 const api: Api = {
   selectDir: (): Promise<string> => ipcRenderer.invoke('select-dir'),
   log: (s: string): Promise<void> => ipcRenderer.invoke('log', s),
+  openSettings: (): Promise<void> => ipcRenderer.invoke('open-settings'),
 }
 
 const databaseApi: DatabaseApi = {

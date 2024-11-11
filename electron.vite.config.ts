@@ -18,6 +18,14 @@ export default defineConfig({
         '@contexts': resolve('src/renderer/src/contexts'),
       }
     },
-    plugins: [react()]
+    plugins: [react()],
+    build: {
+      rollupOptions: {
+        input: {
+          main: './src/renderer/index.html',
+          settings: './src/renderer/settings.html',
+        }
+      }
+    }
   }
 })

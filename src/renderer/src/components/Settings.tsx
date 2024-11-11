@@ -36,7 +36,8 @@ export const Settings = (): JSX.Element => {
   }, []);
 
   const openSettings = (): void => {
-    setisOpen((isOpen) => !isOpen);
+    // setisOpen((isOpen) => !isOpen);
+    window.api.openSettings();
   }
 
   const closeSettings = (event): void => {

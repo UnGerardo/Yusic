@@ -45,6 +45,24 @@ function createWindow(): void {
   }
 }
 
+function createSettingsWindow() {
+  const settingsWindow = new BrowserWindow({
+    width: 600,
+    height: 400,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: false,
+      contextIsolation: true,
+    },
+  });
+
+  settingsWindow.loadFile(join(__dirname, '../renderer/settings.html')); // URL path for the secondary window
+}
+
+ipcMain.handle('open-settings', (): void => {
+  createSettingsWindow();
+});
+
 app.commandLine.appendSwitch('disable-features', 'DnsOverHttps');
 
 app.whenReady().then(() => {
