@@ -10,7 +10,7 @@ import Playlist from "@classes/Playlist";
 import { useRouteLoaderData } from "react-router-dom";
 
 const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], track: Track, index: number, style: React.CSSProperties }): JSX.Element => {
-  const $playlistBtnRef = useRef<SVGSVGElement>(null);
+  const $playlistBtnRef = useRef<HTMLButtonElement>(null);
   const $playlistMenuRef = useRef<HTMLUListElement>(null);
   const { setQueue, queueIndex, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext);
@@ -57,14 +57,10 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], tra
       </TrackInfo>
       <TrackAlbum>{track.album}</TrackAlbum>
       <TrackDuration>{formatSeconds(track.duration!)}</TrackDuration>
-      <div style={{ position: 'relative', height: '18px', width: '18px' }}>
-        <AddIcon ref={$playlistBtnRef} onClick={(e) => {
-          setIsOpen((prev) => !prev);
-          e.stopPropagation();
-        }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 48">
-          <path d="M36.19,23.22h-9.33v-9.41c0-.45-.36-.81-.81-.81h-1.58c-.45,0-.81.36-.81.81v9.41h-9.85c-.45,0-.81.36-.81.81v1.58c0,.45.36.81.81.81h9.85v9.77c0,.45.36.81.81.81h1.58c.45,0,.81-.36.81-.81v-9.77h9.33c.45,0,.81-.36.81-.81v-1.58c0-.45-.36-.81-.81-.81Z"/>
-          <path d="M25,0C11.19,0,0,11.19,0,25s11.19,25,25,25,25-11.19,25-25S38.81,0,25,0ZM25,45c-12.15,0-20-7.85-20-20S12.85,5,25,5s20,7.85,20,20-7.85,20-20,20Z"/>
-        </AddIcon>
+      <PlaylistButton ref={$playlistBtnRef} onClick={(e) => {
+        setIsOpen((prev) => !prev);
+        e.stopPropagation();
+      }}>
         {isOpen &&
           <PlaylistMenu ref={$playlistMenuRef}>
             {
@@ -77,7 +73,7 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], tra
             }
           </PlaylistMenu>
         }
-      </div>
+      </PlaylistButton>
       <AddIcon onClick={addToQueue} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 42">
         <rect width="34" height="6"/>
         <rect y="13" width="26" height="6"/>
@@ -126,6 +122,42 @@ const TrackDuration = styled.p`
   @media (max-width: 820px) {
     display: none;
   }
+`;
+
+const PlaylistButton = styled.button`
+  background: none;
+  border: 2px solid gray;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 18px;
+  width: 18px;
+  position: relative;
+
+  &:before {
+    background-color: gray;
+    content: '';
+    height: 2px;
+    width: 8px;
+    position: absolute;
+  }
+
+  &:after {
+    background-color: gray;
+    content: '';
+    height: 8px;
+    width: 2px;
+    position: absolute;
+  }
+
+  &:hover { border-color: white; }
+  &:hover::after { background-color: white; }
+  &:hover::before { background-color: white; }
+
+  &:active { border-color: #666; }
+  &:active::after { background-color: #666; }
+  &:active::before { background-color: #666; }
 `;
 
 const AddIcon = styled.svg`
