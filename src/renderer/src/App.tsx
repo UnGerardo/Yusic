@@ -42,8 +42,8 @@ export async function action({ request }) {
 }
 
 const App = (): JSX.Element => {
-  const [display, setDisplay] = useState('none');
-  const [opacity, setOpacity] = useState(100);
+  const [settingsDisplay, setSettingsDisplay] = useState('none');
+  const [contentDisplay, setContentDisplay] = useState('flex');
   const { backgroundColor, setBackgroundColor } = useContext(BackgroundColorContext);
   const { backgroundImage, setBackgroundImage } = useContext(BackgroundImageContext);
   const { backgroundImageOpacity, setBackgroundImageOpacity } = useContext(BackgroundImageOpacityContext);
@@ -63,28 +63,28 @@ const App = (): JSX.Element => {
   }, []);
 
   const openSettings = (): void => {
-    setDisplay('flex');
-    setOpacity(0);
+    setSettingsDisplay('flex');
+    setContentDisplay('none');
   }
 
   const closeSettings = (): void => {
-    setDisplay('none');
-    setOpacity(100);
+    setSettingsDisplay('none');
+    setContentDisplay('flex');
   }
 
   return (
     <>
       <AppContainer backgroundColor={backgroundColor}>
         <BackgroundImage path={backgroundImage} opacity={backgroundImageOpacity} />
-        <div style={{opacity: opacity, display: 'flex', height: '100%', overflow: "hidden", width: "100%"}}>
+        <Content display={contentDisplay} >
           <SidePanel openSettings={openSettings} />
           <Main>
             <ActionBar />
             <Outlet />
           </Main>
           <Queue />
-        </div>
-        <SettingsApp display={display} closeHandler={closeSettings} />
+        </Content>
+        <SettingsApp display={settingsDisplay} closeHandler={closeSettings} />
       </AppContainer>
       <BottomPanel />
     </>
@@ -117,6 +117,13 @@ const BackgroundImage = styled.div<{ path: string, opacity: number }>`
   pointer-events: none;
   z-index: 2;
 `;
+
+const Content = styled.section<{ display: string }>`
+  display: ${props => props.display};
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+`
 
 const Main = styled.main`
   display: grid;
