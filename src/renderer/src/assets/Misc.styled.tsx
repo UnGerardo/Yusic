@@ -93,3 +93,10 @@ export const Slider = styled.input<{ value: number, max: number }>`
     appearance: none;
   }
 `;
+
+export const StyledSetting = styled.section`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;

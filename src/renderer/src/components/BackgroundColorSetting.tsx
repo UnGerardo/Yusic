@@ -1,6 +1,7 @@
+import { useCallback, useContext } from "react";
+import { StyledSetting } from "@renderer/assets/Misc.styled";
 import { BackgroundColorContext } from "@renderer/contexts/BackgroundColorContext";
 import { debounce } from "@renderer/utils/debounce";
-import { useCallback, useContext } from "react";
 
 const BackgroundColorSetting = (): JSX.Element => {
   const { backgroundColor, setBackgroundColor } = useContext(BackgroundColorContext);
@@ -17,10 +18,10 @@ const BackgroundColorSetting = (): JSX.Element => {
   }
 
   return (
-    <section>
+    <StyledSetting>
       <label htmlFor="background-color">Background Color:</label>
       <input type="color" name="background-color" value={backgroundColor} onChange={changeBackgroundColor}/>
-    </section>
+    </StyledSetting>
   );
 }
 

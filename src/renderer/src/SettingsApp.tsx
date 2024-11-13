@@ -24,9 +24,9 @@ const StyledSettings = styled.section<{ display: string }>`
   justify-content: flex-start;
   align-items: center;
   position: absolute;
-  top: 50px;
-  left: 60px;
-  right: 60px;
+  top: 40px;
+  left: 150px;
+  right: 150px;
   z-index: 3;
 `;
 
@@ -40,10 +40,10 @@ const Header = styled.section`
 
 const Title = styled.h1`
   font-size: 24px;
-`
+`;
 
 const SettingsContainer = styled.section`
-  width: 75%;
+  width: 50%;
 `;
 
 const CloseButton = styled.button`
