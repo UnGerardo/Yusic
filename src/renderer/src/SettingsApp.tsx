@@ -1,14 +1,90 @@
+import styled from "styled-components";
 import BackgroundColorSetting from "./components/BackgroundColorSetting";
 
 const SettingsApp = ({ display, closeHandler }: { display: string, closeHandler: () => void }): JSX.Element => {
 
   return (
-    <div style={{ display: display, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 3 }} >
-      <h1>Settings</h1>
-      <button onClick={closeHandler}>Close</button>
-      <BackgroundColorSetting />
-    </div>
+    <StyledSettings display={display}>
+      <Header>
+        <Title>Settings</Title>
+        <CloseButton onClick={closeHandler} />
+      </Header>
+      <SettingsContainer>
+        <BackgroundColorSetting />
+      </SettingsContainer>
+    </StyledSettings>
   )
 }
 
 export default SettingsApp;
+
+const StyledSettings = styled.section<{ display: string }>`
+  display: ${(props) => props.display};
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: absolute;
+  top: 50px;
+  left: 60px;
+  right: 60px;
+  z-index: 3;
+`;
+
+const Header = styled.section`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 30px 0;
+  width: 100%;
+`;
+
+const Title = styled.h1`
+  font-size: 24px;
+`
+
+const SettingsContainer = styled.section`
+  width: 75%;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: 2px solid gray;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 40px;
+  position: relative;
+  transform: rotate(45deg);
+
+  &:before {
+    background-color: gray;
+    content: '';
+    height: 1px;
+    width: 15px;
+    position: absolute;
+  }
+
+  &:after {
+    background-color: gray;
+    content: '';
+    height: 15px;
+    width: 1px;
+    position: absolute;
+  }
+
+  &:hover {
+    border-color: white;
+    transform: scale(1.05) rotate(45deg);
+  }
+  &:hover::after,
+  &:hover::before { background-color: white; }
+
+  &:active {
+    border-color: #666;
+    transform: scale(.95) rotate(45deg);
+  }
+  &:active::after,
+  &:active::before { background-color: #666; }
+`;
