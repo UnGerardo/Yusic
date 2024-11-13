@@ -74,13 +74,10 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], tra
           </PlaylistMenu>
         }
       </PlaylistButton>
-      <AddIcon onClick={addToQueue} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 42">
-        <rect width="34" height="6"/>
-        <rect y="13" width="26" height="6"/>
-        <rect y="26" width="34" height="6"/>
-        <rect y="39" width="34" height="6"/>
-        <polygon points="50 12.85 43.12 12.85 43.12 6 36.88 6 36.88 12.85 30 12.85 30 19.15 36.88 19.15 36.88 26 43.12 26 43.12 19.15 50 19.15 50 12.85"/>
-      </AddIcon>
+      <PlayNextButton onClick={addToQueue}>
+        <PlayNext2nd />
+        <PlayNext3rd />
+      </PlayNextButton>
 
     </TrackSection>
   );
@@ -160,21 +157,95 @@ const PlaylistButton = styled.button`
   &:active::before { background-color: #666; }
 `;
 
-const AddIcon = styled.svg`
-  fill: gray;
-  height: 18px;
+/* top and bottom bar */
+const PlayNextButton = styled.button`
+  background: none;
+  border: none;
+  height: 20px;
   width: 18px;
-  z-index: 10px;
+  position: relative;
+
+  &:before,
+  &:after {
+    background-color: gray;
+    content: '';
+    height: 2px;
+    width: 15px;
+    position: absolute;
+  }
+
+  &:before {
+    top: 0px;
+    left: 0px;
+  }
+
+  &:after {
+    bottom: 0px;
+    left: 0px;
+  }
 
   &:hover {
-    fill: #fff;
-    transform: scale(1.05);
+    > * {
+      background-color: white;
+    }
+
+    &::after,
+    &::before,
+    & ::after, /* Includes cross of second bar */
+    & ::before { background-color: white; }
   }
 
   &:active {
-    fill: rgb(100, 100, 100);
-    transform: scale(1);
+    > * {
+      background-color: #666;
+    }
+
+    &::after,
+    &::before,
+    & ::after, /* Includes cross of second bar */
+    & ::before { background-color: #666; }
   }
+`;
+
+/*  second bar and cross */
+const PlayNext2nd = styled.section`
+  background-color: gray;
+  height: 2px;
+  width: 11px;
+  position: absolute;
+  top: 6px;
+  left: 0px;
+
+  /* horizontal cross */
+  &:before {
+    background-color: gray;
+    content: '';
+    height: 2px;
+    width: 10px;
+    position: absolute;
+    top: 0px;
+    right: -13px;
+  }
+  /* vertical cross */
+  &:after {
+    background-color: gray;
+    content: '';
+    height: 10px;
+    width: 2px;
+    position: absolute;
+    top: -4px;
+    right: -9px;
+  }
+`;
+
+/* third bar */
+const PlayNext3rd = styled.section`
+  background-color: gray;
+  height: 2px;
+  width: 15px;
+  position: absolute;
+  top: 12px;
+  left: 0px;
 `;
 
 const PlaylistMenu = styled.ul`
