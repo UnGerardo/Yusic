@@ -43,16 +43,7 @@ const Player = (): JSX.Element => {
       navigator.mediaSession.setActionHandler('previoustrack', backwardStep);
       navigator.mediaSession.setActionHandler('nexttrack', forwardStep);
     }
-
-    return () => {
-      if ('mediaSession' in navigator) {
-        navigator.mediaSession.setActionHandler('play', null);
-        navigator.mediaSession.setActionHandler('pause', null);
-        navigator.mediaSession.setActionHandler('previoustrack', null);
-        navigator.mediaSession.setActionHandler('nexttrack', null);
-      }
-    };
-  }, [audioSource]);
+  }, [audioSource, queue]);
 
   const playPauseTrack = () => {
     const { current: audio } = $audioRef;
