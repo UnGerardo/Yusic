@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import BackgroundColorSetting from "./components/BackgroundColorSetting";
+import BackgroundImageSetting from "./components/BackgroundImageSetting";
 
 const SettingsApp = ({ display, closeHandler }: { display: string, closeHandler: () => void }): JSX.Element => {
 
@@ -11,6 +12,7 @@ const SettingsApp = ({ display, closeHandler }: { display: string, closeHandler:
       </Header>
       <SettingsContainer>
         <BackgroundColorSetting />
+        <BackgroundImageSetting />
       </SettingsContainer>
     </StyledSettings>
   )
@@ -43,7 +45,7 @@ const Title = styled.h1`
 `;
 
 const SettingsContainer = styled.section`
-  width: 50%;
+  width: 60%;
 `;
 
 const CloseButton = styled.button`

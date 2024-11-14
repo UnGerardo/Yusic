@@ -2,12 +2,10 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Setting from "../../../classes/Setting";
 import { BigIcon, Slider } from "@renderer/assets/Misc.styled";
-import { BackgroundImageContext } from "@renderer/contexts/BackgroundImageContext";
 import { BackgroundImageOpacityContext } from "@renderer/contexts/BackgroundImageOpacity";
 import { debounce } from "@renderer/utils/debounce";
 
 export const Settings = (): JSX.Element => {
-  const { setBackgroundImage } = useContext(BackgroundImageContext);
   const { backgroundImageOpacity, setBackgroundImageOpacity } = useContext(BackgroundImageOpacityContext);
   const [isOpen, setisOpen] = useState(false);
 
@@ -16,7 +14,6 @@ export const Settings = (): JSX.Element => {
   useEffect(() => {
     window.databaseApi.getAppSettings().then((settings: Setting[]) => {
       const settingHandlers = {
-        'bg-image': setBackgroundImage,
         'bg-image-opacity': setBackgroundImageOpacity,
       }
 
@@ -35,13 +32,6 @@ export const Settings = (): JSX.Element => {
     if (menu && !menu.contains(event.target)) {
       setisOpen(false);
     }
-  }
-
-  const changeBackgroundImage = (event): void => {
-    const filePath: string = event.target.files[0].path;
-    const sanitizedPath = encodeURI(filePath).replaceAll('%5C', '/').replace('%3A', ':');
-    setBackgroundImage(sanitizedPath);
-    window.databaseApi.setAppSetting('bg-image', sanitizedPath);
   }
 
   const saveBgImgOpacityToDb = useCallback(
@@ -64,10 +54,6 @@ export const Settings = (): JSX.Element => {
       </BigIcon>
       {isOpen &&
         <SettingsMenu ref={$menuRef}>
-          <Option>
-            <label htmlFor="bg-image">Background Image:</label>
-            <input type="file" name="bg-image" onChange={changeBackgroundImage} accept="image/*"/>
-          </Option>
           <Option>
             <label htmlFor="bg-opactiy">BG Image Opacity:</label>
             <Slider type="range" name="bg-opacity" onChange={changeBackgroundImageOpacity} value={backgroundImageOpacity} max={1} step={0.01} />

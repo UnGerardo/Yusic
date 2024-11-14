@@ -99,4 +99,5 @@ export const StyledSetting = styled.section`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  user-select: none;
 `;
