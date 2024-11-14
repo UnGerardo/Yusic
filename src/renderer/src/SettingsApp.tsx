@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import BackgroundColorSetting from "./components/BackgroundColorSetting";
 import BackgroundImageSetting from "./components/BackgroundImageSetting";
+import BackgroundImageOpacity from "./components/BackgroundImageOpacity";
 
 const SettingsApp = ({ display, closeHandler }: { display: string, closeHandler: () => void }): JSX.Element => {
 
@@ -13,6 +14,7 @@ const SettingsApp = ({ display, closeHandler }: { display: string, closeHandler:
       <SettingsContainer>
         <BackgroundColorSetting />
         <BackgroundImageSetting />
+        <BackgroundImageOpacity />
       </SettingsContainer>
     </StyledSettings>
   )
