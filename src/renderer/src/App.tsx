@@ -10,7 +10,7 @@ import { ActionBar } from "./components/ActionBar";
 import { BackgroundImageContext } from "./contexts/BackgroundImageContext";
 import { BackgroundImageOpacityContext } from "./contexts/BackgroundImageOpacity";
 import { Outlet } from "react-router-dom";
-import SettingsApp from "./SettingsApp";
+import Settings from "./components/Settings/Settings";
 
 export async function loader() {
   const playlists = await window.databaseApi.getPlaylists();
@@ -84,7 +84,7 @@ const App = (): JSX.Element => {
           </Main>
           <Queue />
         </Content>
-        <SettingsApp display={settingsDisplay} closeHandler={closeSettings} />
+        <Settings display={settingsDisplay} closeHandler={closeSettings} />
       </AppContainer>
       <BottomPanel />
     </>

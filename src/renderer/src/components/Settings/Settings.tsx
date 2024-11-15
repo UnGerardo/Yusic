@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import BackgroundColorSetting from "./components/BackgroundColorSetting";
-import BackgroundImageSetting from "./components/BackgroundImageSetting";
-import BackgroundImageOpacity from "./components/BackgroundImageOpacity";
-import ReadMusicFolder from "./components/ReadMusicFolder";
+import BackgroundColorSetting from "./BackgroundColorSetting";
+import BackgroundImageSetting from "./BackgroundImageSetting";
+import BackgroundImageOpacity from "./BackgroundImageOpacity";
+import ReadMusicFolder from "./ReadMusicFolder";
 
-const SettingsApp = ({ display, closeHandler }: { display: string, closeHandler: () => void }): JSX.Element => {
+const Settings = ({ display, closeHandler }: { display: string, closeHandler: () => void }): JSX.Element => {
 
   return (
     <StyledSettings display={display}>
@@ -24,7 +24,7 @@ const SettingsApp = ({ display, closeHandler }: { display: string, closeHandler:
   )
 }
 
-export default SettingsApp;
+export default Settings;
 
 const StyledSettings = styled.section<{ display: string }>`
   display: ${(props) => props.display};
