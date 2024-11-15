@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Queue from "./components/Queue";
 import Setting from '../../classes/Setting';
 import { BottomPanel } from "./components/BottomPanel";
-import { SidePanel } from "./components/SidePanel";
+import LibraryPanel from "./components/LibraryPanel/LibraryPanel";
 import { ActionBar } from "./components/ActionBar";
 import { BackgroundImageContext } from "./contexts/BackgroundImageContext";
 import { BackgroundImageOpacityContext } from "./contexts/BackgroundImageOpacity";
@@ -77,7 +77,7 @@ const App = (): JSX.Element => {
       <AppContainer backgroundColor={backgroundColor}>
         <BackgroundImage path={backgroundImage} opacity={backgroundImageOpacity} />
         <Content display={contentDisplay} >
-          <SidePanel openSettings={openSettings} />
+          <LibraryPanel openSettings={openSettings} />
           <Main>
             <ActionBar />
             <Outlet />

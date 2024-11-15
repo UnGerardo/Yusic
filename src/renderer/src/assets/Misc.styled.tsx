@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { FixedSizeList } from "react-window";
 import styled, { css } from "styled-components";
 
@@ -82,4 +83,16 @@ export const StyledSetting = styled.section`
   align-items: center;
   width: 100%;
   user-select: none;
+`;
+
+export const LibraryCollection = styled(Link)`
+  border-bottom: 1px white solid;
+  color: white;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  /* padding: 10px 0; */
+  height: 30px;
+  width: 100%;
+  text-decoration: none;
 `;
