@@ -36,24 +36,6 @@ export const TrackArtist = styled.p`
   font-size: 14px;
 `;
 
-export const BigIcon = styled.section`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 30px;
-  padding: 8px;
-  height: 50px;
-  width: 50px;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-`;
-
 export const Slider = styled.input<{ value: number, max: number }>`
   appearance: none;
   background: linear-gradient(

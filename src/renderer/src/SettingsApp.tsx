@@ -2,6 +2,7 @@ import styled from "styled-components";
 import BackgroundColorSetting from "./components/BackgroundColorSetting";
 import BackgroundImageSetting from "./components/BackgroundImageSetting";
 import BackgroundImageOpacity from "./components/BackgroundImageOpacity";
+import ReadMusicFolder from "./components/ReadMusicFolder";
 
 const SettingsApp = ({ display, closeHandler }: { display: string, closeHandler: () => void }): JSX.Element => {
 
@@ -12,6 +13,9 @@ const SettingsApp = ({ display, closeHandler }: { display: string, closeHandler:
         <CloseButton onClick={closeHandler} />
       </Header>
       <SettingsContainer>
+        <SubHeader>Data</SubHeader>
+        <ReadMusicFolder />
+        <SubHeader>Appearence</SubHeader>
         <BackgroundColorSetting />
         <BackgroundImageSetting />
         <BackgroundImageOpacity />
@@ -41,6 +45,11 @@ const Header = styled.section`
   margin: 0 0 30px 0;
   width: 100%;
 `;
+
+const SubHeader = styled.h2`
+  font-size: 20px;
+  margin-top: 20px;
+`
 
 const Title = styled.h1`
   font-size: 24px;
