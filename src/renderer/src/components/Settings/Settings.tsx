@@ -4,10 +4,10 @@ import BackgroundImageSetting from "./BackgroundImageSetting";
 import BackgroundImageOpacity from "./BackgroundImageOpacity";
 import ReadMusicFolder from "./ReadMusicFolder";
 
-const Settings = ({ display, closeHandler }: { display: string, closeHandler: () => void }): JSX.Element => {
+const Settings = ({ opacity, scale, closeHandler }: { opacity: number, scale: number, closeHandler: () => void }): JSX.Element => {
 
   return (
-    <StyledSettings display={display}>
+    <StyledSettings opacity={opacity} scale={scale}>
       <Header>
         <Title>Settings</Title>
         <CloseButton onClick={closeHandler} />
@@ -26,15 +26,18 @@ const Settings = ({ display, closeHandler }: { display: string, closeHandler: ()
 
 export default Settings;
 
-const StyledSettings = styled.section<{ display: string }>`
-  display: ${(props) => props.display};
+const StyledSettings = styled.section<{ opacity: number, scale: number }>`
+  display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  opacity: ${(props) => props.opacity};
   position: absolute;
   top: 40px;
   left: 150px;
   right: 150px;
+  transition: 0.3s;
+  transform: scale(${props => props.scale});
   z-index: 3;
 `;
 

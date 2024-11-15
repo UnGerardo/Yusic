@@ -42,8 +42,10 @@ export async function action({ request }) {
 }
 
 const App = (): JSX.Element => {
-  const [settingsDisplay, setSettingsDisplay] = useState('none');
-  const [contentDisplay, setContentDisplay] = useState('flex');
+  const [settingsOpacity, setSettingsOpacity] = useState(0);
+  const [settingsScale, setSettingsScale] = useState(.7);
+  const [contentOpacity, setContentOpacity] = useState(1);
+  const [contentScale, setContentScale] = useState(1);
   const { backgroundColor, setBackgroundColor } = useContext(BackgroundColorContext);
   const { backgroundImage, setBackgroundImage } = useContext(BackgroundImageContext);
   const { backgroundImageOpacity, setBackgroundImageOpacity } = useContext(BackgroundImageOpacityContext);
@@ -63,20 +65,24 @@ const App = (): JSX.Element => {
   }, []);
 
   const openSettings = (): void => {
-    setSettingsDisplay('flex');
-    setContentDisplay('none');
+    setSettingsOpacity(1);
+    setSettingsScale(1);
+    setContentOpacity(0);
+    setContentScale(.7);
   }
 
   const closeSettings = (): void => {
-    setSettingsDisplay('none');
-    setContentDisplay('flex');
+    setSettingsOpacity(0);
+    setSettingsScale(.7);
+    setContentOpacity(1);
+    setContentScale(1);
   }
 
   return (
     <>
       <AppContainer backgroundColor={backgroundColor}>
         <BackgroundImage path={backgroundImage} opacity={backgroundImageOpacity} />
-        <Content display={contentDisplay} >
+        <Content opacity={contentOpacity} scale={contentScale}>
           <LibraryPanel openSettings={openSettings} />
           <Main>
             <ActionBar />
@@ -84,7 +90,7 @@ const App = (): JSX.Element => {
           </Main>
           <Queue />
         </Content>
-        <Settings display={settingsDisplay} closeHandler={closeSettings} />
+        <Settings opacity={settingsOpacity} scale={settingsScale} closeHandler={closeSettings} />
       </AppContainer>
       <BottomPanel />
     </>
@@ -118,11 +124,15 @@ const BackgroundImage = styled.div<{ path: string, opacity: number }>`
   z-index: 2;
 `;
 
-const Content = styled.section<{ display: string }>`
-  display: ${props => props.display};
+const Content = styled.section<{ opacity: number, scale: number }>`
+  display: flex;
+  opacity: ${props => props.opacity};
   overflow: hidden;
   height: 100%;
   width: 100%;
+  transition: 0.3s;
+  transform: scale(${props => props.scale});
+  z-index: 3;
 `
 
 const Main = styled.main`
