@@ -44,6 +44,7 @@ export async function action({ request }) {
 const App = (): JSX.Element => {
   const [settingsOpacity, setSettingsOpacity] = useState(0);
   const [settingsScale, setSettingsScale] = useState(.7);
+  const [settingsZIndex, setSettingsZIndex] = useState(-1);
   const [contentOpacity, setContentOpacity] = useState(1);
   const [contentScale, setContentScale] = useState(1);
   const { backgroundColor, setBackgroundColor } = useContext(BackgroundColorContext);
@@ -67,6 +68,7 @@ const App = (): JSX.Element => {
   const openSettings = (): void => {
     setSettingsOpacity(1);
     setSettingsScale(1);
+    setSettingsZIndex(3);
     setContentOpacity(0);
     setContentScale(.7);
   }
@@ -74,6 +76,7 @@ const App = (): JSX.Element => {
   const closeSettings = (): void => {
     setSettingsOpacity(0);
     setSettingsScale(.7);
+    setSettingsZIndex(-1);
     setContentOpacity(1);
     setContentScale(1);
   }
@@ -90,7 +93,7 @@ const App = (): JSX.Element => {
           </Main>
           <Queue />
         </Content>
-        <Settings opacity={settingsOpacity} scale={settingsScale} closeHandler={closeSettings} />
+        <Settings opacity={settingsOpacity} scale={settingsScale} zIndex={settingsZIndex} closeHandler={closeSettings} />
       </AppContainer>
       <BottomPanel />
     </>

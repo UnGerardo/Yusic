@@ -4,10 +4,10 @@ import BackgroundImageSetting from "./BackgroundImageSetting";
 import BackgroundImageOpacity from "./BackgroundImageOpacity";
 import ReadMusicFolder from "./ReadMusicFolder";
 
-const Settings = ({ opacity, scale, closeHandler }: { opacity: number, scale: number, closeHandler: () => void }): JSX.Element => {
+const Settings = ({ opacity, scale, zIndex, closeHandler }: { opacity: number, scale: number, zIndex: number, closeHandler: () => void }): JSX.Element => {
 
   return (
-    <StyledSettings opacity={opacity} scale={scale}>
+    <StyledSettings opacity={opacity} scale={scale} zIndex={zIndex}>
       <Header>
         <Title>Settings</Title>
         <CloseButton onClick={closeHandler} />
@@ -26,7 +26,7 @@ const Settings = ({ opacity, scale, closeHandler }: { opacity: number, scale: nu
 
 export default Settings;
 
-const StyledSettings = styled.section<{ opacity: number, scale: number }>`
+const StyledSettings = styled.section<{ opacity: number, scale: number, zIndex: number }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -38,7 +38,7 @@ const StyledSettings = styled.section<{ opacity: number, scale: number }>`
   right: 150px;
   transition: 0.3s;
   transform: scale(${props => props.scale});
-  z-index: 3;
+  z-index: ${props => props.zIndex};
 `;
 
 const Header = styled.section`
