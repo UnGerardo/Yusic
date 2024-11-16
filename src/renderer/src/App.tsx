@@ -1,16 +1,16 @@
 import { useContext, useEffect, useState } from "react";
-import { BackgroundColorContext } from "./contexts/BackgroundColorContext";
+import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
-import Queue from "./components/Queue";
 import Setting from '../../classes/Setting';
 import { BottomPanel } from "./components/BottomPanel";
 import LibraryPanel from "./components/LibraryPanel/LibraryPanel";
 import { ActionBar } from "./components/ActionBar";
+import { BackgroundColorContext } from "./contexts/BackgroundColorContext";
 import { BackgroundImageContext } from "./contexts/BackgroundImageContext";
 import { BackgroundImageOpacityContext } from "./contexts/BackgroundImageOpacity";
-import { Outlet } from "react-router-dom";
 import Settings from "./components/Settings/Settings";
+import QueueDnd from "./components/Queue/Queue";
 
 export async function loader() {
   const playlists = await window.databaseApi.getPlaylists();
@@ -91,7 +91,7 @@ const App = (): JSX.Element => {
             <ActionBar />
             <Outlet />
           </Main>
-          <Queue />
+          <QueueDnd />
         </Content>
         <Settings opacity={settingsOpacity} scale={settingsScale} zIndex={settingsZIndex} closeHandler={closeSettings} />
       </AppContainer>

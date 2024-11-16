@@ -5,8 +5,9 @@ import QueuedTrack from "./QueuedTrack";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import { DragOverlay } from "@dnd-kit/core";
 import Track from "@classes/Track";
+import AutoSizer from "react-virtualized-auto-sizer";
 
-const QueueList = ({ height, width, activeTrack }: { height: number, width: number, activeTrack: Track | null }): JSX.Element => {
+const QueueList = ({ activeTrack }: { activeTrack: Track | null }): JSX.Element => {
   const { queue, queueIndex } = useContext(QueueContext);
   const { playingTrack } = useContext(PlayingTrackContext);
   const $listRef = useRef(null);
@@ -23,23 +24,27 @@ const QueueList = ({ height, width, activeTrack }: { height: number, width: numb
 
   return (
     <>
-      <WindowList
-        height={height}
-        itemCount={queue.length}
-        itemSize={60}
-        width={width}
-        outerRef={$listRef}
-      >
-        {({ index, style }) => (
-          <QueuedTrack
-            key={queue[index].id}
-            index={index}
-            track={queue[index]}
-            activeTrack={activeTrack}
-            style={style}
-          />
+      <AutoSizer>
+        {({ height, width }) => (
+          <WindowList
+            height={height}
+            width={width}
+            itemCount={queue.length}
+            itemSize={60}
+            outerRef={$listRef}
+          >
+            {({ index, style }) => (
+              <QueuedTrack
+                key={queue[index].id}
+                index={index}
+                track={queue[index]}
+                activeTrack={activeTrack}
+                style={style}
+              />
+            )}
+          </WindowList>
         )}
-      </WindowList>
+      </AutoSizer>
       <DragOverlay>
         {activeTrack ? (
           <QueuedTrack

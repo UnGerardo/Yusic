@@ -27,7 +27,7 @@ const QueuedTrack = ({ index, track, style, activeTrack } : { index: number, tra
   }
 
   return (
-    <QueuedTrackSection
+    <StyledQueuedTrack
       isCurrentTrack={index === queueIndex}
       onClick={jumpToTrack}
       style={{ ...itemStyle, opacity: activeTrack === track ? 0 : 1 }}
@@ -41,13 +41,13 @@ const QueuedTrack = ({ index, track, style, activeTrack } : { index: number, tra
         <TrackTitle>{track.title}</TrackTitle>
         <TrackArtist>{track.artists}</TrackArtist>
       </TrackInfo>
-    </QueuedTrackSection>
+    </StyledQueuedTrack>
   );
 };
 
 export default QueuedTrack;
 
-const QueuedTrackSection = styled.section<{ isCurrentTrack: boolean }>`
+const StyledQueuedTrack = styled.section<{ isCurrentTrack: boolean }>`
   background-color: ${(props) => props.isCurrentTrack ? 'rgba(61, 61, 61, 0.5)' : 'none'};
   display: grid;
   grid-template-columns: 18px 50px 1fr ;

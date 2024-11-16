@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-import AutoSizer from "react-virtualized-auto-sizer";
 import { QueueContext } from "@contexts/QueueContext";
 import styled from "styled-components";
 import QueueList from "./QueueList";
@@ -7,9 +6,9 @@ import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from 
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import Track from "@classes/Track";
-import { ClearQueue } from "./ClearQueue";
+import QueueHeader from "./QueueHeader";
 
-const Queue = (): JSX.Element => {
+const QueueDnd = (): JSX.Element => {
   const [activeTrack, setActiveTrack] = useState<Track | null>(null);
   const { queue, setQueue, setQueueIndex } = useContext(QueueContext);
   const { playingTrack } = useContext(PlayingTrackContext);
@@ -17,6 +16,7 @@ const Queue = (): JSX.Element => {
 
   const handleDragStart = (event) => {
     const { active } = event;
+    console.log(active)
     setActiveTrack(queue[queue.findIndex(track => track.id === active.id)]);
   }
 
@@ -45,31 +45,32 @@ const Queue = (): JSX.Element => {
   }
 
   return (
-    <QueueSection style={{ display: queue.length > 0 ? 'flex' : 'none' }}>
-      <Header>
-        <p>Queue:</p>
-        <ClearQueue />
-      </Header>
-      <Content>
-        <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
-          <SortableContext items={queue.map(track => track.id)} strategy={verticalListSortingStrategy}>
-            <AutoSizer>
-              {({ height, width }) => (
-                <QueueList height={height} width={width} activeTrack={activeTrack} />
-              )}
-            </AutoSizer>
+    <StyledQueueDnd display={ queue.length > 0 ? 'flex' : 'none' }>
+      <QueueHeader />
+      <DndContainer>
+        <DndContext
+          sensors={sensors}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          collisionDetection={closestCenter}
+        >
+          <SortableContext
+            items={queue.map(track => track)}
+            strategy={verticalListSortingStrategy}
+          >
+            <QueueList activeTrack={activeTrack} />
           </SortableContext>
         </DndContext>
-      </Content>
-    </QueueSection>
-  )
+      </DndContainer>
+    </StyledQueueDnd>
+  );
 };
 
-export default Queue;
+export default QueueDnd;
 
-const QueueSection = styled.section`
+const StyledQueueDnd = styled.section<{ display: string }>`
   border-left: 1px white solid;
-  display: none;
+  display: ${props => props.display};
   flex-direction: column;
   overflow: hidden;
   min-width: 300px;
@@ -77,13 +78,6 @@ const QueueSection = styled.section`
   z-index: 3;
 `;
 
-const Header = styled.section`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 5px 10px;
-`;
-
-const Content = styled.section`
+const DndContainer = styled.section`
   flex-grow: 1;
 `;
