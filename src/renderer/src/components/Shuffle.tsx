@@ -2,22 +2,23 @@ import { useContext } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 import styled from "styled-components";
 
-import Track from "@classes/Track";
 import { QueueContext } from "@renderer/contexts/QueueContext";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import { AudioSourceContext } from "@renderer/contexts/AudioSourceContext";
 import shuffleArray from "../utils/shuffleArray";
+import createReactTracks from "@renderer/utils/createReactTracks";
+import ReactTrack from "@renderer/react-classes/ReactTrack";
 
 const Shuffle = () => {
-  const { tracks }: { tracks: Track[] } = useRouteLoaderData('root') as any;
+  const { tracks }: { tracks: ReactTrack[] } = useRouteLoaderData('root') as any;
   const { setQueue, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext)
   const { setAudioSource } = useContext(AudioSourceContext);
 
   const shuffle = (): void => {
-    const newQueue: Track[] = shuffleArray([...tracks]);
+    const newQueue: ReactTrack[] = shuffleArray([...tracks]);
 
-    setQueue(newQueue);
+    setQueue(createReactTracks(newQueue));
     setQueueIndex(0);
     setPlayingTrack(newQueue[0]);
     setAudioSource(newQueue[0].path);

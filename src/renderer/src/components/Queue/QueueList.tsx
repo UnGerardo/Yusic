@@ -4,10 +4,10 @@ import { QueueContext } from "@contexts/QueueContext";
 import QueuedTrack from "./QueuedTrack";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import { DragOverlay } from "@dnd-kit/core";
-import Track from "@classes/Track";
 import AutoSizer from "react-virtualized-auto-sizer";
+import ReactTrack from "@renderer/react-classes/ReactTrack";
 
-const QueueList = ({ activeTrack }: { activeTrack: Track | null }): JSX.Element => {
+const QueueList = ({ activeTrack }: { activeTrack: ReactTrack | null }): JSX.Element => {
   const { queue, queueIndex } = useContext(QueueContext);
   const { playingTrack } = useContext(PlayingTrackContext);
   const $listRef = useRef(null);
@@ -24,6 +24,8 @@ const QueueList = ({ activeTrack }: { activeTrack: Track | null }): JSX.Element 
 
   return (
     <>
+      {/* Scroll to track clicked from main tracks no longer scrolls, might need to
+      extract AutoSizer */}
       <AutoSizer>
         {({ height, width }) => (
           <WindowList

@@ -1,9 +1,9 @@
 import { createContext, useState } from "react";
-import Track from "@classes/Track";
+import ReactTrack from "@renderer/react-classes/ReactTrack";
 
 interface QueueContextState {
-  queue: Track[],
-  setQueue: React.Dispatch<React.SetStateAction<Track[]>> | (() => null),
+  queue: ReactTrack[],
+  setQueue: React.Dispatch<React.SetStateAction<ReactTrack[]>> | (() => null),
   queueIndex: number,
   setQueueIndex: React.Dispatch<React.SetStateAction<number>> | (() => null),
 }
@@ -16,7 +16,7 @@ export const QueueContext = createContext<QueueContextState>({
 });
 
 export const QueueProvider = ({ children }) => {
-  const [queue, setQueue] = useState<Track[]>([]);
+  const [queue, setQueue] = useState<ReactTrack[]>([]);
   const [queueIndex, setQueueIndex] = useState(0);
   const value = { queue, setQueue, queueIndex, setQueueIndex };
 

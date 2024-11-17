@@ -1,5 +1,5 @@
 
-export default class Track {
+export default class Setting {
   id: number | undefined;
   name: string;
   value: string;

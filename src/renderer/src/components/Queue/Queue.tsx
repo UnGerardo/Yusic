@@ -5,18 +5,17 @@ import QueueList from "./QueueList";
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
-import Track from "@classes/Track";
 import QueueHeader from "./QueueHeader";
+import ReactTrack from "@renderer/react-classes/ReactTrack";
 
 const QueueDnd = (): JSX.Element => {
-  const [activeTrack, setActiveTrack] = useState<Track | null>(null);
+  const [activeTrack, setActiveTrack] = useState<ReactTrack | null>(null);
   const { queue, setQueue, setQueueIndex } = useContext(QueueContext);
   const { playingTrack } = useContext(PlayingTrackContext);
   const sensors = useSensors(useSensor(PointerSensor));
 
   const handleDragStart = (event) => {
     const { active } = event;
-    console.log(active)
     setActiveTrack(queue[queue.findIndex(track => track.id === active.id)]);
   }
 

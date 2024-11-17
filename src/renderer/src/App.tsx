@@ -11,10 +11,11 @@ import { BackgroundImageContext } from "./contexts/BackgroundImageContext";
 import { BackgroundImageOpacityContext } from "./contexts/BackgroundImageOpacity";
 import Settings from "./components/Settings/Settings";
 import QueueDnd from "./components/Queue/Queue";
+import ReactTrack from "./react-classes/ReactTrack";
 
 export async function loader() {
   const playlists = await window.databaseApi.getPlaylists();
-  const tracks = await window.databaseApi.getAllMusicFiles();
+  const tracks = await window.databaseApi.getAllMusicFiles() as ReactTrack[];
   return { playlists, tracks };
 }
 

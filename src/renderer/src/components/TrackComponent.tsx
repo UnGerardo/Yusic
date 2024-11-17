@@ -3,13 +3,14 @@ import formatSeconds from "@renderer/utils/formatSeconds";
 import { QueueContext } from "@contexts/QueueContext";
 import { PlayingTrackContext } from "@contexts/PlayingTrackContext";
 import { AudioSourceContext } from "@contexts/AudioSourceContext";
-import Track from "@classes/Track";
 import styled from "styled-components";
 import { ellipsisOverflow, TrackArtist, TrackImage, TrackInfo, TrackTitle } from "@renderer/assets/Misc.styled";
 import Playlist from "@classes/Playlist";
 import { useRouteLoaderData } from "react-router-dom";
+import createReactTracks from "@renderer/utils/createReactTracks";
+import ReactTrack from "@renderer/react-classes/ReactTrack";
 
-const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], track: Track, index: number, style: React.CSSProperties }): JSX.Element => {
+const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[], track: ReactTrack, index: number, style: React.CSSProperties }): JSX.Element => {
   const $playlistBtnRef = useRef<HTMLButtonElement>(null);
   const $playlistMenuRef = useRef<HTMLUListElement>(null);
   const { setQueue, queueIndex, setQueueIndex } = useContext(QueueContext);
@@ -22,14 +23,14 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: Track[], tra
     setAudioSource(track.path);
     setPlayingTrack(track);
     setQueueIndex(index);
-    setQueue(tracks);
+    setQueue(createReactTracks(tracks));
   }
 
   const addToQueue = (e) => {
     e.stopPropagation();
     setQueue((oldQueue) => {
       oldQueue.splice(queueIndex + 1, 0, track);
-      return [...oldQueue];
+      return createReactTracks(oldQueue);
     });
   }
 

@@ -2,18 +2,32 @@ import { useContext } from "react";
 import { QueueContext } from "@contexts/QueueContext";
 import { PlayingTrackContext } from "@contexts/PlayingTrackContext";
 import { AudioSourceContext } from "@contexts/AudioSourceContext";
-import Track from "@classes/Track";
 import styled from "styled-components";
 import { TrackArtist, TrackImage, TrackInfo, TrackTitle } from "@renderer/assets/Misc.styled";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import ReactTrack from "@renderer/react-classes/ReactTrack";
 
-const QueuedTrack = ({ index, track, style, activeTrack } : { index: number, track: Track, style: React.CSSProperties, activeTrack: Track | null }): JSX.Element => {
+const QueuedTrack = ({ index, track, style, activeTrack }:
+  {
+    index: number,
+    track: ReactTrack,
+    style: React.CSSProperties,
+    activeTrack: ReactTrack | null
+  }): JSX.Element => {
   const { queueIndex, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext)
   const { setAudioSource } = useContext(AudioSourceContext);
 
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: track.id });
+  const componentOpacity = activeTrack?.id === track.id ? 0 : 1;
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition
+  } = useSortable({ id: track.id });
   const itemStyle = {
     ...style,
     transform: CSS.Transform.toString(transform),
@@ -30,7 +44,7 @@ const QueuedTrack = ({ index, track, style, activeTrack } : { index: number, tra
     <StyledQueuedTrack
       isCurrentTrack={index === queueIndex}
       onClick={jumpToTrack}
-      style={{ ...itemStyle, opacity: activeTrack === track ? 0 : 1 }}
+      style={{ ...itemStyle, opacity: componentOpacity }}
       ref={setNodeRef}
     >
       <DragHandler {...attributes} {...listeners}>
