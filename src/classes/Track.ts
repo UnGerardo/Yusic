@@ -1,6 +1,6 @@
 import { IAudioMetadata } from "music-metadata";
 
-class Track {
+export default class Track {
   id: number;
   path: string;
   title: string;
