@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { QueueContext } from "@renderer/contexts/QueueContext";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import { AudioSourceContext } from "@renderer/contexts/AudioSourceContext";
-import shuffleArray from "../utils/shuffleArray";
+import shuffleArray from "../../utils/shuffleArray";
 import createReactTracks from "@renderer/utils/createReactTracks";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
 
