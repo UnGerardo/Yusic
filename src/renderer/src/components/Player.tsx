@@ -6,8 +6,8 @@ import { AudioSourceContext } from "@contexts/AudioSourceContext";
 import { QueueContext } from "@renderer/contexts/QueueContext";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 
-import Track from "src/classes/Track";
 import { Slider } from "@renderer/assets/Misc.styled";
+import ReactTrack from "@renderer/react-classes/ReactTrack";
 
 const Player = (): JSX.Element => {
   const $audioRef = useRef<HTMLAudioElement>(null);
@@ -45,6 +45,12 @@ const Player = (): JSX.Element => {
     }
   }, [audioSource, queue]);
 
+  useEffect(() => {
+    const { current: audio } = $audioRef;
+    audio!.currentTime = 0;
+    setCurrentTime(0);
+  }, [playingTrack]);
+
   const playPauseTrack = () => {
     const { current: audio } = $audioRef;
     if (!audio || audio.readyState !== 4) return;
@@ -64,16 +70,15 @@ const Player = (): JSX.Element => {
     }
   }
 
-  const resetTrackProgress = (event) => {
-    const audio = event.target as HTMLAudioElement;
-    setMaxTime(audio.duration);
-    setCurrentTime(0);
-    audio.play();
+  const resetTrackProgress = () => {
+    const { current: audio } = $audioRef;
+    setMaxTime(audio!.duration);
     setIsPaused(false);
     setUpdateProgressInterval((oldInterval) => {
       clearInterval(oldInterval);
-      return setInterval(() => setCurrentTime(audio.currentTime), 499);
+      return setInterval(() => setCurrentTime(audio!.currentTime), 499);
     });
+    audio!.play();
   }
 
   const seeking = (event) => {
@@ -107,15 +112,21 @@ const Player = (): JSX.Element => {
   const onAudioEnd = () => {
     if (queueIndex === queue.length - 1) {
       setIsPaused(true);
+      setCurrentTime(0);
       clearInterval(updateProgressInterval);
       return;
     }
 
     const queueIndexInc = queueIndex + 1;
     setQueueIndex(queueIndexInc);
-    const nextTrack: Track = queue[queueIndexInc];
+    const nextTrack: ReactTrack = queue[queueIndexInc];
     setPlayingTrack(nextTrack);
-    setAudioSource(nextTrack!.path);
+
+    if (nextTrack!.path === playingTrack!.path) {
+      resetTrackProgress();
+    } else {
+      setAudioSource(nextTrack!.path);
+    }
   }
 
   const backwardStep = () => {
@@ -128,9 +139,13 @@ const Player = (): JSX.Element => {
 
     const queueIndexDec = queueIndex - 1;
     setQueueIndex(queueIndexDec);
-    const previousTrack: Track = queue[queueIndexDec];
+    const previousTrack: ReactTrack = queue[queueIndexDec];
     setPlayingTrack(previousTrack);
-    setAudioSource(previousTrack!.path);
+    if (previousTrack!.path === playingTrack!.path) {
+      resetTrackProgress();
+    } else {
+      setAudioSource(previousTrack!.path);
+    }
   }
 
   const forwardStep = () => {
@@ -138,9 +153,13 @@ const Player = (): JSX.Element => {
 
     const queueIndexInc = queueIndex + 1;
     setQueueIndex(queueIndexInc);
-    const nextTrack: Track = queue[queueIndexInc];
+    const nextTrack: ReactTrack = queue[queueIndexInc];
     setPlayingTrack(nextTrack);
-    setAudioSource(nextTrack!.path);
+    if (nextTrack!.path === playingTrack!.path) {
+      resetTrackProgress();
+    } else {
+      setAudioSource(nextTrack!.path);
+    }
   }
 
   const adjustVolume = (event) => {
