@@ -35,4 +35,8 @@ export default class ReactTrack {
   getUniqueId(): string {
     return `${this.index}-${this.id}`;
   }
+
+  newCopy(): ReactTrack {
+    return Object.assign({}, this);
+  }
 }

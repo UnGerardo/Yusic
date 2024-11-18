@@ -7,6 +7,7 @@ import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-ki
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import QueueHeader from "./QueueHeader";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
+import updateTrackIndicies from "@renderer/utils/updateTrackIndicies";
 
 const QueueDnd = (): JSX.Element => {
   const [activeTrack, setActiveTrack] = useState<ReactTrack | null>(null);
@@ -25,7 +26,12 @@ const QueueDnd = (): JSX.Element => {
     if (active.id !== over.id) {
       const oldIndex = queue.findIndex(track => track.id === active.id);
       const newIndex = queue.findIndex(track => track.id === over.id);
-      setQueue((prevQueue) => arrayMove(prevQueue, oldIndex, newIndex));
+      setQueue((prevQueue) => {
+        const newQueue = arrayMove(prevQueue, oldIndex, newIndex);
+        // Use updateTrackIndicies() to prevent unnecessary re-creation of tracks
+        updateTrackIndicies(newQueue);
+        return newQueue;
+      });
       setQueueIndex(oldQueueIndex => {
         if (active.id === playingTrack!.id) {
           return newIndex;

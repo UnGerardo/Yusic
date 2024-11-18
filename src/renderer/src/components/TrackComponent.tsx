@@ -9,6 +9,7 @@ import Playlist from "@classes/Playlist";
 import { useRouteLoaderData } from "react-router-dom";
 import createReactTracks from "@renderer/utils/createReactTracks";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
+import updateTrackIndicies from "@renderer/utils/updateTrackIndicies";
 
 const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[], track: ReactTrack, index: number, style: React.CSSProperties }): JSX.Element => {
   const $playlistBtnRef = useRef<HTMLButtonElement>(null);
@@ -23,14 +24,17 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[]
     setAudioSource(track.path);
     setPlayingTrack(track);
     setQueueIndex(index);
+    // Use createReactTracks() when creating a new queue
     setQueue(createReactTracks(tracks));
   }
 
   const addToQueue = (e) => {
     e.stopPropagation();
-    setQueue((oldQueue) => {
-      oldQueue.splice(queueIndex + 1, 0, track);
-      return createReactTracks(oldQueue);
+    setQueue((queue) => {
+      queue.splice(queueIndex + 1, 0, track.newCopy());
+      // Use updateTrackIndicies() to prevent unnecessary re-creation of tracks
+      updateTrackIndicies(queue);
+      return [...queue];
     });
   }
 

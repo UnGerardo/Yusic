@@ -18,6 +18,7 @@ const Shuffle = () => {
   const shuffle = (): void => {
     const newQueue: ReactTrack[] = shuffleArray([...tracks]);
 
+    // Use createReactTracks() when creating a new queue
     setQueue(createReactTracks(newQueue));
     setQueueIndex(0);
     setPlayingTrack(newQueue[0]);
