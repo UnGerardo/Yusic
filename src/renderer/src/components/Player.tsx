@@ -21,6 +21,7 @@ const Player = (): JSX.Element => {
   const [maxTime, setMaxTime] = useState(0);
   const [volume, setVolume] = useState(1);
   const [prevVolume, setPrevVolume] = useState(1);
+  const [repeatStatus, setRepeatStatus] = useState<RepeatStatus>('off');
 
   useEffect(() => {
     if (audioSource === '') return setIsPaused(true);
@@ -110,7 +111,29 @@ const Player = (): JSX.Element => {
   }
 
   const onAudioEnd = () => {
+    if (repeatStatus === 'single') {
+      const { current: audio } = $audioRef;
+      setCurrentTime(0);
+      audio!.currentTime = 0;
+      audio!.play();
+      return;
+    }
+
     if (queueIndex === queue.length - 1) {
+      if (repeatStatus === 'queue') {
+        const queueIndex = 0;
+        setQueueIndex(queueIndex);
+        const nextTrack: ReactTrack = queue[queueIndex];
+        setPlayingTrack(nextTrack);
+
+        if (nextTrack!.path === playingTrack!.path) {
+          resetTrackProgress();
+        } else {
+          setAudioSource(nextTrack!.path);
+        }
+        return
+      }
+
       setIsPaused(true);
       setCurrentTime(0);
       clearInterval(updateProgressInterval);
@@ -181,11 +204,26 @@ const Player = (): JSX.Element => {
     }
   }
 
+  const changeRepeatStatus = (): void => {
+    switch (repeatStatus) {
+      case "off":
+        setRepeatStatus('queue');
+        break;
+      case "queue":
+        setRepeatStatus('single');
+        break;
+      case "single":
+        setRepeatStatus('off');
+        break;
+    }
+  }
+
   return (
     <>
       <PlayerSection>
         <audio src={audioSource} ref={$audioRef} onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd}/>
         <Controls>
+          <div style={{ width: '20px' }}></div>
           <MiscIcon onClick={backwardStep} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39.5 38">
             <rect width="8" height="38" rx="1.03" ry="1.03"/>
             <path d="M8.03,19.88l29.95,17.25c.68.39,1.52-.1,1.52-.88V1.75c0-.78-.84-1.27-1.52-.88L8.03,18.12c-.68.39-.68,1.37,0,1.76Z"/>
@@ -203,6 +241,10 @@ const Player = (): JSX.Element => {
             <rect x="31.5" width="8" height="38" rx="1.03" ry="1.03"/>
             <path d="M31.47,19.88L1.52,37.13c-.68.39-1.52-.1-1.52-.88V1.75C0,.97.84.49,1.52.87l29.95,17.25c.68.39.68,1.37,0,1.76Z"/>
           </MiscIcon>
+          <Repeat onClick={changeRepeatStatus} status={repeatStatus}>
+            <RepeatIndicator status={repeatStatus} />
+            <RepeatSingleIndicator status={repeatStatus} />
+          </Repeat>
         </Controls>
         <SliderSection>
           <SliderTimes>{formatSeconds(currentTime)}</SliderTimes>
@@ -246,6 +288,96 @@ const Controls = styled.section`
   width: 100%;
   max-width: 300px;
   user-select: none;
+`;
+
+const RepeatIndicator = styled.div<{ status: RepeatStatus }>`
+  background-color: #0d0;
+  border-radius: 50%;
+  height: 4px;
+  width: 4px;
+  opacity: ${props => props.status === 'off' ? 0 : 1};
+  position: absolute;
+  top: 18px;
+`;
+
+const RepeatSingleIndicator = styled.div<{ status: RepeatStatus }>`
+  opacity: ${props => props.status === 'single' ? 1 : 0};
+  position: relative;
+
+  &::before {
+    background-color: black;
+    content: '';
+    height: 12px;
+    width: 10px;
+    position: absolute;
+    top: -13px;
+    left: -5px;
+  }
+
+  &::after {
+    color: #0d0;
+    content: '1';
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    position: absolute;
+    top: -14px;
+    left: -4px;
+  }
+`;
+
+const Repeat = styled.div<{ status: RepeatStatus }>`
+  --base-color: ${props => props.status === 'off' ? 'gray' : '#0d0'};
+  --brighter-color: ${props => props.status === 'off' ? 'white' : '#0f0'};
+  --darker-color: ${props => props.status === 'off' ? '#666' : '#0a0'};
+  background: transparent;
+  border: 2px solid var(--base-color);
+  border-radius: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 15px;
+  width: 20px;
+  position: relative;
+
+  &:before {
+    background-color: black;
+    content: '';
+    height: 3px;
+    width: 6px;
+    position: absolute;
+    left: 4px;
+    bottom: -2px;
+  }
+
+  &:after {
+    border-top: 5px solid transparent;
+    border-right: 6px solid var(--base-color);
+    border-bottom: 5px solid transparent;
+    content: '';
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    right: 4px;
+    bottom: -5.8px;
+  }
+
+  &:hover {
+    border-color: var(--brighter-color);
+    > ${RepeatIndicator} { background-color: var(--brighter-color); }
+    > ${RepeatSingleIndicator}::after { color: var(--brighter-color); }
+  }
+  &:hover::after {
+    border-right-color: var(--brighter-color);
+  }
+
+  &:active {
+    border-color: var(--darker-color);
+    > ${RepeatIndicator} { background-color: var(--darker-color); }
+    > ${RepeatSingleIndicator}::after { color: var(--darker-color); }
+  }
+  &:active::after {
+    border-right-color: var(--darker-color);
+  }
 `;
 
 const Icon = styled.svg`
