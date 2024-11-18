@@ -19,7 +19,7 @@ const QueuedTrack = ({ index, track, style, activeTrack }:
   const { setPlayingTrack } = useContext(PlayingTrackContext)
   const { setAudioSource } = useContext(AudioSourceContext);
 
-  const componentOpacity = activeTrack?.id === track.id ? 0 : 1;
+  const componentOpacity = activeTrack?.getUniqueId() === track.getUniqueId() ? 0 : 1;
 
   const {
     attributes,
@@ -27,7 +27,7 @@ const QueuedTrack = ({ index, track, style, activeTrack }:
     setNodeRef,
     transform,
     transition
-  } = useSortable({ id: track.id });
+  } = useSortable({ id: track.getUniqueId() });
   const itemStyle = {
     ...style,
     transform: CSS.Transform.toString(transform),

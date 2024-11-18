@@ -17,15 +17,17 @@ const QueueDnd = (): JSX.Element => {
 
   const handleDragStart = (event) => {
     const { active } = event;
-    setActiveTrack(queue[queue.findIndex(track => track.id === active.id)]);
+    const activeIndex = parseInt(active.id.split('-')[0]);
+    setActiveTrack(queue[activeIndex]);
   }
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
     setActiveTrack(null);
     if (active.id !== over.id) {
-      const oldIndex = queue.findIndex(track => track.id === active.id);
-      const newIndex = queue.findIndex(track => track.id === over.id);
+      const oldIndex = parseInt(active.id.split('-')[0]);
+      const newIndex = parseInt(over.id.split('-')[0]);
+      const playingTrackUniqueId = playingTrack?.getUniqueId();
       setQueue((prevQueue) => {
         const newQueue = arrayMove(prevQueue, oldIndex, newIndex);
         // Use updateTrackIndicies() to prevent unnecessary re-creation of tracks
@@ -33,7 +35,7 @@ const QueueDnd = (): JSX.Element => {
         return newQueue;
       });
       setQueueIndex(oldQueueIndex => {
-        if (active.id === playingTrack!.id) {
+        if (active.id === playingTrackUniqueId) {
           return newIndex;
         }
         // if track moves up and passes playingTrack
@@ -60,7 +62,7 @@ const QueueDnd = (): JSX.Element => {
           collisionDetection={closestCenter}
         >
           <SortableContext
-            items={queue.map(track => track)}
+            items={queue.map(track => track.getUniqueId())}
             strategy={verticalListSortingStrategy}
           >
             <QueueList activeTrack={activeTrack} />

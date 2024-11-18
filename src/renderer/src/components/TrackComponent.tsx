@@ -21,11 +21,13 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[]
   const { playlists }: { playlists: Playlist[] } = useRouteLoaderData('root') as any;
 
   const playAtTrack = () => {
-    setAudioSource(track.path);
-    setPlayingTrack(track);
-    setQueueIndex(index);
     // Use createReactTracks() when creating a new queue
-    setQueue(createReactTracks(tracks));
+    const newQueue = createReactTracks(tracks);
+    setAudioSource(track.path);
+    // Use index to get track, because the newQueue creates new instances of tracks
+    setPlayingTrack(newQueue[index]);
+    setQueueIndex(index);
+    setQueue(tracks);
   }
 
   const addToQueue = (e) => {

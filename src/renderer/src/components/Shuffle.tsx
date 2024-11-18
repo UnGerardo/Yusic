@@ -16,10 +16,10 @@ const Shuffle = () => {
   const { setAudioSource } = useContext(AudioSourceContext);
 
   const shuffle = (): void => {
-    const newQueue: ReactTrack[] = shuffleArray([...tracks]);
-
     // Use createReactTracks() when creating a new queue
-    setQueue(createReactTracks(newQueue));
+    const newQueue: ReactTrack[] = createReactTracks(shuffleArray([...tracks]));
+
+    setQueue(newQueue);
     setQueueIndex(0);
     setPlayingTrack(newQueue[0]);
     setAudioSource(newQueue[0].path);
