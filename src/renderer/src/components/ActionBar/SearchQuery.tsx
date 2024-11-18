@@ -3,14 +3,17 @@ import { SearchQueryContext } from "@contexts/SearchQueryContext";
 import styled from "styled-components";
 
 const SearchQuery = (): JSX.Element =>{
-  const { setSearchQuery } = useContext(SearchQueryContext);
+  const { searchQuery, setSearchQuery } = useContext(SearchQueryContext);
 
   const onChangeHandler = (event) => setSearchQuery(event.target.value);
+
+  const clearSearch = () => setSearchQuery('');
 
   return (
     <StyledSearchQuery>
       <SearchIcon />
-      <SearchInput type="text" id="search" onChange={onChangeHandler} />
+      <SearchInput type="text" id="search" value={searchQuery} onChange={onChangeHandler} />
+      <ClearSearchIcon onClick={clearSearch} searching={!!searchQuery.length} />
     </StyledSearchQuery>
   );
 }
@@ -44,12 +47,47 @@ const SearchInput = styled.input`
   border: none;
   color: white;
   font-size: 18px;
-  padding: 5px 5px 5px 32px;
+  padding: 5px 28px 5px 32px;
   width: 100%;
 
   &:focus {
     outline: none;
   }
+`;
+
+const ClearSearchIcon = styled.div<{ searching: boolean }>`
+  background: transparent;
+  display: ${props => props.searching ? 'flex' : 'none'};
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  transform: rotate(45deg);
+  top: 6px;
+  right: 3px;
+
+  &:before {
+    background-color: gray;
+    content: '';
+    height: 2px;
+    width: 20px;
+    position: absolute;
+  }
+
+  &:after {
+    background-color: gray;
+    content: '';
+    height: 20px;
+    width: 2px;
+    position: absolute;
+  }
+
+  &:hover::before,
+  &:hover::after { background-color: white; }
+
+  &:active::before,
+  &:active::after { background-color: #666; }
 `;
 
 const StyledSearchQuery = styled.section`
