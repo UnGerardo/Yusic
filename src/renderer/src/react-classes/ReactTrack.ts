@@ -10,16 +10,27 @@ export default class ReactTrack {
   imgFormat: string;
   imgData: string;
 
-  constructor(
-    id: number = -1,
-    index: number = -1,
-    path: string = '',
-    title: string = '',
-    artists: string = '',
-    album: string = '',
-    duration: number = 0,
-    imgFormat: string = '',
-    imgData: string = '',
+  constructor({
+    id = -1,
+    index = -1,
+    path = '',
+    title = '',
+    artists = '',
+    album = '',
+    duration = 0,
+    imgFormat = '',
+    imgData = '',
+  }: {
+    id: number,
+    index: number,
+    path: string,
+    title: string,
+    artists: string,
+    album: string,
+    duration: number,
+    imgFormat: string,
+    imgData: string,
+  }
   ) {
     this.id = id;
     this.index = index;
@@ -37,6 +48,6 @@ export default class ReactTrack {
   }
 
   newCopy(): ReactTrack {
-    return Object.assign({}, this);
+    return new ReactTrack(this);
   }
 }

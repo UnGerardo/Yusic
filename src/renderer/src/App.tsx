@@ -16,7 +16,8 @@ import ReactTrack from "./react-classes/ReactTrack";
 export async function loader() {
   const playlists = await window.databaseApi.getPlaylists();
   const tracks = await window.databaseApi.getAllMusicFiles() as ReactTrack[];
-  return { playlists, tracks };
+  const reactTracks = tracks.map(track => new ReactTrack(track));
+  return { playlists, tracks: reactTracks };
 }
 
 export async function action({ request }) {
