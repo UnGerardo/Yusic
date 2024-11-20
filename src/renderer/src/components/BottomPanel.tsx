@@ -1,13 +1,22 @@
 import styled from "styled-components";
 import PlayingTrack from "./PlayingTrack";
 import Player from "./Player";
+import { useContext } from "react";
+import { FocusModeHoverContext } from "@renderer/contexts/FocusModeHoverContext";
 
-export const BottomPanel = ({ focusModeOn, openFocusMode }: { focusModeOn: boolean, openFocusMode: () => void }): JSX.Element => (
-  <Panel focusModeOn={focusModeOn}>
-    <PlayingTrack />
-    <Player openFocusMode={openFocusMode} />
-  </Panel>
-);
+export const BottomPanel = ({ focusModeOn, openFocusMode }: { focusModeOn: boolean, openFocusMode: () => void }): JSX.Element => {
+  const { setIsHovering } = useContext(FocusModeHoverContext);
+
+  return (
+    <Panel
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+      focusModeOn={focusModeOn}>
+      <PlayingTrack focusModeOn={focusModeOn} />
+      <Player focusModeOn={focusModeOn} openFocusMode={openFocusMode} />
+    </Panel>
+  );
+}
 
 const Panel = styled.section<{ focusModeOn: boolean }>`
   background-color: ${({focusModeOn}) => focusModeOn ? 'transparent' : 'black'};

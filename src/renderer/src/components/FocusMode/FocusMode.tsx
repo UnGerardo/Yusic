@@ -1,13 +1,20 @@
 import { TrackArtist, TrackImage, TrackInfo, TrackTitle } from "@renderer/assets/Misc.styled";
+import { FocusModeHoverContext } from "@renderer/contexts/FocusModeHoverContext";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import { useContext } from "react";
 import styled from "styled-components";
 
 const FocusMode = ({ opacity, zIndex, closeFocusMode }: { opacity: number, zIndex: number, closeFocusMode: () => void }): JSX.Element => {
   const { playingTrack } = useContext(PlayingTrackContext);
+  const { setIsHovering } = useContext(FocusModeHoverContext);
 
   return (
-    <StyledFocusMode opacity={opacity} zIndex={zIndex}>
+    <StyledFocusMode
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+      opacity={opacity}
+      zIndex={zIndex}
+    >
       { playingTrack ?
         <TrackContainer>
           <FocusTrackImage src={`data:${playingTrack?.imgFormat};base64,${playingTrack?.imgData}`} />

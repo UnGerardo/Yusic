@@ -16,6 +16,7 @@ import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import TrackList from './components/TrackList';
 import ErrorPage from './components/ErrorPage';
 import PlaylistTracks, { loader as playlistTracksLoader } from './components/PlaylistTracks';
+import { FocusModeHoverProvider } from './contexts/FocusModeHoverContext';
 // import ArtistList from './components/ArtistList';
 
 const router = createMemoryRouter([
@@ -57,7 +58,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             <BackgroundColorProvider>
               <BackgroundImageProvider>
                 <BackgroundImageOpacityProvider>
-                  <RouterProvider router={router} />
+                  <FocusModeHoverProvider>
+                    <RouterProvider router={router} />
+                  </FocusModeHoverProvider>
                 </BackgroundImageOpacityProvider>
               </BackgroundImageProvider>
             </BackgroundColorProvider>
