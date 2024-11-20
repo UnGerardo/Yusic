@@ -9,7 +9,7 @@ import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import { Slider } from "@renderer/assets/Misc.styled";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
 
-const Player = (): JSX.Element => {
+const Player = ({ openFocusMode }: { openFocusMode: () => void }): JSX.Element => {
   const $audioRef = useRef<HTMLAudioElement>(null);
   const { audioSource, setAudioSource } = useContext(AudioSourceContext);
   const { queue, queueIndex, setQueueIndex } = useContext(QueueContext);
@@ -223,7 +223,9 @@ const Player = (): JSX.Element => {
       <PlayerSection>
         <audio src={audioSource} ref={$audioRef} onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd}/>
         <Controls>
-          <div style={{ width: '20px' }}></div>
+          <OpenFocusMode onClick={openFocusMode}>
+            <OpenFocusModeBottom />
+          </OpenFocusMode>
           <MiscIcon onClick={backwardStep} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39.5 38">
             <rect width="8" height="38" rx="1.03" ry="1.03"/>
             <path d="M8.03,19.88l29.95,17.25c.68.39,1.52-.1,1.52-.88V1.75c0-.78-.84-1.27-1.52-.88L8.03,18.12c-.68.39-.68,1.37,0,1.76Z"/>
@@ -278,6 +280,11 @@ const PlayerSection = styled.section`
   justify-content: center;
   align-items: center;
   width: 100%;
+  /*
+  width: 33%;
+  position: absolute;
+  bottom: 10px; */
+  /* left: 33%; */
 `;
 
 const Controls = styled.section`
@@ -288,6 +295,111 @@ const Controls = styled.section`
   width: 100%;
   max-width: 300px;
   user-select: none;
+`;
+
+const ExtraControls = styled.section`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 20px;
+  /*
+  position: ;
+  bottom: ;
+  right: ; */
+`;
+
+const OpenFocusModeBottom = styled.div`
+  &:before {
+    border: 1.5px transparent solid;
+    border-right-color: gray;
+    border-top-color: gray;
+    content: '';
+    height: 6px;
+    width: 6px;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+  }
+
+  &:after {
+    border: 1.5px transparent solid;
+    border-left-color: gray;
+    border-top-color: gray;
+    content: '';
+    height: 6px;
+    width: 6px;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+  }
+`;
+
+const OpenFocusMode = styled.div`
+  height: 20px;
+  width: 20px;
+  position: relative;
+
+  &:before {
+    border: 1.5px transparent solid;
+    border-right-color: gray;
+    border-bottom-color: gray;
+    content: '';
+    height: 6px;
+    width: 6px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+
+  &:after {
+    border: 1.5px transparent solid;
+    border-left-color: gray;
+    border-bottom-color: gray;
+    content: '';
+    height: 6px;
+    width: 6px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+
+  &:hover {
+    > ${OpenFocusModeBottom}::before {
+      border-right-color: white;
+      border-top-color: white;
+    }
+    > ${OpenFocusModeBottom}::after {
+      border-left-color: white;
+      border-top-color: white;
+    }
+  }
+  &:hover::before {
+    border-right-color: white;
+    border-bottom-color: white;
+  }
+  &:hover::after {
+    border-left-color: white;
+    border-bottom-color: white;
+  }
+
+  &:active {
+    > ${OpenFocusModeBottom}::before {
+      border-right-color: #666;
+      border-top-color: #666;
+    }
+    > ${OpenFocusModeBottom}::after {
+      border-left-color: #666;
+      border-top-color: #666;
+    }
+  }
+  &:active::before {
+    border-right-color: #666;
+    border-bottom-color: #666;
+  }
+  &:active::after {
+    border-left-color: #666;
+    border-bottom-color: #666;
+  }
 `;
 
 const RepeatIndicator = styled.div<{ status: RepeatStatus }>`
@@ -432,13 +544,6 @@ const SliderTimes = styled.span`
   font-size: 14px;
   margin: 0 5px;
   user-select: none;
-`;
-
-const ExtraControls = styled.section`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-right: 20px;
 `;
 
 const Volume = styled.section`
