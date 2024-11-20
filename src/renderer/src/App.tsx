@@ -12,6 +12,7 @@ import { BackgroundImageOpacityContext } from "./contexts/BackgroundImageOpacity
 import Settings from "./components/Settings/Settings";
 import QueueDnd from "./components/Queue/Queue";
 import ReactTrack from "./react-classes/ReactTrack";
+import FocusMode from "./components/FocusMode/FocusMode";
 
 export async function loader() {
   const playlists = await window.databaseApi.getPlaylists();
@@ -49,6 +50,9 @@ const App = (): JSX.Element => {
   const [settingsZIndex, setSettingsZIndex] = useState(-1);
   const [contentOpacity, setContentOpacity] = useState(1);
   const [contentScale, setContentScale] = useState(1);
+  const [focusModeOpacity, setFocusModeOpacity] = useState(0);
+  const [focusModeZIndex, setFocusModeZIndex] = useState(-1);
+  const [focusModeOn, setFocusModeOn] = useState(false);
   const { backgroundColor, setBackgroundColor } = useContext(BackgroundColorContext);
   const { backgroundImage, setBackgroundImage } = useContext(BackgroundImageContext);
   const { backgroundImageOpacity, setBackgroundImageOpacity } = useContext(BackgroundImageOpacityContext);
@@ -68,25 +72,33 @@ const App = (): JSX.Element => {
   }, []);
 
   const openSettings = (): void => {
-    setSettingsOpacity(1);
-    setSettingsScale(1);
-    setSettingsZIndex(3);
-    setContentOpacity(0);
-    setContentScale(.7);
+    showSettings();
+    hideContent();
   }
 
   const closeSettings = (): void => {
-    setSettingsOpacity(0);
-    setSettingsScale(.7);
-    setSettingsZIndex(-1);
-    setContentOpacity(1);
-    setContentScale(1);
+    hideSettings();
+    showContent();
+  }
+
+  const openFocusMode = (): void => {
+    hideContent();
+    showFocusMode();
+  }
+
+  const closeFocusMode = (): void => {
+    showContent();
+    hideFocusMode();
   }
 
   return (
     <>
       <AppContainer backgroundColor={backgroundColor}>
-        <BackgroundImage path={backgroundImage} opacity={backgroundImageOpacity} />
+        <BackgroundImage
+          path={backgroundImage}
+          opacity={backgroundImageOpacity}
+          focusModeOn={focusModeOn}
+        />
         <Content opacity={contentOpacity} scale={contentScale}>
           <LibraryPanel openSettings={openSettings} />
           <Main>
@@ -96,10 +108,40 @@ const App = (): JSX.Element => {
           <QueueDnd />
         </Content>
         <Settings opacity={settingsOpacity} scale={settingsScale} zIndex={settingsZIndex} closeHandler={closeSettings} />
+        <FocusMode opacity={focusModeOpacity} zIndex={focusModeZIndex} closeFocusMode={closeFocusMode} />
       </AppContainer>
-      <BottomPanel />
+      <BottomPanel focusModeOn={focusModeOn} openFocusMode={openFocusMode} />
     </>
   );
+
+  function showContent(): void {
+    setContentOpacity(1);
+    setContentScale(1);
+  }
+  function hideContent(): void {
+    setContentOpacity(0);
+    setContentScale(.7);
+  }
+  function showSettings(): void {
+    setSettingsOpacity(1);
+    setSettingsScale(1);
+    setSettingsZIndex(3);
+  }
+  function hideSettings(): void {
+    setSettingsOpacity(0);
+    setSettingsScale(.7);
+    setSettingsZIndex(-1);
+  }
+  function showFocusMode(): void {
+    setFocusModeOpacity(1);
+    setFocusModeZIndex(3);
+    setFocusModeOn(true);
+  }
+  function hideFocusMode(): void {
+    setFocusModeOpacity(0);
+    setFocusModeZIndex(-1);
+    setFocusModeOn(false);
+  }
 }
 export default App;
 
@@ -107,25 +149,26 @@ const AppContainer = styled.section<{ backgroundColor: string }>`
   display: flex;
   height: 100%;
   background-color: ${props => props.backgroundColor};
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   z-index: 1;
 `;
 
-const BackgroundImage = styled.div<{ path: string, opacity: number }>`
+const BackgroundImage = styled.div<{ path: string, opacity: number, focusModeOn: boolean }>`
   content: '';
   display: block;
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
-  bottom: 0;
-  opacity: ${props => props.opacity};
+  bottom: ${({ focusModeOn }) => focusModeOn ? '-100px' : 0};
+  opacity: ${({focusModeOn, opacity}) => focusModeOn ? 1 : opacity};
   background-image: ${props => `url("${props.path}")`};
   background-size: cover;
   background-position: center;
   user-select: none;
   pointer-events: none;
+  transition: 0.5s;
   z-index: 2;
 `;
 
