@@ -18,10 +18,10 @@ const FocusMode = ({ opacity, zIndex, closeFocusMode }: { opacity: number, zInde
       { playingTrack ?
         <TrackContainer>
           <FocusTrackImage src={`data:${playingTrack?.imgFormat};base64,${playingTrack?.imgData}`} />
-          <TrackInfo>
+          <FocusTrackInfo>
             <TrackTitle>{playingTrack?.title}</TrackTitle>
             <TrackArtist>{playingTrack?.artists}</TrackArtist>
-          </TrackInfo>
+          </FocusTrackInfo>
         </TrackContainer>
         : <></> }
       <CloseFocusMode onClick={closeFocusMode} />
@@ -41,8 +41,19 @@ const TrackContainer = styled.section`
 
 const FocusTrackImage = styled(TrackImage)`
   border-radius: 10%;
-  height: 100px;
-  width: 100px;
+  height: 150px;
+  width: 150px;
+`;
+
+const FocusTrackInfo = styled(TrackInfo)`
+  padding-bottom: 10px;
+
+  ${TrackTitle} {
+    font-size: 20px;
+  }
+  ${TrackArtist} {
+    font-size: 19px;
+  }
 `;
 
 const CloseFocusMode = styled.button`
