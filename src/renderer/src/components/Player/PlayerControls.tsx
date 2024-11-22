@@ -1,7 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import formatSeconds from "@renderer/utils/formatSeconds";
 import { AudioSourceContext } from "@contexts/AudioSourceContext";
 import { QueueContext } from "@renderer/contexts/QueueContext";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
@@ -9,7 +8,8 @@ import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import { Slider } from "@renderer/assets/Misc.styled";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
 import { FocusModeHoverContext } from "@renderer/contexts/FocusModeHoverContext";
-import { OpenFocusMode, PauseIcon, PlayerIcon, PlayIcon, Repeat, StepIcon } from "./PlayerIcons";
+import { OpenFocusMode, PlayerIcon, Repeat, StepIcon } from "./PlayerIcons";
+import PlayerSlider from "./PlayerSlider";
 
 const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocusMode: () => void }): JSX.Element => {
   const $audioRef = useRef<HTMLAudioElement>(null);
@@ -232,11 +232,7 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
           <StepIcon onClick={forwardStep} facingRight={true} />
           <Repeat action={changeRepeatStatus} status={repeatStatus} />
         </Controls>
-        <SliderSection>
-          <SliderTimes>{formatSeconds(currentTime)}</SliderTimes>
-          <Slider type="range" onChange={seeking} onMouseUp={seekTo} value={currentTime} max={maxTime}/>
-          <SliderTimes>{formatSeconds(maxTime)}</SliderTimes>
-        </SliderSection>
+        <PlayerSlider currentTime={currentTime} maxTime={maxTime} changeHandler={seeking} mouseUpHandler={seekTo} />
       </PlayerSection>
       <ExtraControls inFocus={inFocus} isHovering={isHovering}>
         <Volume>
@@ -310,20 +306,6 @@ const MiscIcon = styled(Icon)`
     fill: rgb(100, 100, 100);
     transform: scale(1);
   }
-`;
-
-const SliderSection = styled.section`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-`;
-
-const SliderTimes = styled.span`
-  color: #a5a5a5;
-  font-size: 14px;
-  margin: 0 5px;
-  user-select: none;
 `;
 
 const Volume = styled.section`
