@@ -9,6 +9,7 @@ import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import { Slider } from "@renderer/assets/Misc.styled";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
 import { FocusModeHoverContext } from "@renderer/contexts/FocusModeHoverContext";
+import { OpenFocusMode, PauseIcon, PlayerIcon, PlayIcon, Repeat, StepIcon } from "./PlayerIcons";
 
 const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocusMode: () => void }): JSX.Element => {
   const $audioRef = useRef<HTMLAudioElement>(null);
@@ -225,18 +226,11 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
       <PlayerSection inFocus={inFocus} isHovering={isHovering}>
         <audio src={audioSource} ref={$audioRef} onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd}/>
         <Controls>
-          <OpenFocusMode onClick={openFocusMode}>
-            <OpenFocusModeBottom />
-          </OpenFocusMode>
+          <OpenFocusMode action={openFocusMode} />
           <StepIcon onClick={backwardStep} facingRight={false} />
-          <PlayerIconBackground onClick={playPauseTrack}>
-            { isPaused ? <PlayIcon /> : <PauseIcon /> }
-          </PlayerIconBackground>
+          <PlayerIcon action={playPauseTrack} isPaused={isPaused} />
           <StepIcon onClick={forwardStep} facingRight={true} />
-          <Repeat onClick={changeRepeatStatus} status={repeatStatus}>
-            <RepeatIndicator status={repeatStatus} />
-            <RepeatSingleIndicator status={repeatStatus} />
-          </Repeat>
+          <Repeat action={changeRepeatStatus} status={repeatStatus} />
         </Controls>
         <SliderSection>
           <SliderTimes>{formatSeconds(currentTime)}</SliderTimes>
@@ -298,266 +292,6 @@ const ExtraControls = styled.section<{ inFocus: boolean, isHovering: boolean }>`
   transition: 0.5s;
 `;
 
-const OpenFocusModeBottom = styled.div`
-  &:before {
-    border: 1.5px transparent solid;
-    border-right-color: gray;
-    border-top-color: gray;
-    content: '';
-    height: 6px;
-    width: 6px;
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-  }
-
-  &:after {
-    border: 1.5px transparent solid;
-    border-left-color: gray;
-    border-top-color: gray;
-    content: '';
-    height: 6px;
-    width: 6px;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-  }
-`;
-
-const OpenFocusMode = styled.div`
-  height: 20px;
-  width: 20px;
-  position: relative;
-
-  &:before {
-    border: 1.5px transparent solid;
-    border-right-color: gray;
-    border-bottom-color: gray;
-    content: '';
-    height: 6px;
-    width: 6px;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-  }
-
-  &:after {
-    border: 1.5px transparent solid;
-    border-left-color: gray;
-    border-bottom-color: gray;
-    content: '';
-    height: 6px;
-    width: 6px;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-  }
-
-  &:hover {
-    > ${OpenFocusModeBottom}::before {
-      border-right-color: white;
-      border-top-color: white;
-    }
-    > ${OpenFocusModeBottom}::after {
-      border-left-color: white;
-      border-top-color: white;
-    }
-  }
-  &:hover::before {
-    border-right-color: white;
-    border-bottom-color: white;
-  }
-  &:hover::after {
-    border-left-color: white;
-    border-bottom-color: white;
-  }
-
-  &:active {
-    > ${OpenFocusModeBottom}::before {
-      border-right-color: #666;
-      border-top-color: #666;
-    }
-    > ${OpenFocusModeBottom}::after {
-      border-left-color: #666;
-      border-top-color: #666;
-    }
-  }
-  &:active::before {
-    border-right-color: #666;
-    border-bottom-color: #666;
-  }
-  &:active::after {
-    border-left-color: #666;
-    border-bottom-color: #666;
-  }
-`;
-
-const StepIcon = styled.div<{ facingRight: boolean }>`
-  width: 15px;
-  height: 15px;
-  position: relative;
-  transform: ${({facingRight}) => facingRight ? 'scale(-1)' : 'scale(1)'};
-
-  &::before {
-    background-color: gray;
-    content: '';
-    width: 3px;
-    height: 15px;
-    position: absolute;
-  }
-
-  &:after {
-    border-top: 7.8px solid transparent;
-    border-right: 12px solid gray;
-    border-bottom: 7.8px solid transparent;
-    content: '';
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-  }
-
-  &:hover {
-    transform: ${({facingRight}) => facingRight ? 'scale(-1.05)' : 'rotate(1.05)'};
-  }
-  &:hover::before { background-color: white; }
-  &:hover::after { border-right-color: white; }
-
-  &:active {
-    transform: ${({facingRight}) => facingRight ? 'scale(-1)' : 'rotate(1)'}
-  }
-  &:active::before { background-color: #666; }
-  &:active::after { border-right-color: #666; }
-`;
-
-const PauseIcon = styled.div`
-  width: 15px;
-  height: 15px;
-  position: relative;
-
-  &::before, &::after {
-    background-color: black;
-    content: '';
-    width: 5px;
-    height: 15px;
-    position: absolute;
-
-  }
-
-  &::after {
-    right: 0;
-  }
-`;
-
-const PlayIcon = styled.div`
-  width: 15px;
-  height: 15px;
-  position: relative;
-
-  &::before {
-    border-top: 8px solid transparent;
-    border-left: 15px solid black;
-    border-bottom: 8px solid transparent;
-    content: '';
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    left: 1px;
-    bottom: -0.5px;
-  }
-`;
-
-const RepeatIndicator = styled.div<{ status: RepeatStatus }>`
-  background-color: #0d0;
-  border-radius: 50%;
-  height: 4px;
-  width: 4px;
-  opacity: ${props => props.status === 'off' ? 0 : 1};
-  position: absolute;
-  top: 18px;
-`;
-
-const RepeatSingleIndicator = styled.div<{ status: RepeatStatus }>`
-  opacity: ${props => props.status === 'single' ? 1 : 0};
-  position: relative;
-
-  &::before {
-    background-color: black;
-    content: '';
-    height: 12px;
-    width: 10px;
-    position: absolute;
-    top: -13px;
-    left: -5px;
-  }
-
-  &::after {
-    color: #0d0;
-    content: '1';
-    font-size: 12px;
-    font-family: Arial, Helvetica, sans-serif;
-    position: absolute;
-    top: -14px;
-    left: -4px;
-  }
-`;
-
-const Repeat = styled.div<{ status: RepeatStatus }>`
-  --base-color: ${props => props.status === 'off' ? 'gray' : '#0d0'};
-  --brighter-color: ${props => props.status === 'off' ? 'white' : '#0f0'};
-  --darker-color: ${props => props.status === 'off' ? '#666' : '#0a0'};
-  background: transparent;
-  border: 2px solid var(--base-color);
-  border-radius: 20%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 15px;
-  width: 20px;
-  position: relative;
-
-  &:before {
-    background-color: black;
-    content: '';
-    height: 3px;
-    width: 6px;
-    position: absolute;
-    left: 4px;
-    bottom: -2px;
-  }
-
-  &:after {
-    border-top: 5px solid transparent;
-    border-right: 6px solid var(--base-color);
-    border-bottom: 5px solid transparent;
-    content: '';
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    right: 4px;
-    bottom: -5.8px;
-  }
-
-  &:hover {
-    border-color: var(--brighter-color);
-    > ${RepeatIndicator} { background-color: var(--brighter-color); }
-    > ${RepeatSingleIndicator}::after { color: var(--brighter-color); }
-  }
-  &:hover::after {
-    border-right-color: var(--brighter-color);
-  }
-
-  &:active {
-    border-color: var(--darker-color);
-    > ${RepeatIndicator} { background-color: var(--darker-color); }
-    > ${RepeatSingleIndicator}::after { color: var(--darker-color); }
-  }
-  &:active::after {
-    border-right-color: var(--darker-color);
-  }
-`;
-
 const Icon = styled.svg`
   cursor: pointer;
   height: 15px;
@@ -574,26 +308,6 @@ const MiscIcon = styled(Icon)`
 
   &:active {
     fill: rgb(100, 100, 100);
-    transform: scale(1);
-  }
-`;
-
-const PlayerIconBackground = styled.section`
-  background-color: #fff;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 35px;
-  width: 35px;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-
-  &:active {
-    background-color: #ccc;
     transform: scale(1);
   }
 `;
