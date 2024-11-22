@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
 import Setting from '../../classes/Setting';
-import Player from "./components/Player";
+import Player from "./components/Player/Player";
 import LibraryPanel from "./components/LibraryPanel/LibraryPanel";
 import ActionBar from "./components/ActionBar/ActionBar";
 import { BackgroundColorContext } from "./contexts/BackgroundColorContext";

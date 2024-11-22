@@ -228,23 +228,11 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
           <OpenFocusMode onClick={openFocusMode}>
             <OpenFocusModeBottom />
           </OpenFocusMode>
-          <MiscIcon onClick={backwardStep} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39.5 38">
-            <rect width="8" height="38" rx="1.03" ry="1.03"/>
-            <path d="M8.03,19.88l29.95,17.25c.68.39,1.52-.1,1.52-.88V1.75c0-.78-.84-1.27-1.52-.88L8.03,18.12c-.68.39-.68,1.37,0,1.76Z"/>
-          </MiscIcon>
+          <StepIcon onClick={backwardStep} facingRight={false} />
           <PlayerIconBackground onClick={playPauseTrack}>
-            <Icon data-name="play" display={isPaused ? '' : 'none'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43.07 47.45">
-              <path d="M42.13,22.13L2.71.23C1.49-.44,0,.44,0,1.83v43.8c0,1.39,1.49,2.27,2.71,1.6l39.42-21.9c1.25-.7,1.25-2.5,0-3.19Z"/>
-            </Icon>
-            <Icon data-name="pause" display={isPaused ? 'none' : ''} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 50">
-              <rect width="15" height="50"/>
-              <rect x="31" y="0" width="15" height="50"/>
-            </Icon>
+            { isPaused ? <PlayIcon /> : <PauseIcon /> }
           </PlayerIconBackground>
-          <MiscIcon onClick={forwardStep} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 39.5 38">
-            <rect x="31.5" width="8" height="38" rx="1.03" ry="1.03"/>
-            <path d="M31.47,19.88L1.52,37.13c-.68.39-1.52-.1-1.52-.88V1.75C0,.97.84.49,1.52.87l29.95,17.25c.68.39.68,1.37,0,1.76Z"/>
-          </MiscIcon>
+          <StepIcon onClick={forwardStep} facingRight={true} />
           <Repeat onClick={changeRepeatStatus} status={repeatStatus}>
             <RepeatIndicator status={repeatStatus} />
             <RepeatSingleIndicator status={repeatStatus} />
@@ -401,6 +389,82 @@ const OpenFocusMode = styled.div`
   &:active::after {
     border-left-color: #666;
     border-bottom-color: #666;
+  }
+`;
+
+const StepIcon = styled.div<{ facingRight: boolean }>`
+  width: 15px;
+  height: 15px;
+  position: relative;
+  transform: ${({facingRight}) => facingRight ? 'scale(-1)' : 'scale(1)'};
+
+  &::before {
+    background-color: gray;
+    content: '';
+    width: 3px;
+    height: 15px;
+    position: absolute;
+  }
+
+  &:after {
+    border-top: 7.8px solid transparent;
+    border-right: 12px solid gray;
+    border-bottom: 7.8px solid transparent;
+    content: '';
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+
+  &:hover {
+    transform: ${({facingRight}) => facingRight ? 'scale(-1.05)' : 'rotate(1.05)'};
+  }
+  &:hover::before { background-color: white; }
+  &:hover::after { border-right-color: white; }
+
+  &:active {
+    transform: ${({facingRight}) => facingRight ? 'scale(-1)' : 'rotate(1)'}
+  }
+  &:active::before { background-color: #666; }
+  &:active::after { border-right-color: #666; }
+`;
+
+const PauseIcon = styled.div`
+  width: 15px;
+  height: 15px;
+  position: relative;
+
+  &::before, &::after {
+    background-color: black;
+    content: '';
+    width: 5px;
+    height: 15px;
+    position: absolute;
+
+  }
+
+  &::after {
+    right: 0;
+  }
+`;
+
+const PlayIcon = styled.div`
+  width: 15px;
+  height: 15px;
+  position: relative;
+
+  &::before {
+    border-top: 8px solid transparent;
+    border-left: 15px solid black;
+    border-bottom: 8px solid transparent;
+    content: '';
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    left: 1px;
+    bottom: -0.5px;
   }
 `;
 
