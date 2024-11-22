@@ -4,13 +4,13 @@ import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import styled from "styled-components";
 import { TrackArtist, TrackImage, TrackInfo, TrackTitle } from "@renderer/assets/Misc.styled";
 
-const PlayingTrack = React.memo(({ isFocusModeActive }: { isFocusModeActive: boolean }): JSX.Element => {
+const PlayingTrack = React.memo(({ inFocus }: { inFocus: boolean }): JSX.Element => {
   const { playingTrack } = useContext(PlayingTrackContext);
 
   return playingTrack ?
-    <PlayingTrackSection inFocus={isFocusModeActive}>
-      <ModTrackImage inFocus={isFocusModeActive} src={`data:${playingTrack.imgFormat};base64,${playingTrack.imgData}`}/>
-      <ModTrackInfo inFocus={isFocusModeActive}>
+    <PlayingTrackSection inFocus={inFocus}>
+      <ModTrackImage inFocus={inFocus} src={`data:${playingTrack.imgFormat};base64,${playingTrack.imgData}`}/>
+      <ModTrackInfo inFocus={inFocus}>
         <TrackTitle>{playingTrack.title}</TrackTitle>
         <TrackArtist>{playingTrack.artists}</TrackArtist>
       </ModTrackInfo>

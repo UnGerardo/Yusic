@@ -2,7 +2,7 @@ import { FocusModeHoverContext } from "@renderer/contexts/FocusModeHoverContext"
 import { useContext } from "react";
 import styled from "styled-components";
 
-const FocusMode = ({ isFocusModeActive, closeFocusMode }: { isFocusModeActive: boolean, closeFocusMode: () => void }): JSX.Element => {
+const FocusMode = ({ inFocus, closeHandler }: { inFocus: boolean, closeHandler: () => void }): JSX.Element => {
   const { setIsHovering } = useContext(FocusModeHoverContext);
 
   const activeZIndex = 3;
@@ -11,10 +11,10 @@ const FocusMode = ({ isFocusModeActive, closeFocusMode }: { isFocusModeActive: b
     <StyledFocusMode
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      opacity={isFocusModeActive ? 1 : 0}
-      zIndex={isFocusModeActive ? activeZIndex : -1}
+      opacity={inFocus ? 1 : 0}
+      zIndex={inFocus ? activeZIndex : -1}
     >
-      <CloseFocusMode onClick={closeFocusMode} />
+      <CloseFocusMode onClick={closeHandler} />
     </StyledFocusMode>
   );
 }

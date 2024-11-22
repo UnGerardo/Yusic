@@ -4,23 +4,23 @@ import Player from "./Player";
 import { useContext } from "react";
 import { FocusModeHoverContext } from "@renderer/contexts/FocusModeHoverContext";
 
-export const BottomPanel = ({ isFocusModeActive, openFocusMode }: { isFocusModeActive: boolean, openFocusMode: () => void }): JSX.Element => {
+export const BottomPanel = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocusMode: () => void }): JSX.Element => {
   const { setIsHovering } = useContext(FocusModeHoverContext);
 
   return (
     <Panel
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      isFocusModeActive={isFocusModeActive}>
+      inFocus={inFocus}>
       <div id="place-holder-to-take-up-space"></div>
-      <PlayingTrack isFocusModeActive={isFocusModeActive} />
-      <Player isFocusModeActive={isFocusModeActive} openFocusMode={openFocusMode} />
+      <PlayingTrack inFocus={inFocus} />
+      <Player inFocus={inFocus} openFocusMode={openFocusMode} />
     </Panel>
   );
 }
 
-const Panel = styled.section<{ isFocusModeActive: boolean }>`
-  background-color: ${({isFocusModeActive}) => isFocusModeActive ? 'transparent' : 'black'};
+const Panel = styled.section<{ inFocus: boolean }>`
+  background-color: ${({inFocus}) => inFocus ? 'transparent' : 'black'};
   display: grid;
   grid-template-columns: 1fr 1.15fr 1fr;
   padding: 15px;

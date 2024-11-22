@@ -93,7 +93,7 @@ const App = (): JSX.Element => {
         <BackgroundImage
           path={backgroundImage}
           opacity={backgroundImageOpacity}
-          isFocusModeActive={isFocusModeActive}
+          inFocus={isFocusModeActive}
         />
         <Content opacity={contentOpacity} scale={contentScale}>
           <LibraryPanel openSettings={openSettings} />
@@ -103,10 +103,10 @@ const App = (): JSX.Element => {
           </Main>
           <QueueDnd />
         </Content>
-        <Settings isSettingsActive={isSettingsActive} closeHandler={closeSettings} />
-        <FocusMode isFocusModeActive={isFocusModeActive} closeFocusMode={closeFocusMode} />
+        <Settings isActive={isSettingsActive} closeHandler={closeSettings} />
+        <FocusMode inFocus={isFocusModeActive} closeHandler={closeFocusMode} />
       </AppContainer>
-      <BottomPanel isFocusModeActive={isFocusModeActive} openFocusMode={openFocusMode} />
+      <BottomPanel inFocus={isFocusModeActive} openFocusMode={openFocusMode} />
     </>
   );
 
@@ -125,6 +125,7 @@ const App = (): JSX.Element => {
     setIsSettingsActive(false);
   }
   function showFocusMode(): void {
+    setIsSettingsActive(false);
     setIsFocusModeActive(true);
   }
   function hideFocusMode(): void {
@@ -142,15 +143,15 @@ const AppContainer = styled.section<{ backgroundColor: string }>`
   z-index: 1;
 `;
 
-const BackgroundImage = styled.div<{ path: string, opacity: number, isFocusModeActive: boolean }>`
+const BackgroundImage = styled.div<{ path: string, opacity: number, inFocus: boolean }>`
   content: '';
   display: block;
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
-  bottom: ${({ isFocusModeActive }) => isFocusModeActive ? '-100px' : 0};
-  opacity: ${({isFocusModeActive, opacity}) => isFocusModeActive ? 1 : opacity};
+  bottom: ${({inFocus}) => inFocus ? '-100px' : 0};
+  opacity: ${({inFocus, opacity}) => inFocus ? 1 : opacity};
   background-image: ${props => `url("${props.path}")`};
   background-size: cover;
   background-position: center;
