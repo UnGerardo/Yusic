@@ -48,11 +48,10 @@ const App = (): JSX.Element => {
   const [settingsOpacity, setSettingsOpacity] = useState(0);
   const [settingsScale, setSettingsScale] = useState(.7);
   const [settingsZIndex, setSettingsZIndex] = useState(-1);
+  const [isSettingsActive, setIsSettingsActive] = useState(false);
   const [contentOpacity, setContentOpacity] = useState(1);
   const [contentScale, setContentScale] = useState(1);
-  const [focusModeOpacity, setFocusModeOpacity] = useState(0);
-  const [focusModeZIndex, setFocusModeZIndex] = useState(-1);
-  const [focusModeOn, setFocusModeOn] = useState(false);
+  const [isFocusModeActive, setIsFocusModeActive] = useState(false);
   const { backgroundColor, setBackgroundColor } = useContext(BackgroundColorContext);
   const { backgroundImage, setBackgroundImage } = useContext(BackgroundImageContext);
   const { backgroundImageOpacity, setBackgroundImageOpacity } = useContext(BackgroundImageOpacityContext);
@@ -97,7 +96,7 @@ const App = (): JSX.Element => {
         <BackgroundImage
           path={backgroundImage}
           opacity={backgroundImageOpacity}
-          focusModeOn={focusModeOn}
+          isFocusModeActive={isFocusModeActive}
         />
         <Content opacity={contentOpacity} scale={contentScale}>
           <LibraryPanel openSettings={openSettings} />
@@ -107,10 +106,10 @@ const App = (): JSX.Element => {
           </Main>
           <QueueDnd />
         </Content>
-        <Settings opacity={settingsOpacity} scale={settingsScale} zIndex={settingsZIndex} closeHandler={closeSettings} />
-        <FocusMode opacity={focusModeOpacity} zIndex={focusModeZIndex} closeFocusMode={closeFocusMode} />
+        <Settings isSettingsActive={isSettingsActive} closeHandler={closeSettings} />
+        <FocusMode isFocusModeActive={isFocusModeActive} closeFocusMode={closeFocusMode} />
       </AppContainer>
-      <BottomPanel focusModeOn={focusModeOn} openFocusMode={openFocusMode} />
+      <BottomPanel isFocusModeActive={isFocusModeActive} openFocusMode={openFocusMode} />
     </>
   );
 
@@ -123,24 +122,16 @@ const App = (): JSX.Element => {
     setContentScale(.7);
   }
   function showSettings(): void {
-    setSettingsOpacity(1);
-    setSettingsScale(1);
-    setSettingsZIndex(3);
+    setIsSettingsActive(true);
   }
   function hideSettings(): void {
-    setSettingsOpacity(0);
-    setSettingsScale(.7);
-    setSettingsZIndex(-1);
+    setIsSettingsActive(false);
   }
   function showFocusMode(): void {
-    setFocusModeOpacity(1);
-    setFocusModeZIndex(3);
-    setFocusModeOn(true);
+    setIsFocusModeActive(true);
   }
   function hideFocusMode(): void {
-    setFocusModeOpacity(0);
-    setFocusModeZIndex(-1);
-    setFocusModeOn(false);
+    setIsFocusModeActive(false);
   }
 }
 export default App;
@@ -154,15 +145,15 @@ const AppContainer = styled.section<{ backgroundColor: string }>`
   z-index: 1;
 `;
 
-const BackgroundImage = styled.div<{ path: string, opacity: number, focusModeOn: boolean }>`
+const BackgroundImage = styled.div<{ path: string, opacity: number, isFocusModeActive: boolean }>`
   content: '';
   display: block;
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
-  bottom: ${({ focusModeOn }) => focusModeOn ? '-100px' : 0};
-  opacity: ${({focusModeOn, opacity}) => focusModeOn ? 1 : opacity};
+  bottom: ${({ isFocusModeActive }) => isFocusModeActive ? '-100px' : 0};
+  opacity: ${({isFocusModeActive, opacity}) => isFocusModeActive ? 1 : opacity};
   background-image: ${props => `url("${props.path}")`};
   background-size: cover;
   background-position: center;

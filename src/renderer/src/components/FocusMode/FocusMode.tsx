@@ -4,16 +4,18 @@ import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import { useContext } from "react";
 import styled from "styled-components";
 
-const FocusMode = ({ opacity, zIndex, closeFocusMode }: { opacity: number, zIndex: number, closeFocusMode: () => void }): JSX.Element => {
+const FocusMode = ({ isFocusModeActive, closeFocusMode }: { isFocusModeActive: boolean, closeFocusMode: () => void }): JSX.Element => {
   const { playingTrack } = useContext(PlayingTrackContext);
   const { setIsHovering } = useContext(FocusModeHoverContext);
+
+  const activeZIndex = 3;
 
   return (
     <StyledFocusMode
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      opacity={opacity}
-      zIndex={zIndex}
+      opacity={isFocusModeActive ? 1 : 0}
+      zIndex={isFocusModeActive ? activeZIndex : -1}
     >
       { playingTrack ?
         <TrackContainer>

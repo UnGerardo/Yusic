@@ -4,10 +4,16 @@ import BackgroundImageSetting from "./BackgroundImageSetting";
 import BackgroundImageOpacity from "./BackgroundImageOpacity";
 import ReadMusicFolder from "./ReadMusicFolder";
 
-const Settings = ({ opacity, scale, zIndex, closeHandler }: { opacity: number, scale: number, zIndex: number, closeHandler: () => void }): JSX.Element => {
+const Settings = ({ isSettingsActive, closeHandler }: { isSettingsActive: boolean, closeHandler: () => void }): JSX.Element => {
+  const inactiveScale = 0.7;
+  const activeZIndex = 3;
 
   return (
-    <StyledSettings opacity={opacity} scale={scale} zIndex={zIndex}>
+    <StyledSettings
+      opacity={isSettingsActive ? 1 : 0}
+      scale={isSettingsActive ? 1 : inactiveScale}
+      zIndex={isSettingsActive ? activeZIndex : -1}
+    >
       <Header>
         <Title>Settings</Title>
         <CloseButton onClick={closeHandler} />
