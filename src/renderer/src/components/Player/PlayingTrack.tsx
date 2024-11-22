@@ -23,6 +23,7 @@ const PlayingTrackSection = styled.section<{ inFocus: boolean }>`
   display: grid;
   grid-template-columns: ${({inFocus}) => inFocus ? '150px 1fr' : '60px 1fr'};
   gap: 15px;
+  width: ${({inFocus}) => inFocus ? '90%' : '30%'};
   position: absolute;
   bottom: 20px;
   left: 20px;
