@@ -3,9 +3,9 @@ import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
 import Setting from '../../classes/Setting';
-import { BottomPanel } from "./components/BottomPanel";
+import Player from "./components/Player";
 import LibraryPanel from "./components/LibraryPanel/LibraryPanel";
-import { ActionBar } from "./components/ActionBar/ActionBar";
+import ActionBar from "./components/ActionBar/ActionBar";
 import { BackgroundColorContext } from "./contexts/BackgroundColorContext";
 import { BackgroundImageContext } from "./contexts/BackgroundImageContext";
 import { BackgroundImageOpacityContext } from "./contexts/BackgroundImageOpacity";
@@ -106,7 +106,7 @@ const App = (): JSX.Element => {
         <Settings isActive={isSettingsActive} closeHandler={closeSettings} />
         <FocusMode inFocus={isFocusModeActive} closeHandler={closeFocusMode} />
       </AppContainer>
-      <BottomPanel inFocus={isFocusModeActive} openFocusMode={openFocusMode} />
+      <Player inFocus={isFocusModeActive} openFocusMode={openFocusMode} />
     </>
   );
 

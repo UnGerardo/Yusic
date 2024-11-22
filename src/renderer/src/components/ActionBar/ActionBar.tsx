@@ -2,14 +2,16 @@ import styled from "styled-components";
 import SearchQuery from "./SearchQuery";
 import Shuffle from "./Shuffle";
 
-export const ActionBar = (): JSX.Element => (
-  <Bar>
+const ActionBar = (): JSX.Element => (
+  <StyledActionBar>
     <SearchQuery />
     <Shuffle />
-  </Bar>
+  </StyledActionBar>
 );
 
-const Bar = styled.section`
+export default ActionBar;
+
+const StyledActionBar = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
