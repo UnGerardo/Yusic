@@ -12,6 +12,7 @@ export const BottomPanel = ({ isFocusModeActive, openFocusMode }: { isFocusModeA
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       isFocusModeActive={isFocusModeActive}>
+      <div id="place-holder-to-take-up-space"></div>
       <PlayingTrack isFocusModeActive={isFocusModeActive} />
       <Player isFocusModeActive={isFocusModeActive} openFocusMode={openFocusMode} />
     </Panel>

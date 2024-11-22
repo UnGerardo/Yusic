@@ -1,11 +1,8 @@
-import { TrackArtist, TrackImage, TrackInfo, TrackTitle } from "@renderer/assets/Misc.styled";
 import { FocusModeHoverContext } from "@renderer/contexts/FocusModeHoverContext";
-import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 import { useContext } from "react";
 import styled from "styled-components";
 
 const FocusMode = ({ isFocusModeActive, closeFocusMode }: { isFocusModeActive: boolean, closeFocusMode: () => void }): JSX.Element => {
-  const { playingTrack } = useContext(PlayingTrackContext);
   const { setIsHovering } = useContext(FocusModeHoverContext);
 
   const activeZIndex = 3;
@@ -17,46 +14,10 @@ const FocusMode = ({ isFocusModeActive, closeFocusMode }: { isFocusModeActive: b
       opacity={isFocusModeActive ? 1 : 0}
       zIndex={isFocusModeActive ? activeZIndex : -1}
     >
-      { playingTrack ?
-        <TrackContainer>
-          <FocusTrackImage src={`data:${playingTrack?.imgFormat};base64,${playingTrack?.imgData}`} />
-          <FocusTrackInfo>
-            <TrackTitle>{playingTrack?.title}</TrackTitle>
-            <TrackArtist>{playingTrack?.artists}</TrackArtist>
-          </FocusTrackInfo>
-        </TrackContainer>
-        : <></> }
       <CloseFocusMode onClick={closeFocusMode} />
     </StyledFocusMode>
   );
 }
-
-const TrackContainer = styled.section`
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 15px;
-  position: absolute;
-  left: 20px;
-  bottom: -80px;
-`;
-
-const FocusTrackImage = styled(TrackImage)`
-  border-radius: 10%;
-  height: 150px;
-  width: 150px;
-`;
-
-const FocusTrackInfo = styled(TrackInfo)`
-  padding-bottom: 10px;
-
-  ${TrackTitle} {
-    font-size: 20px;
-  }
-  ${TrackArtist} {
-    font-size: 19px;
-  }
-`;
 
 const CloseFocusMode = styled.button`
   background: none;

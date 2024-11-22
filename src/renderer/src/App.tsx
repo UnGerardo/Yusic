@@ -45,9 +45,6 @@ export async function action({ request }) {
 }
 
 const App = (): JSX.Element => {
-  const [settingsOpacity, setSettingsOpacity] = useState(0);
-  const [settingsScale, setSettingsScale] = useState(.7);
-  const [settingsZIndex, setSettingsZIndex] = useState(-1);
   const [isSettingsActive, setIsSettingsActive] = useState(false);
   const [contentOpacity, setContentOpacity] = useState(1);
   const [contentScale, setContentScale] = useState(1);
