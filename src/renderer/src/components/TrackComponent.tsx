@@ -27,7 +27,7 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[]
     // Use index to get track, because the newQueue creates new instances of tracks
     setPlayingTrack(newQueue[index]);
     setQueueIndex(index);
-    setQueue(tracks);
+    setQueue(newQueue);
   }
 
   const addToQueue = (e) => {
