@@ -10,6 +10,7 @@ import { FocusModeHoverContext } from "@renderer/contexts/FocusModeHoverContext"
 import { OpenFocusMode, PlayerIcon, Repeat, StepIcon } from "./PlayerIcons";
 import PlayerSlider from "./PlayerSlider";
 import PlayerVolume from "./PlayerVolume";
+import PlayerSpeed from "./PlayerSpeed";
 
 const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocusMode: () => void }): JSX.Element => {
   const $audioRef = useRef<HTMLAudioElement>(null);
@@ -24,6 +25,7 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
   const [maxTime, setMaxTime] = useState(0);
   const [volume, setVolume] = useState(1);
   const [prevVolume, setPrevVolume] = useState(1);
+  const [speed, setSpeed] = useState(1);
   const [repeatStatus, setRepeatStatus] = useState<RepeatStatus>('off');
 
   useEffect(() => {
@@ -83,6 +85,7 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
       return setInterval(() => setCurrentTime(audio!.currentTime), 499);
     });
     audio!.play();
+    audio!.playbackRate = speed;
   }
 
   const seeking = (event) => {
@@ -221,6 +224,14 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
     }
   }
 
+  const changeSpeed = (e): void => {
+    const { current: audio } = $audioRef;
+    const element = e.target as HTMLElement
+    const speed = parseFloat(element.getAttribute('data-speed') || '');
+    setSpeed(speed);
+    audio!.playbackRate = speed;
+  }
+
   return (
     <>
       <PlayerSection inFocus={inFocus} isHovering={isHovering}>
@@ -235,6 +246,7 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
         <PlayerSlider currentTime={currentTime} maxTime={maxTime} changeHandler={seeking} mouseUpHandler={seekTo} />
       </PlayerSection>
       <ExtraControls inFocus={inFocus} isHovering={isHovering}>
+        <PlayerSpeed speed={speed} optionClickHandler={changeSpeed} />
         <PlayerVolume volume={volume} iconClickHandler={muteAudio} sliderChangeHandler={adjustVolume} />
       </ExtraControls>
     </>
