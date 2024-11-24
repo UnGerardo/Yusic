@@ -86,13 +86,13 @@ export const StyledSetting = styled.section`
 `;
 
 export const LibraryCollection = styled(Link)`
-  border-bottom: 1px white solid;
   color: white;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 35px 1fr;
+  align-items: center;
+  gap: 10px;
   cursor: pointer;
-  /* padding: 10px 0; */
-  height: 30px;
+  height: 35px;
   width: 100%;
   text-decoration: none;
 `;
