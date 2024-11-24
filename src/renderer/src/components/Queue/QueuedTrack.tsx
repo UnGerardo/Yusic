@@ -124,7 +124,7 @@ const RemoveButton = styled.button`
 `;
 
 const StyledQueuedTrack = styled.section<{ isCurrentTrack: boolean }>`
-  background-color: ${(props) => props.isCurrentTrack ? 'rgba(61, 61, 61, 0.5)' : 'none'};
+  background-color: ${(props) => props.isCurrentTrack ? 'rgba(255, 255, 255, 0.15)' : 'none'};
   display: grid;
   grid-template-columns: 18px 50px 1fr 18px;
   align-items: center;
@@ -133,7 +133,7 @@ const StyledQueuedTrack = styled.section<{ isCurrentTrack: boolean }>`
   user-select: none;
 
   &:hover {
-    background-color: rgba(61, 61, 61, 0.5);
+    background-color: rgba(255, 255, 255, 0.15);
     cursor: pointer;
 
     ${RemoveButton} {

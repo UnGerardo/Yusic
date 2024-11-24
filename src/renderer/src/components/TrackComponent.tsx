@@ -101,16 +101,16 @@ const TrackSection = styled.section`
   margin: 0 0 0 10px;
 
   &:hover {
-    background-color: rgba(61, 61, 61, 0.5);
+    background-color: rgba(255, 255, 255, 0.15);
     cursor: pointer;
   }
 
   @media (max-width: 920px) {
-    grid-template-columns: 60px 1fr 40px 18px 18px;
+    grid-template-columns: 80px 1fr 40px 18px 18px;
   }
 
   @media (max-width: 820px) {
-    grid-template-columns: 50px 1fr 18px 18px;
+    grid-template-columns: 80px 1fr 18px 18px;
   }
 `;
 
