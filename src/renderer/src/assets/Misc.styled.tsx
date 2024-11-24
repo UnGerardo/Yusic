@@ -88,11 +88,13 @@ export const StyledSetting = styled.section`
 export const LibraryCollection = styled(Link)`
   color: white;
   display: grid;
-  grid-template-columns: 35px 1fr;
+  grid-template-columns: 50px 1fr;
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  height: 35px;
+  margin-bottom: 10px;
+  height: 50px;
   width: 100%;
   text-decoration: none;
+  user-select: none;
 `;

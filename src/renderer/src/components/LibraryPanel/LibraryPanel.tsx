@@ -12,19 +12,20 @@ const LibraryPanel = React.memo(({ openSettings }: { openSettings: () => void })
         <OpenSettingsLastDot />
       </OpenSettings>
       <NewPlaylistForm />
-      <LibraryCollection to={'/'}>
+      {/* on click set route id to 'root' for loaderdata */}
+      <Collection to={'/'} draggable={false}>
         <TracksIcon /> Tracks
-      </LibraryCollection>
-      <LibraryCollection to={'/artists'}>
+      </Collection>
+      <Collection to={'/artists'} draggable={false}>
         <ArtistIcon /> Artists
-      </LibraryCollection>
-      <LibraryCollection to={'/albums'}>
+      </Collection>
+      <Collection to={'/albums'} draggable={false}>
         <AlbumsIcon>
           <AlbumRows />
           <MusicIcon />
         </AlbumsIcon>
         Albums
-      </LibraryCollection>
+      </Collection>
       <PlaylistList />
     </StyledLibraryPanel>
   );
@@ -42,6 +43,12 @@ const StyledLibraryPanel = styled.section`
   min-width: 150px;
   max-width: 150px;
   z-index: 3;
+`;
+
+const Collection = styled(LibraryCollection)`
+  grid-template-columns: 30px 1fr;
+  margin-bottom: 0;
+  height: 35px;
 `;
 
 const OpenSettingsLastDot = styled.div`
@@ -90,6 +97,7 @@ const OpenSettings = styled.button`
 const TracksIcon = styled.div`
   border: 2px solid gray;
   border-radius: 50%;
+  justify-self: center;
   margin-right: 5px;
   height: 28px;
   width: 28px;
@@ -123,6 +131,7 @@ const TracksIcon = styled.div`
 `;
 
 const ArtistIcon = styled.div`
+  justify-self: center;
   height: 28px;
   width: 28px;
   margin-right: 5px;
@@ -180,6 +189,7 @@ const AlbumRows = styled.div`
 `;
 
 const AlbumsIcon = styled.div`
+  justify-self: center;
   height: 28px;
   width: 28px;
   margin-right: 5px;

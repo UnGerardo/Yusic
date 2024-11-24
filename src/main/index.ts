@@ -111,6 +111,17 @@ app.whenReady().then(() => {
     `).all(playlistId) as Track[];
   });
 
+  ipcMain.handle('get-first-four-playlist-tracks', (_event, playlistId: number): Track[] => {
+    return db.prepare(`
+      SELECT mf.id, mf.path, mf.title, mf.artists, mf.album, mf.duration, mf.imgFormat, mf.imgData
+      FROM MusicFiles mf
+      INNER JOIN PlaylistTracks pt ON mf.id = pt.musicFileId
+      WHERE pt.playlistId = ?
+      ORDER BY pt.addedAt
+      LIMIT 4
+    `).all(playlistId) as Track[];
+  });
+
   ipcMain.handle('add-track-to-playlist', (_event, playlistId: number, musicFileId: number): void => {
     db.prepare('INSERT INTO PlaylistTracks (playlistId, musicFileId) VALUES (?, ?)').run(playlistId, musicFileId);
   });
