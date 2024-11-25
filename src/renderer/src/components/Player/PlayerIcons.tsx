@@ -208,97 +208,97 @@ export const PlayerIcon = ({ action, isPaused }: { action: () => void, isPaused:
   </PlayerIconBackground>
 );
 
-export const RepeatIndicator = styled.div`
-  background-color: #0d0;
-  border-radius: 50%;
-  height: 4px;
-  width: 4px;
-  position: absolute;
-  top: 18px;
-`;
+// export const RepeatIndicator = styled.div`
+//   background-color: #0d0;
+//   border-radius: 50%;
+//   height: 4px;
+//   width: 4px;
+//   position: absolute;
+//   top: 18px;
+// `;
 
-export const RepeatSingleIndicator = styled.div`
-  position: relative;
+// export const RepeatSingleIndicator = styled.div`
+//   position: relative;
 
-  &::before {
-    background-color: black;
-    content: '';
-    height: 12px;
-    width: 10px;
-    position: absolute;
-    top: -13px;
-    left: -5px;
-  }
+//   &::before {
+//     background-color: black;
+//     content: '';
+//     height: 12px;
+//     width: 10px;
+//     position: absolute;
+//     top: -13px;
+//     left: -5px;
+//   }
 
-  &::after {
-    color: #0d0;
-    content: '1';
-    font-size: 12px;
-    font-family: Arial, Helvetica, sans-serif;
-    position: absolute;
-    top: -14px;
-    left: -4px;
-  }
-`;
+//   &::after {
+//     color: #0d0;
+//     content: '1';
+//     font-size: 12px;
+//     font-family: Arial, Helvetica, sans-serif;
+//     position: absolute;
+//     top: -14px;
+//     left: -4px;
+//   }
+// `;
 
-export const StyledRepeat = styled.div<{ status: RepeatStatus }>`
-  --base-color: ${props => props.status === 'off' ? 'gray' : '#0d0'};
-  --brighter-color: ${props => props.status === 'off' ? 'white' : '#0f0'};
-  --darker-color: ${props => props.status === 'off' ? '#666' : '#0a0'};
-  background: transparent;
-  border: 2px solid var(--base-color);
-  border-radius: 20%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 15px;
-  width: 20px;
-  position: relative;
+// export const StyledRepeat = styled.div<{ status: RepeatStatus }>`
+//   --base-color: ${props => props.status === 'off' ? 'gray' : '#0d0'};
+//   --brighter-color: ${props => props.status === 'off' ? 'white' : '#0f0'};
+//   --darker-color: ${props => props.status === 'off' ? '#666' : '#0a0'};
+//   background: transparent;
+//   border: 2px solid var(--base-color);
+//   border-radius: 20%;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   height: 15px;
+//   width: 20px;
+//   position: relative;
 
-  &:before {
-    background-color: black;
-    content: '';
-    height: 3px;
-    width: 6px;
-    position: absolute;
-    left: 4px;
-    bottom: -2px;
-  }
+//   &:before {
+//     background-color: black;
+//     content: '';
+//     height: 3px;
+//     width: 6px;
+//     position: absolute;
+//     left: 4px;
+//     bottom: -2px;
+//   }
 
-  &:after {
-    border-top: 5px solid transparent;
-    border-right: 6px solid var(--base-color);
-    border-bottom: 5px solid transparent;
-    content: '';
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    right: 4px;
-    bottom: -5.8px;
-  }
+//   &:after {
+//     border-top: 5px solid transparent;
+//     border-right: 6px solid var(--base-color);
+//     border-bottom: 5px solid transparent;
+//     content: '';
+//     width: 0px;
+//     height: 0px;
+//     position: absolute;
+//     right: 4px;
+//     bottom: -5.8px;
+//   }
 
-  &:hover {
-    border-color: var(--brighter-color);
-    > ${RepeatIndicator} { background-color: var(--brighter-color); }
-    > ${RepeatSingleIndicator}::after { color: var(--brighter-color); }
-  }
-  &:hover::after {
-    border-right-color: var(--brighter-color);
-  }
+//   &:hover {
+//     border-color: var(--brighter-color);
+//     > ${RepeatIndicator} { background-color: var(--brighter-color); }
+//     > ${RepeatSingleIndicator}::after { color: var(--brighter-color); }
+//   }
+//   &:hover::after {
+//     border-right-color: var(--brighter-color);
+//   }
 
-  &:active {
-    border-color: var(--darker-color);
-    > ${RepeatIndicator} { background-color: var(--darker-color); }
-    > ${RepeatSingleIndicator}::after { color: var(--darker-color); }
-  }
-  &:active::after {
-    border-right-color: var(--darker-color);
-  }
-`;
+//   &:active {
+//     border-color: var(--darker-color);
+//     > ${RepeatIndicator} { background-color: var(--darker-color); }
+//     > ${RepeatSingleIndicator}::after { color: var(--darker-color); }
+//   }
+//   &:active::after {
+//     border-right-color: var(--darker-color);
+//   }
+// `;
 
-export const Repeat = ({ action, status }: { action: () => void, status: RepeatStatus }): JSX.Element => (
-  <StyledRepeat onClick={action} status={status}>
-    { status === 'off' ? <></> : <RepeatIndicator /> }
-    { status === 'single' ? <RepeatSingleIndicator /> : <></> }
-  </StyledRepeat>
-);
+// export const Repeat = ({ action, status }: { action: () => void, status: RepeatStatus }): JSX.Element => (
+//   <StyledRepeat onClick={action} status={status}>
+//     { status === 'off' ? <></> : <RepeatIndicator /> }
+//     { status === 'single' ? <RepeatSingleIndicator /> : <></> }
+//   </StyledRepeat>
+// );
