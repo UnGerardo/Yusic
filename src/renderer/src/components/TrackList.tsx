@@ -7,10 +7,7 @@ import TrackComponent from "./TrackComponent";
 import { WindowList } from '@renderer/assets/Misc.styled';
 import TrackHeader from './TrackHeader';
 import ReactTrack from '@renderer/react-classes/ReactTrack';
-
-const isSubstrIgnoreCase = (string: string, substr: string): boolean => {
-  return string.toLocaleLowerCase().includes(substr.toLocaleLowerCase());
-}
+import isSubstrIgnoreCase from '@renderer/utils/isSubStrIgnoreCase';
 
 const TrackList = React.memo(() => {
   const { tracks }: { tracks: ReactTrack[] } = useRouteLoaderData('root') as any;
