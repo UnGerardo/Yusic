@@ -1,5 +1,14 @@
+import defaultTrackImage from "../assets/defaultTrackImage.svg";
 
 async function combineImages(base64Images: string[]) {
+  if (base64Images.length === 0) {
+    return defaultTrackImage;
+  }
+
+  if (base64Images.length < 4) {
+    return base64Images[0];
+  }
+
   const images = base64Images.map((base64) => {
     const img = new Image();
     img.src = base64;
