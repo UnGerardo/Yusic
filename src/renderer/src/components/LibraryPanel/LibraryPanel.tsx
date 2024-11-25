@@ -38,7 +38,7 @@ const StyledLibraryPanel = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 0 0 10px;
   height: 100%;
   min-width: 150px;
   max-width: 150px;

@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
+import defaultTrackImage from "../../assets/defaultTrackImage.svg";
 
 import styled from "styled-components";
 import { TrackArtist, TrackImage, TrackInfo, TrackTitle } from "@renderer/assets/Misc.styled";
@@ -9,7 +10,7 @@ const PlayingTrack = React.memo(({ inFocus }: { inFocus: boolean }): JSX.Element
 
   return playingTrack ?
     <PlayingTrackSection inFocus={inFocus}>
-      <ModTrackImage inFocus={inFocus} src={`data:${playingTrack.imgFormat};base64,${playingTrack.imgData}`}/>
+      <ModTrackImage inFocus={inFocus} src={playingTrack.imgData !== '' ? `data:${playingTrack.imgFormat};base64,${playingTrack.imgData}` : defaultTrackImage}/>
       <ModTrackInfo inFocus={inFocus}>
         <TrackTitle>{playingTrack.title}</TrackTitle>
         <TrackArtist>{playingTrack.artists}</TrackArtist>

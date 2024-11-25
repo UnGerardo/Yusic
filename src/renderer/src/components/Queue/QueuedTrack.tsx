@@ -8,6 +8,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
 import updateTrackIndicies from "@renderer/utils/updateTrackIndicies";
+import defaultTrackImage from "../../assets/defaultTrackImage.svg";
 
 const QueuedTrack = ({ index, track, style, activeTrack }:
   {
@@ -75,7 +76,7 @@ const QueuedTrack = ({ index, track, style, activeTrack }:
       <DragHandler {...attributes} {...listeners}>
         <DragLines />
       </DragHandler>
-      <TrackImage src={`data:${track.imgFormat};base64,${track.imgData}`} />
+      <TrackImage src={track.imgData !== '' ? `data:${track.imgFormat};base64,${track.imgData}` : defaultTrackImage} />
       <TrackInfo>
         <TrackTitle>{track.title}</TrackTitle>
         <TrackArtist>{track.artists}</TrackArtist>

@@ -10,6 +10,7 @@ import { useRouteLoaderData } from "react-router-dom";
 import createReactTracks from "@renderer/utils/createReactTracks";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
 import updateTrackIndicies from "@renderer/utils/updateTrackIndicies";
+import defaultTrackImage from "../assets/defaultTrackImage.svg";
 
 const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[], track: ReactTrack, index: number, style: React.CSSProperties }): JSX.Element => {
   const $playlistBtnRef = useRef<HTMLButtonElement>(null);
@@ -57,7 +58,7 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[]
 
   return (
     <TrackSection onClick={playAtTrack} style={style}>
-      <TrackImage src={`data:${track.imgFormat};base64,${track.imgData}`}/>
+      <TrackImage src={track.imgData !== '' ? `data:${track.imgFormat};base64,${track.imgData}` : defaultTrackImage}/>
       <TrackInfo>
         <TrackTitle>{track.title}</TrackTitle>
         <TrackArtist>{track.artists}</TrackArtist>
