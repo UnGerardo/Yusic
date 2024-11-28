@@ -8,16 +8,26 @@ import { AudioSourceContext } from "@renderer/contexts/AudioSourceContext";
 import shuffleArray from "../../utils/shuffleArray";
 import createReactTracks from "@renderer/utils/createReactTracks";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
+import isSubstrIgnoreCase from "@renderer/utils/isSubStrIgnoreCase";
+import { SearchQueryContext } from "@renderer/contexts/SearchQueryContext";
 
 const Shuffle = () => {
   const { tracks }: { tracks: ReactTrack[] } = useRouteLoaderData('root') as any;
   const { setQueue, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext)
   const { setAudioSource } = useContext(AudioSourceContext);
+  const { searchQuery } = useContext(SearchQueryContext)
 
   const shuffle = (): void => {
+    let filteredTracks = tracks.filter(track => {
+      return (
+        isSubstrIgnoreCase(track.title!, searchQuery) ||
+        isSubstrIgnoreCase(track.album!, searchQuery) ||
+        isSubstrIgnoreCase(track.artists!, searchQuery)
+      );
+    });
     // Use createReactTracks() when creating a new queue
-    const newQueue: ReactTrack[] = createReactTracks(shuffleArray([...tracks]));
+    const newQueue: ReactTrack[] = createReactTracks(shuffleArray([...filteredTracks]));
 
     setQueue(newQueue);
     setQueueIndex(0);
