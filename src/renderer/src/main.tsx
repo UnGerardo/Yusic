@@ -15,8 +15,8 @@ import { BackgroundImageOpacityProvider } from './contexts/BackgroundImageOpacit
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import TrackList from './components/TrackList';
 import ErrorPage from './components/ErrorPage';
-import PlaylistTracks, { loader as playlistTracksLoader } from './components/PlaylistTracks';
 import { FocusModeHoverProvider } from './contexts/FocusModeHoverContext';
+import { PlaylistIdProvider } from './contexts/PlaylistIdContext';
 // import ArtistList from './components/ArtistList';
 
 const router = createMemoryRouter([
@@ -38,12 +38,6 @@ const router = createMemoryRouter([
         element: <div>Artists</div>,
         // element: <ArtistList />,
         errorElement: <ErrorPage />,
-      },
-      {
-        path: '/playlist/:playlistId',
-        element: <PlaylistTracks />,
-        errorElement: <ErrorPage />,
-        loader: playlistTracksLoader,
       }
     ]
   }
@@ -59,7 +53,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
               <BackgroundImageProvider>
                 <BackgroundImageOpacityProvider>
                   <FocusModeHoverProvider>
-                    <RouterProvider router={router} />
+                    <PlaylistIdProvider>
+                      <RouterProvider router={router} />
+                    </PlaylistIdProvider>
                   </FocusModeHoverProvider>
                 </BackgroundImageOpacityProvider>
               </BackgroundImageProvider>

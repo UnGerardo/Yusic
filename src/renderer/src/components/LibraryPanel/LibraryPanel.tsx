@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import NewPlaylistForm from "./NewPlaylistForm";
 import PlaylistList from "./PlaylistList";
 import { LibraryCollection } from "@renderer/assets/Misc.styled";
+import { PlaylistIdContext } from "@renderer/contexts/PlaylistIdContext";
 
 const LibraryPanel = React.memo(({ openSettings }: { openSettings: () => void }): JSX.Element => {
+  const { setPlaylistId } = useContext(PlaylistIdContext);
 
   return (
     <StyledLibraryPanel>
@@ -12,8 +14,7 @@ const LibraryPanel = React.memo(({ openSettings }: { openSettings: () => void })
         <OpenSettingsLastDot />
       </OpenSettings>
       <NewPlaylistForm />
-      {/* on click set route id to 'root' for loaderdata */}
-      <Collection to={'/'} draggable={false}>
+      <Collection onClick={() => setPlaylistId(0)} to={'/'} draggable={false}>
         <TracksIcon /> Tracks
       </Collection>
       <Collection to={'/artists'} draggable={false}>

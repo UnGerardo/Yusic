@@ -111,6 +111,24 @@ app.whenReady().then(() => {
     `).all(playlistId) as Track[];
   });
 
+  ipcMain.handle('get-playlist-track-ids', (_event): Record<number, number[]> => {
+    const playlists = db.prepare(`SELECT * FROM Playlists`).all() as Playlist[];
+
+    const allPlaylistTrackIds: Record<number, number[]> = {};
+
+    for (const playlist of playlists) {
+      const playlistTrackIds = db.prepare(`
+        SELECT musicFileId
+        FROM PlaylistTracks
+        WHERE playlistId = ?
+        ORDER BY addedAt
+      `).all(playlist.id).map((row: any) => row.musicFileId) as number[];
+      allPlaylistTrackIds[playlist.id!] = playlistTrackIds;
+    }
+
+    return allPlaylistTrackIds;
+  });
+
   ipcMain.handle('get-first-four-playlist-tracks', (_event, playlistId: number): Track[] => {
     return db.prepare(`
       SELECT mf.id, mf.path, mf.title, mf.artists, mf.album, mf.duration, mf.imgFormat, mf.imgData

@@ -24,6 +24,7 @@ const databaseApi: DatabaseApi = {
   getPlaylists: (): Promise<Playlist[]> => ipcRenderer.invoke('get-playlists'),
   createPlaylist: (name: string): Promise<void> => ipcRenderer.invoke('create-playlist', name),
   getPlaylistTracks: (playlistId: number): Promise<Track[]> => ipcRenderer.invoke('get-playlist-tracks', playlistId),
+  getPlaylistTrackIds: (): Promise<Record<number, number[]>> => ipcRenderer.invoke('get-playlist-track-ids'),
   getFirstFourPlaylistTracks: (playlistId: number): Promise<Track[]> => ipcRenderer.invoke('get-first-four-playlist-tracks', playlistId),
   addTrackToPlaylist: (playlistId: number, trackId: number): Promise<void> => ipcRenderer.invoke('add-track-to-playlist', playlistId, trackId),
 }

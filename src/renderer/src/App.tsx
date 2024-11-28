@@ -15,10 +15,11 @@ import ReactTrack from "./react-classes/ReactTrack";
 import FocusMode from "./components/FocusMode/FocusMode";
 
 export async function loader() {
+  let tracks = await window.databaseApi.getAllMusicFiles() as ReactTrack[];
   const playlists = await window.databaseApi.getPlaylists();
-  const tracks = await window.databaseApi.getAllMusicFiles() as ReactTrack[];
+  const playlistTrackIds = await window.databaseApi.getPlaylistTrackIds() as Record<number, number[]>;
   const reactTracks = tracks.map(track => new ReactTrack(track));
-  return { playlists, tracks: reactTracks };
+  return { playlists, tracks: reactTracks, playlistTrackIds };
 }
 
 export async function action({ request }) {

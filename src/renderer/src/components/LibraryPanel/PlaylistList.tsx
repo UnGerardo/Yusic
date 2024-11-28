@@ -2,12 +2,14 @@ import { useRouteLoaderData } from "react-router-dom";
 import AutoSizer from "react-virtualized-auto-sizer";
 import styled from "styled-components";
 import Playlist from "@classes/Playlist";
-import { LibraryCollection, TrackImage, WindowList } from "@renderer/assets/Misc.styled";
-import { useEffect, useState } from "react";
+import { TrackImage, WindowList } from "@renderer/assets/Misc.styled";
+import { useContext, useEffect, useState } from "react";
 import combineImages from "@renderer/utils/combineImages";
+import { PlaylistIdContext } from "@renderer/contexts/PlaylistIdContext";
 
 const PlaylistList = (): JSX.Element => {
   const { playlists }: { playlists: Playlist[] } = useRouteLoaderData('root') as any;
+  const { setPlaylistId } = useContext(PlaylistIdContext);
   const [playlistImages, setPlaylistImages] = useState<string[]>([]);
 
   useEffect(() => {
@@ -38,16 +40,15 @@ const PlaylistList = (): JSX.Element => {
             style={{ overflowX: 'hidden' }}
           >
             {({ index, style }) => (
-              // on click set route id to 'playlist' for loaderdata
-              <LibraryCollection
-                key={playlists[index]?.id}
-                to={`/playlist/${playlists[index]?.id}`}
+              <StyledPlaylist
+                key={playlists[index].id}
                 style={style}
+                onClick={() => setPlaylistId(playlists[index].id!)}
                 draggable={false}
               >
                 <TrackImage src={playlistImages[index]} />
                 {playlists[index]?.name}
-              </LibraryCollection>
+              </StyledPlaylist>
             )}
           </WindowList>
         )}
@@ -62,4 +63,18 @@ const StyledPlaylistList = styled.div`
   flex: 1;
   margin-top: 5px;
   width: 100%;
+`;
+
+const StyledPlaylist = styled.section`
+  color: white;
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  height: 50px;
+  width: 100%;
+  text-decoration: none;
+  user-select: none;
 `;

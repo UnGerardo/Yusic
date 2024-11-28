@@ -10,20 +10,25 @@ import createReactTracks from "@renderer/utils/createReactTracks";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
 import isSubstrIgnoreCase from "@renderer/utils/isSubStrIgnoreCase";
 import { SearchQueryContext } from "@renderer/contexts/SearchQueryContext";
+import { PlaylistIdContext } from "@renderer/contexts/PlaylistIdContext";
 
 const Shuffle = () => {
-  const { tracks }: { tracks: ReactTrack[] } = useRouteLoaderData('root') as any;
+  const { tracks, playlistTrackIds }: { tracks: ReactTrack[], playlistTrackIds: Record<number, number[]> } = useRouteLoaderData('root') as any;
   const { setQueue, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext)
   const { setAudioSource } = useContext(AudioSourceContext);
-  const { searchQuery } = useContext(SearchQueryContext)
+  const { searchQuery } = useContext(SearchQueryContext);
+  const { playlistId } = useContext(PlaylistIdContext);
 
   const shuffle = (): void => {
     let filteredTracks = tracks.filter(track => {
       return (
-        isSubstrIgnoreCase(track.title!, searchQuery) ||
-        isSubstrIgnoreCase(track.album!, searchQuery) ||
-        isSubstrIgnoreCase(track.artists!, searchQuery)
+        // if playlistId is 0 (meaning no playlist selected), skip the id check
+        (playlistId === 0 || playlistTrackIds[playlistId].includes(track.id)) && (
+          isSubstrIgnoreCase(track.title!, searchQuery) ||
+          isSubstrIgnoreCase(track.album!, searchQuery) ||
+          isSubstrIgnoreCase(track.artists!, searchQuery)
+        )
       );
     });
     // Use createReactTracks() when creating a new queue

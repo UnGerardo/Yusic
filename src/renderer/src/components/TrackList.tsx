@@ -8,18 +8,25 @@ import { WindowList } from '@renderer/assets/Misc.styled';
 import TrackHeader from './TrackHeader';
 import ReactTrack from '@renderer/react-classes/ReactTrack';
 import isSubstrIgnoreCase from '@renderer/utils/isSubStrIgnoreCase';
+import { PlaylistIdContext } from '@renderer/contexts/PlaylistIdContext';
 
 const TrackList = React.memo(() => {
-  const { tracks }: { tracks: ReactTrack[] } = useRouteLoaderData('root') as any;
+  const { tracks, playlistTrackIds }: { tracks: ReactTrack[], playlistTrackIds: Record<number, number[]> } = useRouteLoaderData('root') as any;
   const { searchQuery } = useContext(SearchQueryContext);
+  const { playlistId } = useContext(PlaylistIdContext);
 
   let filteredTracks = tracks.filter(track => {
     return (
-      isSubstrIgnoreCase(track.title!, searchQuery) ||
-      isSubstrIgnoreCase(track.album!, searchQuery) ||
-      isSubstrIgnoreCase(track.artists!, searchQuery)
+      // if playlistId is 0 (meaning no playlist selected), skip the id check
+      (playlistId === 0 || playlistTrackIds[playlistId].includes(track.id)) && (
+        isSubstrIgnoreCase(track.title!, searchQuery) ||
+        isSubstrIgnoreCase(track.album!, searchQuery) ||
+        isSubstrIgnoreCase(track.artists!, searchQuery)
+      )
     );
   });
+
+  console.log(filteredTracks)
 
   return (
     <>
