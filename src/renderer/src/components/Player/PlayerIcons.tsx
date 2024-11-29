@@ -1,104 +1,39 @@
 import styled from "styled-components";
 
-const OpenFocusModeBottom = styled.div`
-  &:before {
-    border: 1.5px transparent solid;
-    border-right-color: gray;
-    border-top-color: gray;
-    content: '';
-    height: 6px;
-    width: 6px;
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-  }
 
-  &:after {
-    border: 1.5px transparent solid;
-    border-left-color: gray;
-    border-top-color: gray;
-    content: '';
-    height: 6px;
-    width: 6px;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-  }
-`;
-const StyledOpenFocusMode = styled.button`
-  background: none;
-  border: none;
-  height: 20px;
-  width: 20px;
-  position: relative;
+const FocusModeSVG = styled.svg<{ inFocus: boolean }>`
+  fill: ${({inFocus}) => inFocus ? '#0d0' : '#808080'};
+  transition: 1s;
 
-  &:before {
-    border: 1.5px transparent solid;
-    border-right-color: gray;
-    border-bottom-color: gray;
-    content: '';
-    height: 6px;
-    width: 6px;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-  }
-
-  &:after {
-    border: 1.5px transparent solid;
-    border-left-color: gray;
-    border-bottom-color: gray;
-    content: '';
-    height: 6px;
-    width: 6px;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-  }
-
-  &:hover {
-    > ${OpenFocusModeBottom}::before {
-      border-right-color: white;
-      border-top-color: white;
-    }
-    > ${OpenFocusModeBottom}::after {
-      border-left-color: white;
-      border-top-color: white;
-    }
-  }
-  &:hover::before {
-    border-right-color: white;
-    border-bottom-color: white;
-  }
-  &:hover::after {
-    border-left-color: white;
-    border-bottom-color: white;
-  }
-
-  &:active {
-    > ${OpenFocusModeBottom}::before {
-      border-right-color: #666;
-      border-top-color: #666;
-    }
-    > ${OpenFocusModeBottom}::after {
-      border-left-color: #666;
-      border-top-color: #666;
-    }
-  }
-  &:active::before {
-    border-right-color: #666;
-    border-bottom-color: #666;
-  }
-  &:active::after {
-    border-left-color: #666;
-    border-bottom-color: #666;
-  }
+  &:hover { fill: ${({inFocus}) => inFocus ? '#0d0' : '#fff'}; }
+  &:active { fill: ${({inFocus}) => inFocus ? '#0d0' : '#666'}; }
 `;
 
-export const OpenFocusMode = ({ action }: { action: () => void }): JSX.Element => (
-  <StyledOpenFocusMode onClick={action}>
-    <OpenFocusModeBottom />
-  </StyledOpenFocusMode>
+export const OpenFocusMode = ({ inFocus, action }: { inFocus: boolean, action: () => void }): JSX.Element => (
+  <FocusModeSVG
+    onClick={action}
+    inFocus={inFocus}
+    height={20}
+    width={20}
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
+  >
+    {
+      inFocus ?
+      <>
+        <polygon points="0 0 0 1.5 0 6 1.5 6 1.5 1.5 6 1.5 6 0 1.5 0 0 0"/>
+        <polygon points="1.5 14 0 14 0 18.5 0 20 1.5 20 6 20 6 18.5 1.5 18.5 1.5 14"/>
+        <polygon points="18.5 18.5 14 18.5 14 20 18.5 20 20 20 20 18.5 20 14 18.5 14 18.5 18.5"/>
+        <polygon points="14 0 14 1.5 18.5 1.5 18.5 6 20 6 20 1.5 20 0 18.5 0 14 0"/>
+      </> :
+      <>
+        <polygon points="4.5 0 4.5 4.5 0 4.5 0 6 4.5 6 6 6 6 4.5 6 0 4.5 0"/>
+        <polygon points="15.5 4.5 15.5 0 14 0 14 4.5 14 6 15.5 6 20 6 20 4.5 15.5 4.5"/>
+        <polygon points="0 14 0 15.5 4.5 15.5 4.5 20 6 20 6 15.5 6 14 4.5 14 0 14"/>
+        <polygon points="15.5 14 14 14 14 15.5 14 20 15.5 20 15.5 15.5 20 15.5 20 14 15.5 14"/>
+      </>
+    }
+  </FocusModeSVG>
 );
 
 export const StepIcon = styled.button<{ facingRight: boolean }>`
@@ -207,98 +142,3 @@ export const PlayerIcon = ({ action, isPaused }: { action: () => void, isPaused:
     { isPaused ? <PlayIcon /> : <PauseIcon /> }
   </PlayerIconBackground>
 );
-
-// export const RepeatIndicator = styled.div`
-//   background-color: #0d0;
-//   border-radius: 50%;
-//   height: 4px;
-//   width: 4px;
-//   position: absolute;
-//   top: 18px;
-// `;
-
-// export const RepeatSingleIndicator = styled.div`
-//   position: relative;
-
-//   &::before {
-//     background-color: black;
-//     content: '';
-//     height: 12px;
-//     width: 10px;
-//     position: absolute;
-//     top: -13px;
-//     left: -5px;
-//   }
-
-//   &::after {
-//     color: #0d0;
-//     content: '1';
-//     font-size: 12px;
-//     font-family: Arial, Helvetica, sans-serif;
-//     position: absolute;
-//     top: -14px;
-//     left: -4px;
-//   }
-// `;
-
-// export const StyledRepeat = styled.div<{ status: RepeatStatus }>`
-//   --base-color: ${props => props.status === 'off' ? 'gray' : '#0d0'};
-//   --brighter-color: ${props => props.status === 'off' ? 'white' : '#0f0'};
-//   --darker-color: ${props => props.status === 'off' ? '#666' : '#0a0'};
-//   background: transparent;
-//   border: 2px solid var(--base-color);
-//   border-radius: 20%;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   height: 15px;
-//   width: 20px;
-//   position: relative;
-
-//   &:before {
-//     background-color: black;
-//     content: '';
-//     height: 3px;
-//     width: 6px;
-//     position: absolute;
-//     left: 4px;
-//     bottom: -2px;
-//   }
-
-//   &:after {
-//     border-top: 5px solid transparent;
-//     border-right: 6px solid var(--base-color);
-//     border-bottom: 5px solid transparent;
-//     content: '';
-//     width: 0px;
-//     height: 0px;
-//     position: absolute;
-//     right: 4px;
-//     bottom: -5.8px;
-//   }
-
-//   &:hover {
-//     border-color: var(--brighter-color);
-//     > ${RepeatIndicator} { background-color: var(--brighter-color); }
-//     > ${RepeatSingleIndicator}::after { color: var(--brighter-color); }
-//   }
-//   &:hover::after {
-//     border-right-color: var(--brighter-color);
-//   }
-
-//   &:active {
-//     border-color: var(--darker-color);
-//     > ${RepeatIndicator} { background-color: var(--darker-color); }
-//     > ${RepeatSingleIndicator}::after { color: var(--darker-color); }
-//   }
-//   &:active::after {
-//     border-right-color: var(--darker-color);
-//   }
-// `;
-
-// export const Repeat = ({ action, status }: { action: () => void, status: RepeatStatus }): JSX.Element => (
-//   <StyledRepeat onClick={action} status={status}>
-//     { status === 'off' ? <></> : <RepeatIndicator /> }
-//     { status === 'single' ? <RepeatSingleIndicator /> : <></> }
-//   </StyledRepeat>
-// );

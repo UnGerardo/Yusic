@@ -238,7 +238,7 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
       <PlayerSection inFocus={inFocus} isHovering={isHovering}>
         <audio src={audioSource} ref={$audioRef} onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd}/>
         <Controls>
-          <OpenFocusMode action={openFocusMode} />
+          <OpenFocusMode inFocus={inFocus} action={openFocusMode} />
           <StepIcon onClick={backwardStep} facingRight={false} />
           <PlayerIcon action={playPauseTrack} isPaused={isPaused} />
           <StepIcon onClick={forwardStep} facingRight={true} />

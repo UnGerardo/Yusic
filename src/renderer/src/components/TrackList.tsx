@@ -26,8 +26,6 @@ const TrackList = React.memo(() => {
     );
   });
 
-  console.log(filteredTracks)
-
   return (
     <>
       <TrackHeader />
