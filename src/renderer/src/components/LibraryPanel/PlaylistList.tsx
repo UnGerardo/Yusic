@@ -9,7 +9,7 @@ import { PlaylistIdContext } from "@renderer/contexts/PlaylistIdContext";
 
 const PlaylistList = (): JSX.Element => {
   const { playlists }: { playlists: Playlist[] } = useRouteLoaderData('root') as any;
-  const { setPlaylistId } = useContext(PlaylistIdContext);
+  const { playlistId, setPlaylistId } = useContext(PlaylistIdContext);
   const [playlistImages, setPlaylistImages] = useState<string[]>([]);
 
   useEffect(() => {
@@ -43,6 +43,7 @@ const PlaylistList = (): JSX.Element => {
               <StyledPlaylist
                 key={playlists[index].id}
                 style={style}
+                isSelected={playlists[index].id === playlistId}
                 onClick={() => setPlaylistId(playlists[index].id!)}
                 draggable={false}
               >
@@ -65,13 +66,15 @@ const StyledPlaylistList = styled.div`
   width: 100%;
 `;
 
-const StyledPlaylist = styled.section`
+const StyledPlaylist = styled.section<{ isSelected: boolean }>`
+  background-color: ${({isSelected}) => isSelected ? 'rgba(255, 255, 255, 0.15)' : 'none'};
   color: white;
   display: grid;
   grid-template-columns: 50px 1fr;
   align-items: center;
   gap: 10px;
   cursor: pointer;
+  padding: 0 0 0 10px;
   margin-bottom: 10px;
   height: 50px;
   width: 100%;

@@ -39,7 +39,6 @@ const StyledLibraryPanel = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 0 0 10px;
   height: 100%;
   min-width: 150px;
   max-width: 150px;
@@ -48,6 +47,7 @@ const StyledLibraryPanel = styled.section`
 
 const Collection = styled(LibraryCollection)`
   grid-template-columns: 30px 1fr;
+  padding: 0 0 0 10px;
   margin-bottom: 0;
   height: 35px;
 `;
