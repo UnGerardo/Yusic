@@ -7,7 +7,7 @@ import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 
 import ReactTrack from "@renderer/react-classes/ReactTrack";
 import { FocusModeHoverContext } from "@renderer/contexts/FocusModeHoverContext";
-import { OpenFocusMode, PlayerIcon, StepIcon } from "./PlayerIcons";
+import { BackwardStepIcon, ForwardStepIcon, OpenFocusMode, PlayerIcon } from "./PlayerIcons";
 import PlayerSlider from "./PlayerSlider";
 import PlayerVolume from "./PlayerVolume";
 import PlayerSpeed from "./PlayerSpeed";
@@ -239,9 +239,9 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
         <audio src={audioSource} ref={$audioRef} onLoadedMetadata={resetTrackProgress} onEnded={onAudioEnd}/>
         <Controls>
           <OpenFocusMode inFocus={inFocus} action={openFocusMode} />
-          <StepIcon onClick={backwardStep} facingRight={false} />
+          <BackwardStepIcon action={backwardStep} />
           <PlayerIcon action={playPauseTrack} isPaused={isPaused} />
-          <StepIcon onClick={forwardStep} facingRight={true} />
+          <ForwardStepIcon action={forwardStep} />
           <RepeatSVG action={changeRepeatStatus} status={repeatStatus} />
         </Controls>
         <PlayerSlider currentTime={currentTime} maxTime={maxTime} changeHandler={seeking} mouseUpHandler={seekTo} />

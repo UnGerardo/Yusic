@@ -1,9 +1,7 @@
 import styled from "styled-components";
 
-
 const FocusModeSVG = styled.svg<{ inFocus: boolean }>`
   fill: ${({inFocus}) => inFocus ? '#0d0' : '#808080'};
-  transition: 1s;
 
   &:hover { fill: ${({inFocus}) => inFocus ? '#0d0' : '#fff'}; }
   &:active { fill: ${({inFocus}) => inFocus ? '#0d0' : '#666'}; }
@@ -36,87 +34,26 @@ export const OpenFocusMode = ({ inFocus, action }: { inFocus: boolean, action: (
   </FocusModeSVG>
 );
 
-export const StepIcon = styled.button<{ facingRight: boolean }>`
-  background: none;
-  border: none;
-  width: 15px;
-  height: 15px;
-  position: relative;
-  transform: ${({facingRight}) => facingRight ? 'scale(-1)' : 'scale(1)'};
+const StepSVG = styled.svg`
+  fill: #808080;
 
-  &::before {
-    background-color: gray;
-    content: '';
-    width: 3px;
-    height: 15px;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
-  &:after {
-    border-top: 7.8px solid transparent;
-    border-right: 12px solid gray;
-    border-bottom: 7.8px solid transparent;
-    content: '';
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-  }
-
-  &:hover {
-    transform: ${({facingRight}) => facingRight ? 'scale(-1.05)' : 'rotate(1.05)'};
-  }
-  &:hover::before { background-color: white; }
-  &:hover::after { border-right-color: white; }
-
-  &:active {
-    transform: ${({facingRight}) => facingRight ? 'scale(-1)' : 'rotate(1)'}
-  }
-  &:active::before { background-color: #666; }
-  &:active::after { border-right-color: #666; }
+  &:hover { fill: #fff; }
+  &:active { fill: #666; }
 `;
 
-export const PauseIcon = styled.button`
-  background: none;
-  border: none;
-  width: 15px;
-  height: 15px;
-  position: relative;
+export const ForwardStepIcon = ({ action }: { action: () => void }): JSX.Element => (
+  <StepSVG onClick={action} height={15} width={15} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15">
+    <rect x="12.1" width="2.9" height="15"/>
+    <path d="M11.77,7.02L.85.5C.47.28,0,.55,0,.98v13.03c0,.43.47.7.85.48l10.92-6.52c.36-.22.36-.74,0-.96Z"/>
+  </StepSVG>
+);
 
-  &::before, &::after {
-    background-color: black;
-    content: '';
-    width: 5px;
-    height: 15px;
-    position: absolute;
-    top: 0;
-  }
-  &::before { left: 0; }
-  &::after { right: 0; }
-`;
-
-export const PlayIcon = styled.button`
-  background: none;
-  border: none;
-  width: 15px;
-  height: 15px;
-  position: relative;
-
-  &::before {
-    border-top: 8px solid transparent;
-    border-left: 15px solid black;
-    border-bottom: 8px solid transparent;
-    content: '';
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    left: 1px;
-    bottom: -0.5px;
-  }
-`;
+export const BackwardStepIcon = ({ action }: { action: () => void }): JSX.Element => (
+  <StepSVG onClick={action} height={15} width={15} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15">
+    <rect x="0" y="0" width="2.9" height="15"/>
+    <path d="M3.23,7.98l10.92,6.52c.37.22.85-.05.85-.48V.98c0-.43-.47-.7-.85-.48L3.23,7.02c-.36.22-.36.74,0,.96Z"/>
+  </StepSVG>
+);
 
 const PlayerIconBackground = styled.section`
   background-color: #fff;
@@ -139,6 +76,15 @@ const PlayerIconBackground = styled.section`
 
 export const PlayerIcon = ({ action, isPaused }: { action: () => void, isPaused: boolean }): JSX.Element => (
   <PlayerIconBackground onClick={action}>
-    { isPaused ? <PlayIcon /> : <PauseIcon /> }
+    <svg height={15} width={15} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15">
+      {
+        isPaused ?
+        <path d="M14.67,6.98L.81.06C.44-.13,0,.14,0,.56v13.84c0,.42.44.69.81.5l13.86-6.92c.41-.21.41-.79,0-1Z"/> :
+        <>
+          <rect width="5" height="15"/>
+          <rect x="10" width="5" height="15"/>
+        </>
+      }
+    </svg>
   </PlayerIconBackground>
 );
