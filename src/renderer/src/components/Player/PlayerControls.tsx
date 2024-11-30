@@ -12,6 +12,7 @@ import PlayerSlider from "./PlayerSlider";
 import PlayerVolume from "./PlayerVolume";
 import PlayerSpeed from "./PlayerSpeed";
 import RepeatSVG from "./RepeatSVG";
+import { PlayerTimeContext } from "@renderer/contexts/PlayerTimeContext";
 
 const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocusMode: () => void }): JSX.Element => {
   const $audioRef = useRef<HTMLAudioElement>(null);
@@ -19,11 +20,10 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
   const { queue, queueIndex, setQueueIndex } = useContext(QueueContext);
   const { playingTrack, setPlayingTrack } = useContext(PlayingTrackContext);
   const { isHovering } = useContext(FocusModeHoverContext);
+  const {currentTime, setCurrentTime, maxTime, setMaxTime } = useContext(PlayerTimeContext);
 
   const [updateProgressInterval, setUpdateProgressInterval] = useState<NodeJS.Timeout | undefined>(undefined);
   const [isPaused, setIsPaused] = useState<boolean>(true);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [maxTime, setMaxTime] = useState(0);
   const [volume, setVolume] = useState(1);
   const [prevVolume, setPrevVolume] = useState(1);
   const [speed, setSpeed] = useState(1);
