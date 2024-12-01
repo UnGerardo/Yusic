@@ -76,7 +76,7 @@ const QueueDnd = (): JSX.Element => {
 export default QueueDnd;
 
 const StyledQueueDnd = styled.section<{ display: string }>`
-  border-left: 1px white solid;
+  /* border-left: 1px white solid; */
   display: ${props => props.display};
   flex-direction: column;
   overflow: hidden;

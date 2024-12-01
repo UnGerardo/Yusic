@@ -12,7 +12,7 @@ const PlayingTrack = React.memo(({ inFocus }: { inFocus: boolean }): JSX.Element
 
   return playingTrack ?
     <PlayingTrackSection inFocus={inFocus} trackProgress={currentTime/maxTime}>
-      <ModTrackImage inFocus={inFocus} src={playingTrack.imgData !== '' ? `data:${playingTrack.imgFormat};base64,${playingTrack.imgData}` : defaultTrackImage}/>
+      <ModTrackImage src={playingTrack.imgData !== '' ? `data:${playingTrack.imgFormat};base64,${playingTrack.imgData}` : defaultTrackImage}/>
       <ModTrackInfo inFocus={inFocus}>
         <TrackTitle>{playingTrack.title}</TrackTitle>
         <TrackArtist>{playingTrack.artists}</TrackArtist>
@@ -42,13 +42,17 @@ const PlayingTrackSection = styled.section<{ inFocus: boolean, trackProgress: nu
       `linear-gradient(
         to right,
         transparent 0%,
-        transparent ${trackProgress * 100}%,
+        transparent ${trackProgress * 95}%,
+        rgba(0, 0, 0, 0.1) ${trackProgress * 96}%,
+        rgba(0, 0, 0, 0.2) ${trackProgress * 97}%,
+        rgba(0, 0, 0, 0.3) ${trackProgress * 98}%,
+        rgba(0, 0, 0, 0.4) ${trackProgress * 99}%,
         rgba(0, 0, 0, 0.5) ${trackProgress * 100}%,
         rgba(0, 0, 0, 0.5) 100%
       );` :
       'none'
     };
-    border-radius: ${({inFocus}) => inFocus ? '10%' : '5px'};
+    border-radius: 10%;
     content: '';
     position: absolute;
     top: 0px;
@@ -59,8 +63,8 @@ const PlayingTrackSection = styled.section<{ inFocus: boolean, trackProgress: nu
   }
 `;
 
-const ModTrackImage = styled(TrackImage)<{ inFocus: boolean }>`
-  border-radius: ${({inFocus}) => inFocus ? '10%' : '5px'};
+const ModTrackImage = styled(TrackImage)`
+  border-radius: 10%;
 `;
 
 const ModTrackInfo = styled(TrackInfo)<{ inFocus: boolean }>`

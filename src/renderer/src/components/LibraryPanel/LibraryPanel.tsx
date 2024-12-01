@@ -35,7 +35,7 @@ const LibraryPanel = React.memo(({ openSettings }: { openSettings: () => void })
 export default LibraryPanel;
 
 const StyledLibraryPanel = styled.section`
-  border-right: 1px white solid;
+  /* border-right: 1px white solid; */
   display: flex;
   flex-direction: column;
   align-items: center;
