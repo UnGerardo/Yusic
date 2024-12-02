@@ -12,7 +12,7 @@ import isSubstrIgnoreCase from "@renderer/utils/isSubStrIgnoreCase";
 import { SearchQueryContext } from "@renderer/contexts/SearchQueryContext";
 import { PlaylistIdContext } from "@renderer/contexts/PlaylistIdContext";
 
-const Shuffle = () => {
+const ShuffleSVG = () => {
   const { tracks, playlistTrackIds }: { tracks: ReactTrack[], playlistTrackIds: Record<number, number[]> } = useRouteLoaderData('root') as any;
   const { setQueue, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext)
@@ -41,96 +41,29 @@ const Shuffle = () => {
   }
 
   return (
-    <ShuffleBody onClick={shuffle}>
-      <ArrowHeads />
-    </ShuffleBody>
+    <StyledSVG
+    onClick={shuffle}
+      width={35}
+      height={29}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 35 29"
+    >
+      <path d="M5.37,19.96c-.22.23-.49.35-.77.35H1.21c-.67,0-1.21.69-1.21,1.54v2.58c0,.85.54,1.54,1.21,1.54h4.62c.28,0,.55-.13.77-.35l5.49-5.8-3.28-3.49-3.44,3.64Z"/>
+      <path d="M34.28,4.6L26.86.2c-.96-.57-2.17.14-2.17,1.28v1.69h-3c-.28,0-.55.13-.77.35l-5.5,5.81,3.28,3.49,3.45-3.65c.22-.23.49-.35.77-.35h1.77v1.45c0,1.14,1.2,1.86,2.17,1.28l7.41-4.4c.96-.57.96-2,0-2.57Z"/>
+      <path d="M34.28,21.83l-7.41-4.4c-.96-.57-2.17.14-2.17,1.28v1.54h-1.77c-.28,0-.55-.13-.77-.35L6.6,3.47c-.22-.23-.49-.35-.77-.35H1.21c-.67,0-1.21.69-1.21,1.54v2.58c0,.85.54,1.54,1.21,1.54h3.39c.28,0,.55.13.77.35l15.56,16.44c.22.23.49.35.77.35h3v1.6c0,1.14,1.2,1.86,2.17,1.28l7.41-4.4c.96-.57.96-2,0-2.57Z"/>
+    </StyledSVG>
   )
 }
 
-export default Shuffle;
+export default ShuffleSVG;
 
-const ShuffleBody = styled.button`
-  background: none;
-  border: none;
-  position: relative;
-  width: 50px;
-  height: 50px;
-  transform: scale(0.7);
 
-  &::before,
-  &::after {
-    content: "";
-    box-sizing: content-box;
-    position: absolute;
-    top: 5px;
-    left: 0;
-    width: 25px;
-    height: 25px;
-    border: 8px solid gray;
-    border-radius: 50px 50px 0 50px;
-    transform: rotate(-45deg);
-  }
-  &::before {
-    border-top-color: transparent;
-    border-left-color: transparent;
-    left: -21px;
-  }
-  &::after {
-    border-top-color: transparent;
-    border-right-color: transparent;
-    left: 26px;
-    border-radius: 50px 50px 50px 0;
-    transform: rotate(45deg);
-  }
+const StyledSVG = styled.svg`
+  --base-color: gray;
+  --brighter-color: white;
+  --darker-color: #666;
+  fill: var(--base-color);
 
-  &:hover {
-    &::before {
-      border-bottom-color: white;
-      border-right-color: white;
-    }
-    &::after {
-      border-bottom-color: white;
-      border-left-color: white;
-    }
-    & ::after,
-    & ::before { border-left-color: white; }
-  }
-
-  &:active {
-    &::before {
-      border-bottom-color: #666;
-      border-right-color: #666;
-    }
-    &::after {
-      border-bottom-color: #666;
-      border-left-color: #666;
-    }
-    & ::after,
-    & ::before { border-left-color: #666; }
-  }
-`;
-
-const ArrowHeads = styled.div`
-  &::before {
-    border-top: 8px solid transparent;
-    border-left: 12px solid gray;
-    border-bottom: 8px solid transparent;
-    content: '';
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    right: -8px;
-    top: 0.8px;
-  }
-  &::after {
-    border-top: 8px solid transparent;
-    border-left: 12px solid gray;
-    border-bottom: 8px solid transparent;
-    content: '';
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    right: -8px;
-    bottom: 0.2px;
-  }
+  &:hover { fill: var(--brighter-color); }
+  &:active { fill: var(--darker-color); }
 `;

@@ -5,7 +5,6 @@ import QueueList from "./QueueList";
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
-import QueueHeader from "./QueueHeader";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
 import updateTrackIndicies from "@renderer/utils/updateTrackIndicies";
 
@@ -53,7 +52,6 @@ const QueueDnd = (): JSX.Element => {
 
   return (
     <StyledQueueDnd display={ queue.length > 0 ? 'flex' : 'none' }>
-      <QueueHeader />
       <DndContainer>
         <DndContext
           sensors={sensors}
@@ -76,7 +74,6 @@ const QueueDnd = (): JSX.Element => {
 export default QueueDnd;
 
 const StyledQueueDnd = styled.section<{ display: string }>`
-  /* border-left: 1px white solid; */
   display: ${props => props.display};
   flex-direction: column;
   overflow: hidden;

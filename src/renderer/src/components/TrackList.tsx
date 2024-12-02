@@ -5,7 +5,6 @@ import { useRouteLoaderData } from 'react-router-dom';
 import { SearchQueryContext } from '@contexts/SearchQueryContext';
 import TrackComponent from "./TrackComponent";
 import { WindowList } from '@renderer/assets/Misc.styled';
-import TrackHeader from './TrackHeader';
 import ReactTrack from '@renderer/react-classes/ReactTrack';
 import isSubstrIgnoreCase from '@renderer/utils/isSubStrIgnoreCase';
 import { PlaylistIdContext } from '@renderer/contexts/PlaylistIdContext';
@@ -28,7 +27,6 @@ const TrackList = React.memo(() => {
 
   return (
     <>
-      <TrackHeader />
       <div>
         <AutoSizer>
           {({ height, width }) => (

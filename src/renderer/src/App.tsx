@@ -175,7 +175,7 @@ const Content = styled.section<{ opacity: number, scale: number }>`
 
 const Main = styled.main`
   display: grid;
-  grid-template-rows: 50px 27px 1fr;
+  grid-template-rows: 50px 1fr;
   height: 100%;
   width: 100%;
   z-index: 3;

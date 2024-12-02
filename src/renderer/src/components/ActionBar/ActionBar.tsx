@@ -1,11 +1,9 @@
 import styled from "styled-components";
 import SearchQuery from "./SearchQuery";
-import Shuffle from "./Shuffle";
 
 const ActionBar = (): JSX.Element => (
   <StyledActionBar>
     <SearchQuery />
-    <Shuffle />
   </StyledActionBar>
 );
 

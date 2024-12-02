@@ -4,15 +4,20 @@ import NewPlaylistForm from "./NewPlaylistForm";
 import PlaylistList from "./PlaylistList";
 import { LibraryCollection } from "@renderer/assets/Misc.styled";
 import { PlaylistIdContext } from "@renderer/contexts/PlaylistIdContext";
+import { ClearQueue } from "./ClearQueue";
+import OpenSettingsSVG from "./OpenSettingsSVG";
+import ShuffleSVG from "./ShuffleSVG";
 
 const LibraryPanel = React.memo(({ openSettings }: { openSettings: () => void }): JSX.Element => {
   const { setPlaylistId } = useContext(PlaylistIdContext);
 
   return (
     <StyledLibraryPanel>
-      <OpenSettings onClick={openSettings}>
-        <OpenSettingsLastDot />
-      </OpenSettings>
+      <Actions>
+        <OpenSettingsSVG action={openSettings} />
+        <ShuffleSVG />
+        <ClearQueue />
+      </Actions>
       <NewPlaylistForm />
       <Collection onClick={() => setPlaylistId(0)} to={'/'} draggable={false}>
         <TracksIcon /> Tracks
@@ -35,7 +40,6 @@ const LibraryPanel = React.memo(({ openSettings }: { openSettings: () => void })
 export default LibraryPanel;
 
 const StyledLibraryPanel = styled.section`
-  /* border-right: 1px white solid; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,54 +49,19 @@ const StyledLibraryPanel = styled.section`
   z-index: 3;
 `;
 
+const Actions = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin: 10px 0 0 0;
+`;
+
 const Collection = styled(LibraryCollection)`
   grid-template-columns: 30px 1fr;
   padding: 0 0 0 10px;
   margin-bottom: 0;
   height: 35px;
-`;
-
-const OpenSettingsLastDot = styled.div`
-  background-color: gray;
-  border-radius: 5px;
-  height: 5px;
-  width: 5px;
-  position: absolute;
-  left: 20px;
-`;
-
-const OpenSettings = styled.button`
-  background: none;
-  border: none;
-  height: 25px;
-  width: 25px;
-  position: relative;
-
-  &::before, &::after {
-    background-color: gray;
-    border-radius: 5px;
-    content: '';
-    height: 5px;
-    width: 5px;
-    position: absolute;
-  }
-
-  &::before { left: 0; }
-  &::after { left: 10px; }
-
-  &:hover {
-    ${OpenSettingsLastDot} {
-      background-color: white;
-    }
-  }
-  &:hover::before, &:hover::after { background-color: white; }
-
-  &:active {
-    ${OpenSettingsLastDot} {
-      background-color: #666;
-    }
-  }
-  &:active::before, &:active::after { background-color: #666; }
 `;
 
 const TracksIcon = styled.div`
