@@ -42,11 +42,7 @@ const PlayingTrackSection = styled.section<{ inFocus: boolean, trackProgress: nu
       `linear-gradient(
         to right,
         transparent 0%,
-        transparent ${trackProgress * 95}%,
-        rgba(0, 0, 0, 0.1) ${trackProgress * 96}%,
-        rgba(0, 0, 0, 0.2) ${trackProgress * 97}%,
-        rgba(0, 0, 0, 0.3) ${trackProgress * 98}%,
-        rgba(0, 0, 0, 0.4) ${trackProgress * 99}%,
+        transparent ${trackProgress * 100}%,
         rgba(0, 0, 0, 0.5) ${trackProgress * 100}%,
         rgba(0, 0, 0, 0.5) 100%
       );` :
@@ -70,6 +66,13 @@ const ModTrackImage = styled(TrackImage)`
 const ModTrackInfo = styled(TrackInfo)<{ inFocus: boolean }>`
   align-self: flex-end;
   padding-bottom: ${({inFocus}) => inFocus ? '10px' : '6.805px'};
+  width: fit-content;
+
+  :hover {
+    background-color: black;
+    padding: 0 10px;
+    border-radius: 5px;
+  }
 
   ${TrackTitle} {
     font-size: ${({inFocus}) => inFocus ? '20px' : '15px'};
