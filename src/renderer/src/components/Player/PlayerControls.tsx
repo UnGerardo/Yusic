@@ -20,7 +20,6 @@ import getRandomInt from "@renderer/utils/getRandomInt";
 const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocusMode: () => void }): JSX.Element => {
   const $audioRef = useRef<HTMLAudioElement>(null);
   const { tracks }: { tracks: ReactTrack[] } = useRouteLoaderData('root') as any;
-  const { setQueue } = useContext(QueueContext);
   const { audioSource, setAudioSource } = useContext(AudioSourceContext);
   const { queue, queueIndex, setQueueIndex } = useContext(QueueContext);
   const { playingTrack, setPlayingTrack } = useContext(PlayingTrackContext);
@@ -246,8 +245,7 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
   const toggleInfiniPlay = (): void => {
     setInfiniPlay(status => {
       // setting to 'on' (true)
-      if (!status) {
-        setQueue([]);
+      if (!status && !queue.length) {
         playRandomSong();
       }
       return !status;
