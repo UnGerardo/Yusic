@@ -13,9 +13,14 @@ import PlayerVolume from "./PlayerVolume";
 import PlayerSpeed from "./PlayerSpeed";
 import RepeatSVG from "./RepeatSVG";
 import { PlayerTimeContext } from "@renderer/contexts/PlayerTimeContext";
+import InfiniPlaySVG from "./InfiniPlaySVG";
+import { useRouteLoaderData } from "react-router-dom";
+import getRandomInt from "@renderer/utils/getRandomInt";
 
 const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocusMode: () => void }): JSX.Element => {
   const $audioRef = useRef<HTMLAudioElement>(null);
+  const { tracks }: { tracks: ReactTrack[] } = useRouteLoaderData('root') as any;
+  const { setQueue } = useContext(QueueContext);
   const { audioSource, setAudioSource } = useContext(AudioSourceContext);
   const { queue, queueIndex, setQueueIndex } = useContext(QueueContext);
   const { playingTrack, setPlayingTrack } = useContext(PlayingTrackContext);
@@ -28,6 +33,7 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
   const [prevVolume, setPrevVolume] = useState(1);
   const [speed, setSpeed] = useState(1);
   const [repeatStatus, setRepeatStatus] = useState<RepeatStatus>('off');
+  const [infiniPlay, setInfiniPlay] = useState<boolean>(false);
 
   useEffect(() => {
     if (audioSource === '') return setIsPaused(true);
@@ -79,14 +85,16 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
 
   const resetTrackProgress = () => {
     const { current: audio } = $audioRef;
+    setCurrentTime(0);
     setMaxTime(audio!.duration);
     setIsPaused(false);
     setUpdateProgressInterval((oldInterval) => {
       clearInterval(oldInterval);
       return setInterval(() => setCurrentTime(audio!.currentTime), 499);
     });
-    audio!.play();
+    audio!.currentTime = 0;
     audio!.playbackRate = speed;
+    audio!.play();
   }
 
   const seeking = (event) => {
@@ -126,6 +134,11 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
       return;
     }
 
+    if (infiniPlay) {
+      playRandomSong();
+      return;
+    }
+
     if (queueIndex === queue.length - 1) {
       if (repeatStatus === 'queue') {
         const queueIndex = 0;
@@ -138,7 +151,7 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
         } else {
           setAudioSource(nextTrack!.path);
         }
-        return
+        return;
       }
 
       setIsPaused(true);
@@ -160,7 +173,7 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
   }
 
   const backwardStep = () => {
-    if (currentTime > 20 || queueIndex === 0) {
+    if (currentTime > 20 || queueIndex === 0 || infiniPlay) {
       setCurrentTime(0);
       const { current: audio } = $audioRef;
       audio!.currentTime = 0;
@@ -179,6 +192,11 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
   }
 
   const forwardStep = () => {
+    if (infiniPlay) {
+      playRandomSong();
+      return;
+    }
+
     if (queueIndex === queue.length - 1) return;
 
     const queueIndexInc = queueIndex + 1;
@@ -225,12 +243,33 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
     }
   }
 
+  const toggleInfiniPlay = (): void => {
+    setInfiniPlay(status => {
+      // setting to 'on' (true)
+      if (!status) {
+        setQueue([]);
+        playRandomSong();
+      }
+      return !status;
+    });
+  }
+
   const changeSpeed = (e): void => {
     const { current: audio } = $audioRef;
     const element = e.target as HTMLElement
     const speed = parseFloat(element.getAttribute('data-speed') || '');
     setSpeed(speed);
     audio!.playbackRate = speed;
+  }
+
+  const playRandomSong = (): void => {
+    const randomSongIndex = getRandomInt(0, tracks.length);
+    setPlayingTrack(tracks[randomSongIndex]);
+    if (playingTrack && tracks[randomSongIndex].path === playingTrack.path) {
+      resetTrackProgress();
+    } else {
+      setAudioSource(tracks[randomSongIndex]!.path);
+    }
   }
 
   return (
@@ -247,6 +286,7 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
         <PlayerSlider currentTime={currentTime} maxTime={maxTime} changeHandler={seeking} mouseUpHandler={seekTo} />
       </PlayerSection>
       <ExtraControls inFocus={inFocus} isHovering={isHovering}>
+        <InfiniPlaySVG action={toggleInfiniPlay} on={infiniPlay} />
         <PlayerSpeed speed={speed} optionClickHandler={changeSpeed} />
         <PlayerVolume volume={volume} iconClickHandler={muteAudio} sliderChangeHandler={adjustVolume} />
       </ExtraControls>
