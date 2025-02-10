@@ -5,11 +5,13 @@ import { AudioSourceContext } from "@renderer/contexts/AudioSourceContext";
 import { PlayingTrackContext } from "@renderer/contexts/PlayingTrackContext";
 
 export const ClearQueue = (): JSX.Element => {
-  const { setQueue } = useContext(QueueContext);
+  const { queue, setQueue } = useContext(QueueContext);
   const { setAudioSource } = useContext(AudioSourceContext);
-  const { playingTrack, setPlayingTrack } = useContext(PlayingTrackContext)
+  const { setPlayingTrack } = useContext(PlayingTrackContext)
 
   const clearQueue = (): void => {
+    if (!queue.length) return;
+
     setQueue([]);
     setAudioSource('');
     setPlayingTrack(null);
@@ -17,7 +19,7 @@ export const ClearQueue = (): JSX.Element => {
 
   return (
     <ClearQueueIcon
-      isQueueEmpty={!playingTrack}
+      isQueueEmpty={!queue.length}
       onClick={clearQueue}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 576 512"
