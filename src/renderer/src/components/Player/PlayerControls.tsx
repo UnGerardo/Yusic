@@ -252,7 +252,7 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
   const toggleInfiniPlay = (): void => {
     setInfiniPlay(status => {
       // setting to 'on' (true)
-      if (!status && !queue.length) {
+      if (!status && !playingTrack) {
         playRandomSong();
       }
       return !status;
