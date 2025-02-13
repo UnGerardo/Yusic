@@ -138,6 +138,13 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
       return;
     }
 
+    if (!queue.length) {
+      setIsPaused(true);
+      setCurrentTime(0);
+      clearInterval(updateProgressInterval);
+      return;
+    }
+
     if (queueIndex === queue.length - 1) {
       if (repeatStatus === 'queue') {
         const queueIndex = 0;
@@ -196,7 +203,7 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
       return;
     }
 
-    if (queueIndex === queue.length - 1) return;
+    if (!queue.length || queueIndex === queue.length - 1) return;
 
     const queueIndexInc = queueIndex + 1;
     setQueueIndex(queueIndexInc);
