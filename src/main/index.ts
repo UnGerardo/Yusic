@@ -243,6 +243,7 @@ app.whenReady().then(() => {
 
         switch (fileExtension) {
           case 'mp3':
+          case 'mp4':
           case 'ogg':
             audioFiles.push(fullPath);
         }
