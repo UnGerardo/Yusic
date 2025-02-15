@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { FixedSizeList } from "react-window";
 import styled, { css } from "styled-components";
 
@@ -85,7 +84,7 @@ export const StyledSetting = styled.section`
   user-select: none;
 `;
 
-export const LibraryCollection = styled(Link)`
+export const LibraryCollection = styled.section`
   color: white;
   display: grid;
   grid-template-columns: 50px 1fr;

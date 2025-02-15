@@ -1,23 +1,24 @@
-import { useRouteLoaderData } from "react-router-dom";
 import AutoSizer from "react-virtualized-auto-sizer";
 import styled from "styled-components";
-import Playlist from "@classes/Playlist";
 import { TrackImage, WindowList } from "@renderer/assets/Misc.styled";
 import { useContext, useEffect, useState } from "react";
 import combineImages from "@renderer/utils/combineImages";
 import { PlaylistIdContext } from "@renderer/contexts/PlaylistIdContext";
+import { PlaylistsContext } from "@renderer/contexts/PlaylistsContext";
 
 const PlaylistList = (): JSX.Element => {
-  const { playlists }: { playlists: Playlist[] } = useRouteLoaderData('root') as any;
+  const { playlists } = useContext(PlaylistsContext);
   const { playlistId, setPlaylistId } = useContext(PlaylistIdContext);
   const [playlistImages, setPlaylistImages] = useState<string[]>([]);
+
+  const playlistIds: number[] = playlists ? Object.keys(playlists).map(key => parseInt(key)) : [];
 
   useEffect(() => {
     async function getCompositeImages() {
       const compositeImages: string[] = [];
 
-      for (const playlist of playlists) {
-        const tracks = await window.databaseApi.getFirstFourPlaylistTracks(playlist.id!);
+      for (const playlistId in playlists) {
+        const tracks = await window.databaseApi.getFirstFourPlaylistTracks(parseInt(playlistId));
         const images = tracks.map(track => `data:${track.imgFormat};base64,${track.imgData}`);
         compositeImages.push(await combineImages(images));
       }
@@ -29,32 +30,34 @@ const PlaylistList = (): JSX.Element => {
   }, []);
 
   return (
+    playlists ?
     <StyledPlaylistList>
       <AutoSizer>
         {({ height, width }) => (
           <WindowList
             height={height}
-            itemCount={playlists.length}
+            itemCount={playlistIds.length}
             itemSize={60}
             width={width}
             style={{ overflowX: 'hidden' }}
           >
             {({ index, style }) => (
               <StyledPlaylist
-                key={playlists[index].id}
+                key={playlistIds[index]}
                 style={style}
-                isSelected={playlists[index].id === playlistId}
-                onClick={() => setPlaylistId(playlists[index].id!)}
+                isSelected={playlistIds[index] === playlistId}
+                onClick={() => setPlaylistId(playlistIds[index])}
                 draggable={false}
               >
                 <TrackImage src={playlistImages[index]} />
-                {playlists[index]?.name}
+                {playlists ? playlists[playlistIds[index]].name : ''}
               </StyledPlaylist>
             )}
           </WindowList>
         )}
       </AutoSizer>
-    </StyledPlaylistList>
+    </StyledPlaylistList> :
+    <p>Loading</p>
   );
 }
 

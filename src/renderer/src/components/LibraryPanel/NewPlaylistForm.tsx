@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Form } from "react-router-dom";
 import styled from "styled-components";
 
 const NewPlaylistForm = (): JSX.Element => {
@@ -36,7 +35,7 @@ const AddPlaylist = styled.button`
   padding: 0;
 `;
 
-const StyledNewPlaylistForm = styled(Form)`
+const StyledNewPlaylistForm = styled.form`
   background: none;
   border: 1px solid black;
   border-radius: 5px;

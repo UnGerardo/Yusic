@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { useRouteLoaderData } from "react-router-dom";
 import styled from "styled-components";
 
 import { QueueContext } from "@renderer/contexts/QueueContext";
@@ -11,9 +10,12 @@ import ReactTrack from "@renderer/react-classes/ReactTrack";
 import isSubstrIgnoreCase from "@renderer/utils/isSubStrIgnoreCase";
 import { SearchQueryContext } from "@renderer/contexts/SearchQueryContext";
 import { PlaylistIdContext } from "@renderer/contexts/PlaylistIdContext";
+import { TracksContext } from "@renderer/contexts/TracksContext";
+import { PlaylistsContext } from "@renderer/contexts/PlaylistsContext";
 
 const ShuffleSVG = () => {
-  const { tracks, playlistTrackIds }: { tracks: ReactTrack[], playlistTrackIds: Record<number, number[]> } = useRouteLoaderData('root') as any;
+  const { tracks } = useContext(TracksContext);
+  const { playlists } = useContext(PlaylistsContext);
   const { setQueue, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext)
   const { setAudioSource } = useContext(AudioSourceContext);
@@ -21,16 +23,19 @@ const ShuffleSVG = () => {
   const { playlistId } = useContext(PlaylistIdContext);
 
   const shuffle = (): void => {
-    let filteredTracks = tracks.filter(track => {
-      return (
-        // if playlistId is 0 (meaning no playlist selected), skip the id check
-        (playlistId === 0 || playlistTrackIds[playlistId].includes(track.id)) && (
-          isSubstrIgnoreCase(track.title!, searchQuery) ||
-          isSubstrIgnoreCase(track.album!, searchQuery) ||
-          isSubstrIgnoreCase(track.artists!, searchQuery)
-        )
-      );
-    });
+    let filteredTracks = !tracks ? [] :
+      tracks.filter(track => {
+        return (
+          // if playlistId is 0 (meaning no playlist selected), skip the id check
+          (playlistId === 0 ||
+            (playlists && playlists[playlistId].trackIds.includes(track.id)))
+            && (
+            isSubstrIgnoreCase(track.title!, searchQuery) ||
+            isSubstrIgnoreCase(track.album!, searchQuery) ||
+            isSubstrIgnoreCase(track.artists!, searchQuery)
+          )
+        );
+      });
     // Use createReactTracks() when creating a new queue
     const newQueue: ReactTrack[] = createReactTracks(shuffleArray([...filteredTracks]));
 
@@ -42,7 +47,7 @@ const ShuffleSVG = () => {
 
   return (
     <StyledSVG
-    onClick={shuffle}
+      onClick={shuffle}
       width={35}
       height={29}
       xmlns="http://www.w3.org/2000/svg"

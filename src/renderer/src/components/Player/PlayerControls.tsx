@@ -14,12 +14,12 @@ import PlayerSpeed from "./PlayerSpeed";
 import RepeatSVG from "./RepeatSVG";
 import { PlayerTimeContext } from "@renderer/contexts/PlayerTimeContext";
 import InfiniPlaySVG from "./InfiniPlaySVG";
-import { useRouteLoaderData } from "react-router-dom";
 import getRandomInt from "@renderer/utils/getRandomInt";
+import { TracksContext } from "@renderer/contexts/TracksContext";
 
 const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocusMode: () => void }): JSX.Element => {
   const $audioRef = useRef<HTMLAudioElement>(null);
-  const { tracks }: { tracks: ReactTrack[] } = useRouteLoaderData('root') as any;
+  const { tracks } = useContext(TracksContext);
   const { audioSource, setAudioSource } = useContext(AudioSourceContext);
   const { queue, queueIndex, setQueueIndex } = useContext(QueueContext);
   const { playingTrack, setPlayingTrack } = useContext(PlayingTrackContext);
@@ -268,12 +268,12 @@ const PlayerControls = ({ inFocus, openFocusMode }: { inFocus: boolean, openFocu
   }
 
   const playRandomSong = (): void => {
-    const randomSongIndex = getRandomInt(0, tracks.length);
-    setPlayingTrack(tracks[randomSongIndex]);
-    if (playingTrack && tracks[randomSongIndex].path === playingTrack.path) {
+    const randomSongIndex = getRandomInt(0, tracks!.length);
+    setPlayingTrack(tracks![randomSongIndex]);
+    if (playingTrack && tracks![randomSongIndex].path === playingTrack.path) {
       resetTrackProgress();
     } else {
-      setAudioSource(tracks[randomSongIndex]!.path);
+      setAudioSource(tracks![randomSongIndex]!.path);
     }
   }
 

@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
 import Setting from '../../classes/Setting';
@@ -13,48 +12,29 @@ import Settings from "./components/Settings/Settings";
 import QueueDnd from "./components/Queue/Queue";
 import ReactTrack from "./react-classes/ReactTrack";
 import FocusMode from "./components/FocusMode/FocusMode";
-
-export async function loader() {
-  let tracks = await window.databaseApi.getAllMusicFiles() as ReactTrack[];
-  const playlists = await window.databaseApi.getPlaylists();
-  const playlistTrackIds = await window.databaseApi.getPlaylistTrackIds() as Record<number, number[]>;
-  const reactTracks = tracks.map(track => new ReactTrack(track));
-  return { playlists, tracks: reactTracks, playlistTrackIds };
-}
-
-export async function action({ request }) {
-  const formData = await request.formData();
-  const action = formData.get('action');
-
-  if (action === 'new-playlist') {
-    const name = formData.get('name');
-    await window.databaseApi.createPlaylist(name);
-    return null;
-  } else if (action === 'add-tracks') {
-    const filePath = formData.get('file') as string;
-
-    if (!filePath || filePath.length === 0) {
-      alert('No file selected.');
-    } else {
-      await window.databaseApi.addTracks(filePath)
-    }
-
-    return null;
-  }
-  alert(`Unknown form action: ${action}`);
-  return null;
-}
+import TrackList from "./components/TrackList";
+import { TracksContext } from "./contexts/TracksContext";
+import { PlaylistsContext } from "./contexts/PlaylistsContext";
 
 const App = (): JSX.Element => {
   const [isSettingsActive, setIsSettingsActive] = useState(false);
   const [contentOpacity, setContentOpacity] = useState(1);
   const [contentScale, setContentScale] = useState(1);
   const [isFocusModeActive, setIsFocusModeActive] = useState(false);
+  const { setTracks } = useContext(TracksContext);
+  const { setPlaylists } = useContext(PlaylistsContext);
   const { backgroundColor, setBackgroundColor } = useContext(BackgroundColorContext);
   const { backgroundImage, setBackgroundImage } = useContext(BackgroundImageContext);
   const { backgroundImageOpacity, setBackgroundImageOpacity } = useContext(BackgroundImageOpacityContext);
 
   useEffect(() => {
+    window.databaseApi.getAllMusicFiles().then((tracks: ReactTrack[]) => {
+      setTracks(tracks.map(track => new ReactTrack(track)));
+    });
+    window.databaseApi.getPlaylists().then((playlists: object) => {
+      setPlaylists(playlists);
+    })
+
     window.databaseApi.getAppSettings().then((settings: Setting[]) => {
       const settingHandlers = {
         'bg-color': setBackgroundColor,
@@ -100,7 +80,7 @@ const App = (): JSX.Element => {
           <LibraryPanel openSettings={openSettings} />
           <Main>
             <ActionBar />
-            <Outlet />
+            <TrackList />
           </Main>
           <QueueDnd />
         </Content>

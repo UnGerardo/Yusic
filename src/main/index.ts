@@ -82,10 +82,6 @@ app.whenReady().then(() => {
     )
   `).run();
 
-  ipcMain.handle('get-playlists', (): Playlist[] => {
-    return db.prepare('SELECT * FROM Playlists').all() as Playlist[];
-  });
-
   ipcMain.handle('create-playlist', (_event, name: string): void => {
     db.prepare('INSERT INTO Playlists (name) VALUES (?)').run(name);
   });
@@ -111,10 +107,9 @@ app.whenReady().then(() => {
     `).all(playlistId) as Track[];
   });
 
-  ipcMain.handle('get-playlist-track-ids', (_event): Record<number, number[]> => {
+  ipcMain.handle('get-playlists', (_event): object => {
     const playlists = db.prepare(`SELECT * FROM Playlists`).all() as Playlist[];
-
-    const allPlaylistTrackIds: Record<number, number[]> = {};
+    const playlistObject: object = {};
 
     for (const playlist of playlists) {
       const playlistTrackIds = db.prepare(`
@@ -123,10 +118,14 @@ app.whenReady().then(() => {
         WHERE playlistId = ?
         ORDER BY addedAt
       `).all(playlist.id).map((row: any) => row.musicFileId) as number[];
-      allPlaylistTrackIds[playlist.id!] = playlistTrackIds;
+
+      playlistObject[playlist.id] = {
+        name: playlist.name,
+        trackIds: playlistTrackIds
+      }
     }
 
-    return allPlaylistTrackIds;
+    return playlistObject;
   });
 
   ipcMain.handle('get-first-four-playlist-tracks', (_event, playlistId: number): Track[] => {
@@ -198,10 +197,10 @@ app.whenReady().then(() => {
   });
 
   const getAllMusicFiles = () => {
-    return db.prepare('SELECT * from MusicFiles').all() as Track[];
+    return db.prepare('SELECT * from MusicFiles').all() as any[];
   }
 
-  ipcMain.handle('get-all-music-files', (): Track[] => {
+  ipcMain.handle('get-all-music-files', (): any[] => {
     return getAllMusicFiles();
   });
 
