@@ -5,7 +5,6 @@ import Track from '../classes/Track';
 import Setting from '../classes/Setting';
 import DatabaseApi from './DatabaseApi';
 import Api from './Api';
-import Playlist from '../classes/Playlist';
 
 // Custom APIs for renderer
 const api: Api = {
@@ -15,16 +14,15 @@ const api: Api = {
 
 const databaseApi: DatabaseApi = {
   addTracks: (initialPath: string): Promise<Track[]> => ipcRenderer.invoke('add-tracks', initialPath),
-  getAllMusicFiles: (): Promise<Track[]> => ipcRenderer.invoke('get-all-music-files'),
+  getAllMusicFiles: (): Promise<any[]> => ipcRenderer.invoke('get-all-music-files'),
   getTrackIds: (): Promise<number[]> => ipcRenderer.invoke('get-track-ids'),
   getTrackById: (id: number) => ipcRenderer.invoke('get-track-by-id', id),
   getAppSettings: (): Promise<Setting[]> => ipcRenderer.invoke('get-app-settings'),
   getAppSetting: (name: string): Promise<Setting> => ipcRenderer.invoke('get-app-setting', name),
   setAppSetting: (name: string, value: string): Promise<void> => ipcRenderer.invoke('set-app-setting', name, value),
-  getPlaylists: (): Promise<Playlist[]> => ipcRenderer.invoke('get-playlists'),
   createPlaylist: (name: string): Promise<void> => ipcRenderer.invoke('create-playlist', name),
   getPlaylistTracks: (playlistId: number): Promise<Track[]> => ipcRenderer.invoke('get-playlist-tracks', playlistId),
-  getPlaylistTrackIds: (): Promise<Record<number, number[]>> => ipcRenderer.invoke('get-playlist-track-ids'),
+  getPlaylists: (): Promise<object> => ipcRenderer.invoke('get-playlists'),
   getFirstFourPlaylistTracks: (playlistId: number): Promise<Track[]> => ipcRenderer.invoke('get-first-four-playlist-tracks', playlistId),
   addTrackToPlaylist: (playlistId: number, trackId: number): Promise<void> => ipcRenderer.invoke('add-track-to-playlist', playlistId, trackId),
 }

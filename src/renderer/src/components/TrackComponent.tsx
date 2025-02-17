@@ -5,12 +5,11 @@ import { PlayingTrackContext } from "@contexts/PlayingTrackContext";
 import { AudioSourceContext } from "@contexts/AudioSourceContext";
 import styled from "styled-components";
 import { ellipsisOverflow, TrackArtist, TrackImage, TrackInfo, TrackTitle } from "@renderer/assets/Misc.styled";
-import Playlist from "@classes/Playlist";
-import { useRouteLoaderData } from "react-router-dom";
 import createReactTracks from "@renderer/utils/createReactTracks";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
 import updateTrackIndicies from "@renderer/utils/updateTrackIndicies";
 import defaultTrackImage from "../assets/defaultTrackImage.svg";
+import { PlaylistsContext } from "@renderer/contexts/PlaylistsContext";
 
 const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[], track: ReactTrack, index: number, style: React.CSSProperties }): JSX.Element => {
   const $playlistBtnRef = useRef<HTMLButtonElement>(null);
@@ -18,8 +17,8 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[]
   const { setQueue, queueIndex, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext);
   const { setAudioSource } = useContext(AudioSourceContext);
+  const { playlists } = useContext(PlaylistsContext);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { playlists }: { playlists: Playlist[] } = useRouteLoaderData('root') as any;
 
   const playAtTrack = () => {
     // Use createReactTracks() when creating a new queue
@@ -72,12 +71,14 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[]
         {isOpen &&
           <PlaylistMenu ref={$playlistMenuRef}>
             {
-              playlists.map((playlist) =>
+              playlists ?
+              Object.keys(playlists).map((id) =>
                 <p onClick={(e) => {
-                  window.databaseApi.addTrackToPlaylist(playlist.id!, track.id!);
+                  window.databaseApi.addTrackToPlaylist(parseInt(id), track.id!);
                   e.stopPropagation();
-                }}>{playlist.name}</p>
-              )
+                }}>{playlists[id].name}</p>
+              ) :
+              ''
             }
           </PlaylistMenu>
         }
