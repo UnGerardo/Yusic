@@ -8,6 +8,7 @@ import isSubstrIgnoreCase from '@renderer/utils/isSubStrIgnoreCase';
 import { PlaylistIdContext } from '@renderer/contexts/PlaylistIdContext';
 import { TracksContext } from '@renderer/contexts/TracksContext';
 import { PlaylistsContext } from '@renderer/contexts/PlaylistsContext';
+import Loader from './Loader';
 
 const TrackList = React.memo(() => {
   const { tracks } = useContext(TracksContext);
@@ -56,7 +57,7 @@ const TrackList = React.memo(() => {
             )}
           </AutoSizer>
         </div> :
-        <p>loading</p>
+        <Loader />
       }
     </>
   );

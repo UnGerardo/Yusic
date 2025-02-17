@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import combineImages from "@renderer/utils/combineImages";
 import { PlaylistIdContext } from "@renderer/contexts/PlaylistIdContext";
 import { PlaylistsContext } from "@renderer/contexts/PlaylistsContext";
+import Loader from "../Loader";
 
 const PlaylistList = (): JSX.Element => {
   const { playlists } = useContext(PlaylistsContext);
@@ -57,7 +58,7 @@ const PlaylistList = (): JSX.Element => {
         )}
       </AutoSizer>
     </StyledPlaylistList> :
-    <p>Loading</p>
+    <Loader />
   );
 }
 
