@@ -1,15 +1,30 @@
-import { useState } from "react";
+import { PlaylistsContext } from "@renderer/contexts/PlaylistsContext";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 
 const NewPlaylistForm = (): JSX.Element => {
+  const { setPlaylists } = useContext(PlaylistsContext);
   const [input, setInput] = useState('');
 
+  const createNewPlaylist = async () => {
+    const name = input;
+    try {
+      await window.databaseApi.createPlaylist(name);
+      const newPlaylist = await window.databaseApi.getPlaylist(name);
+      setPlaylists((playlists) => {
+        return { ...playlists, ...newPlaylist };
+      });
+      setInput('');
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
-    <StyledNewPlaylistForm method="post" onSubmit={() => setInput('')}>
-      <PlaylistInput value={input} onChange={(event) => setInput(event.target.value)} name="name" type="text" placeholder="New Playlist..." required />
-      <AddPlaylist type="submit">+</AddPlaylist>
-      <input type="hidden" name="action" value='new-playlist' />
-    </StyledNewPlaylistForm>
+    <StyledNewPlaylist>
+      <PlaylistInput value={input} onChange={(event) => setInput(event.target.value)} name="name" type="text" placeholder="New Playlist..." />
+      <AddPlaylist onClick={createNewPlaylist}>+</AddPlaylist>
+    </StyledNewPlaylist>
   );
 }
 
@@ -35,7 +50,7 @@ const AddPlaylist = styled.button`
   padding: 0;
 `;
 
-const StyledNewPlaylistForm = styled.form`
+const StyledNewPlaylist = styled.section`
   background: none;
   border: 1px solid black;
   border-radius: 5px;

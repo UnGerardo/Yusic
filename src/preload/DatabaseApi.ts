@@ -12,6 +12,7 @@ export default interface DatabaseApi {
   createPlaylist: (name: string) => Promise<void>;
   getPlaylistTracks: (playlistId: number) => Promise<Track[]>;
   getPlaylists: () => Promise<object>;
+  getPlaylist: (name: string) => Promise<object>;
   getFirstFourPlaylistTracks: (playlistId: number) => Promise<Track[]>;
   addTrackToPlaylist: (playlistId: number, trackId: number) => Promise<void>;
 }
