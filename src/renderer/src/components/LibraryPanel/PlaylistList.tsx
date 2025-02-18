@@ -4,10 +4,12 @@ import { TrackImage, WindowList } from "@renderer/assets/Misc.styled";
 import { useContext, useEffect, useState } from "react";
 import combineImages from "@renderer/utils/combineImages";
 import { PlaylistIdContext } from "@renderer/contexts/PlaylistIdContext";
+import { TracksContext } from "@renderer/contexts/TracksContext";
 import { PlaylistsContext } from "@renderer/contexts/PlaylistsContext";
 import Loader from "../Loader";
 
 const PlaylistList = (): JSX.Element => {
+  const { tracks } = useContext(TracksContext);
   const { playlists } = useContext(PlaylistsContext);
   const { playlistId, setPlaylistId } = useContext(PlaylistIdContext);
   const [playlistImages, setPlaylistImages] = useState<string[]>([]);
@@ -16,11 +18,14 @@ const PlaylistList = (): JSX.Element => {
 
   useEffect(() => {
     async function getCompositeImages() {
+      if (!tracks || !playlists) return;
+
       const compositeImages: string[] = [];
 
       for (const playlistId in playlists) {
-        const tracks = await window.databaseApi.getFirstFourPlaylistTracks(parseInt(playlistId));
-        const images = tracks.map(track => `data:${track.imgFormat};base64,${track.imgData}`);
+        const trackIds = playlists[playlistId].trackIds.slice(0, 5);
+        const firstFourTracks = tracks?.filter(track => trackIds.includes(track.id));
+        const images = firstFourTracks.map(track => `data:${track.imgFormat};base64,${track.imgData}`);
         compositeImages.push(await combineImages(images));
       }
 
@@ -28,7 +33,7 @@ const PlaylistList = (): JSX.Element => {
     }
 
     getCompositeImages();
-  }, []);
+  }, [playlists]);
 
   return (
     playlists ?
