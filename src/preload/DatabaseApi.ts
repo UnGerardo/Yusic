@@ -10,9 +10,8 @@ export default interface DatabaseApi {
   getAppSetting: (name: string) => Promise<Setting>;
   setAppSetting: (name: string, value: string) => Promise<void>;
   createPlaylist: (name: string) => Promise<void>;
-  getPlaylistTracks: (playlistId: number) => Promise<Track[]>;
   getPlaylists: () => Promise<object>;
   getPlaylist: (name: string) => Promise<object>;
-  getFirstFourPlaylistTracks: (playlistId: number) => Promise<Track[]>;
   addTrackToPlaylist: (playlistId: number, trackId: number) => Promise<void>;
+  removeTrackFromPlaylist: (playlistId: number, trackId: number) => Promise<void>;
 }
