@@ -24,7 +24,7 @@ const databaseApi: DatabaseApi = {
   getPlaylists: (): Promise<object> => ipcRenderer.invoke('get-playlists'),
   getPlaylist: (name: string): Promise<object> => ipcRenderer.invoke('get-playlist', name),
   addTrackToPlaylist: (playlistId: number, trackId: number): Promise<void> => ipcRenderer.invoke('add-track-to-playlist', playlistId, trackId),
-  removeTrackFromPlaylist: (playlistId: number, trackId: number): Promise<void> => ipcRenderer.invoke('remove-track-to-playlist', playlistId, trackId),
+  removeTrackFromPlaylist: (playlistId: number, trackId: number): Promise<void> => ipcRenderer.invoke('remove-track-from-playlist', playlistId, trackId),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
