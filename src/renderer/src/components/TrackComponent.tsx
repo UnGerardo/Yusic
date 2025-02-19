@@ -9,15 +9,13 @@ import createReactTracks from "@renderer/utils/createReactTracks";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
 import updateTrackIndicies from "@renderer/utils/updateTrackIndicies";
 import defaultTrackImage from "../assets/defaultTrackImage.svg";
-import { PlaylistsContext } from "@renderer/contexts/PlaylistsContext";
+import PlaylistMenu from "./PlaylistMenu";
 
 const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[], track: ReactTrack, index: number, style: React.CSSProperties }): JSX.Element => {
-  const $playlistBtnRef = useRef<HTMLButtonElement>(null);
-  const $playlistMenuRef = useRef<HTMLUListElement>(null);
+  const $playlistMenuRef = useRef<HTMLElement>(null);
   const { setQueue, queueIndex, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext);
   const { setAudioSource } = useContext(AudioSourceContext);
-  const { playlists } = useContext(PlaylistsContext);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const playAtTrack = () => {
@@ -40,15 +38,15 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[]
     });
   }
 
-  const closePlaylistMenu = (event): void => {
-    const $playlistBtn = $playlistBtnRef.current as unknown as HTMLElement
-    const $playlistMenu = $playlistMenuRef.current as unknown as HTMLElement;
-    if ($playlistMenu && !$playlistMenu.contains(event.target) && !$playlistBtn.contains(event.target)) {
-      setIsOpen(false);
-    }
-  }
-
   useEffect(() => {
+    const closePlaylistMenu = (e: MouseEvent): void => {
+      e.stopPropagation();
+      const $playlistMenu = $playlistMenuRef.current as unknown as HTMLElement;
+      if ($playlistMenu && !$playlistMenu.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
     document.addEventListener('mousedown', closePlaylistMenu);
     return () => {
       document.removeEventListener('mousedown', closePlaylistMenu);
@@ -64,30 +62,16 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[]
       </TrackInfo>
       <TrackAlbum>{track.album}</TrackAlbum>
       <TrackDuration>{formatSeconds(track.duration!)}</TrackDuration>
-      <PlaylistButton ref={$playlistBtnRef} onClick={(e) => {
-        setIsOpen((prev) => !prev);
+      <PlaylistButton onClick={(e) => {
         e.stopPropagation();
+        setIsOpen((prev) => !prev);
       }}>
-        {isOpen &&
-          <PlaylistMenu ref={$playlistMenuRef}>
-            {
-              playlists ?
-              Object.keys(playlists).map((id) =>
-                <p onClick={(e) => {
-                  window.databaseApi.addTrackToPlaylist(parseInt(id), track.id!);
-                  e.stopPropagation();
-                }}>{playlists[id].name}</p>
-              ) :
-              ''
-            }
-          </PlaylistMenu>
-        }
+        {isOpen && <PlaylistMenu inputRef={$playlistMenuRef} trackId={track.id} />}
       </PlaylistButton>
       <PlayNextButton onClick={addToQueue}>
         <PlayNext2nd />
         <PlayNext3rd />
       </PlayNextButton>
-
     </TrackSection>
   );
 };
@@ -255,23 +239,4 @@ const PlayNext3rd = styled.section`
   position: absolute;
   top: 12px;
   left: 0px;
-`;
-
-const PlaylistMenu = styled.ul`
-  background-color: black;
-  border: 1px solid black;
-  border-radius: 5px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  list-style: none;
-  padding: 10px;
-  margin: 0;
-  position: absolute;
-  top: 50px;
-  left: -64px;
-  width: 150px;
-  z-index: 11;
 `;
