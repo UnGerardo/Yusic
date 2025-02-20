@@ -15,6 +15,7 @@ import FocusMode from "./components/FocusMode/FocusMode";
 import TrackList from "./components/TrackList";
 import { TracksContext } from "./contexts/TracksContext";
 import { PlaylistsContext } from "./contexts/PlaylistsContext";
+import { TrackMapContext } from "./contexts/TrackMapContext";
 
 const App = (): JSX.Element => {
   const [isSettingsActive, setIsSettingsActive] = useState(false);
@@ -22,6 +23,7 @@ const App = (): JSX.Element => {
   const [contentScale, setContentScale] = useState(1);
   const [isFocusModeActive, setIsFocusModeActive] = useState(false);
   const { setTracks } = useContext(TracksContext);
+  const { setTrackMap } = useContext(TrackMapContext);
   const { setPlaylists } = useContext(PlaylistsContext);
   const { backgroundColor, setBackgroundColor } = useContext(BackgroundColorContext);
   const { backgroundImage, setBackgroundImage } = useContext(BackgroundImageContext);
@@ -30,6 +32,10 @@ const App = (): JSX.Element => {
   useEffect(() => {
     window.databaseApi.getAllMusicFiles().then((tracks: ReactTrack[]) => {
       setTracks(tracks.map(track => new ReactTrack(track)));
+      setTrackMap(tracks.reduce((map, track) => {
+        map[track.id] = track;
+        return map;
+      }, {} as Record<number, ReactTrack>))
     });
     window.databaseApi.getPlaylists().then((playlists: object) => {
       setPlaylists(playlists);

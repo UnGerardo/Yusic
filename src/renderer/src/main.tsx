@@ -14,9 +14,10 @@ import { BackgroundImageOpacityProvider } from './contexts/BackgroundImageOpacit
 import { FocusModeHoverProvider } from './contexts/FocusModeHoverContext';
 import { PlaylistIdProvider } from './contexts/PlaylistIdContext';
 import { PlayerTimeProvider } from './contexts/PlayerTimeContext';
-import App from './App';
 import { TracksProvider } from './contexts/TracksContext';
 import { PlaylistsProvider } from './contexts/PlaylistsContext';
+import { TrackMapProvider } from './contexts/TrackMapContext';
+import App from './App';
 // import ArtistList from './components/ArtistList';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -33,7 +34,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                       <PlayerTimeProvider>
                         <TracksProvider>
                           <PlaylistsProvider>
-                            <App />
+                            <TrackMapProvider>
+                              <App />
+                            </TrackMapProvider>
                           </PlaylistsProvider>
                         </TracksProvider>
                       </PlayerTimeProvider>
