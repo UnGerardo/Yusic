@@ -9,6 +9,7 @@ import { CSS } from "@dnd-kit/utilities";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
 import updateTrackIndicies from "@renderer/utils/updateTrackIndicies";
 import defaultTrackImage from "../../assets/defaultTrackImage.svg";
+import X_SVG from "../svgs/X_SVG";
 
 const QueuedTrack = ({ index, track, style, activeTrack }:
   {
@@ -81,47 +82,15 @@ const QueuedTrack = ({ index, track, style, activeTrack }:
         <TrackTitle>{track.title}</TrackTitle>
         <TrackArtist>{track.artists}</TrackArtist>
       </TrackInfo>
-      <RemoveButton onClick={removeFromQueue} />
+      <Styled_X_SVG height={18} width={18} onClick={removeFromQueue} />
     </StyledQueuedTrack>
   );
 };
 
 export default QueuedTrack;
 
-const RemoveButton = styled.button`
-  background: none;
-  border: none;
+const Styled_X_SVG = styled(X_SVG)`
   display: none;
-  justify-content: center;
-  align-items: center;
-  height: 18px;
-  width: 18px;
-  position: relative;
-  transform: rotate(45deg);
-
-  &:before {
-    background-color: gray;
-    content: '';
-    height: 2px;
-    width: 18px;
-    position: absolute;
-  }
-
-  &:after {
-    background-color: gray;
-    content: '';
-    height: 18px;
-    width: 2px;
-    position: absolute;
-  }
-
-  &:hover { border-color: white; }
-  &:hover::after { background-color: white; }
-  &:hover::before { background-color: white; }
-
-  &:active { border-color: #666; }
-  &:active::after { background-color: #666; }
-  &:active::before { background-color: #666; }
 `;
 
 const StyledQueuedTrack = styled.section<{ isCurrentTrack: boolean }>`
@@ -137,8 +106,8 @@ const StyledQueuedTrack = styled.section<{ isCurrentTrack: boolean }>`
     background-color: rgba(255, 255, 255, 0.15);
     cursor: pointer;
 
-    ${RemoveButton} {
-      display: flex;
+    ${Styled_X_SVG} {
+      display: block;
     }
   }
 `;
