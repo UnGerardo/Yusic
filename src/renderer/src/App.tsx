@@ -33,7 +33,7 @@ const App = (): JSX.Element => {
     window.databaseApi.getAllMusicFiles().then((tracks: ReactTrack[]) => {
       setTracks(tracks.map(track => new ReactTrack(track)));
       setTrackMap(tracks.reduce((map, track) => {
-        map[track.id] = track;
+        map[track.id] = new ReactTrack(track);
         return map;
       }, {} as Record<number, ReactTrack>))
     });

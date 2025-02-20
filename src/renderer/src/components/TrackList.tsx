@@ -7,28 +7,28 @@ import { WindowList } from '@renderer/assets/Misc.styled';
 import isSubstrIgnoreCase from '@renderer/utils/isSubStrIgnoreCase';
 import { PlaylistIdContext } from '@renderer/contexts/PlaylistIdContext';
 import { TracksContext } from '@renderer/contexts/TracksContext';
+import { TrackMapContext } from '@renderer/contexts/TrackMapContext';
 import { PlaylistsContext } from '@renderer/contexts/PlaylistsContext';
 import Loader from './Loader';
 
 const TrackList = React.memo(() => {
   const { tracks } = useContext(TracksContext);
+  const { trackMap } = useContext(TrackMapContext);
   const { playlists } = useContext(PlaylistsContext);
   const { searchQuery } = useContext(SearchQueryContext);
   const { playlistId } = useContext(PlaylistIdContext);
 
   let filteredTracks = !tracks ? [] :
-    tracks.filter(track => {
-      return (
-        // if playlistId is 0 (meaning no playlist selected), skip the id check
-        (playlistId === 0 ||
-          (playlists && playlists[playlistId].trackIds.includes(track.id)))
-          && (
-          isSubstrIgnoreCase(track.title!, searchQuery) ||
-          isSubstrIgnoreCase(track.album!, searchQuery) ||
-          isSubstrIgnoreCase(track.artists!, searchQuery)
-        )
-      );
-    });
+    playlistId === 0 || !playlists || !trackMap ? tracks.filter(track =>
+      isSubstrIgnoreCase(track.title, searchQuery) ||
+      isSubstrIgnoreCase(track.album, searchQuery) ||
+      isSubstrIgnoreCase(track.artists, searchQuery)
+    ) :
+    playlists[playlistId].trackIds.map(id => trackMap[id]).filter(track =>
+      isSubstrIgnoreCase(track.title, searchQuery) ||
+      isSubstrIgnoreCase(track.album, searchQuery) ||
+      isSubstrIgnoreCase(track.artists, searchQuery)
+    );
 
   return (
     <>

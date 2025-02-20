@@ -3,13 +3,13 @@ import styled from "styled-components";
 import { TrackImage, WindowList } from "@renderer/assets/Misc.styled";
 import { useContext, useEffect, useState } from "react";
 import combineImages from "@renderer/utils/combineImages";
+import { TrackMapContext } from "@renderer/contexts/TrackMapContext";
 import { PlaylistIdContext } from "@renderer/contexts/PlaylistIdContext";
-import { TracksContext } from "@renderer/contexts/TracksContext";
 import { PlaylistsContext } from "@renderer/contexts/PlaylistsContext";
 import Loader from "../Loader";
 
 const PlaylistList = (): JSX.Element => {
-  const { tracks } = useContext(TracksContext);
+  const { trackMap } = useContext(TrackMapContext);
   const { playlists } = useContext(PlaylistsContext);
   const { playlistId, setPlaylistId } = useContext(PlaylistIdContext);
   const [playlistImages, setPlaylistImages] = useState<string[]>([]);
@@ -18,14 +18,15 @@ const PlaylistList = (): JSX.Element => {
 
   useEffect(() => {
     async function getCompositeImages() {
-      if (!tracks || !playlists) return;
+      if (!trackMap || !playlists) return;
 
       const compositeImages: string[] = [];
 
       for (const playlistId in playlists) {
-        const trackIds = playlists[playlistId].trackIds.slice(0, 5);
-        const firstFourTracks = tracks?.filter(track => trackIds.includes(track.id));
-        const images = firstFourTracks.map(track => `data:${track.imgFormat};base64,${track.imgData}`);
+        const images = playlists[playlistId].trackIds
+          .slice(0, 4)
+          .map(id => trackMap[id])
+          .map(track => `data:${track.imgFormat};base64,${track.imgData}`);
         compositeImages.push(await combineImages(images));
       }
 
@@ -33,7 +34,7 @@ const PlaylistList = (): JSX.Element => {
     }
 
     getCompositeImages();
-  }, [playlists]);
+  }, [playlists, trackMap]);
 
   return (
     playlists ?
