@@ -10,6 +10,7 @@ import ReactTrack from "@renderer/react-classes/ReactTrack";
 import updateTrackIndicies from "@renderer/utils/updateTrackIndicies";
 import defaultTrackImage from "../../assets/defaultTrackImage.svg";
 import X_SVG from "../svgs/X_SVG";
+import PlaylistButton from "../PlaylistButton";
 
 const QueuedTrack = ({ index, track, style, activeTrack }:
   {
@@ -82,6 +83,7 @@ const QueuedTrack = ({ index, track, style, activeTrack }:
         <TrackTitle>{track.title}</TrackTitle>
         <TrackArtist>{track.artists}</TrackArtist>
       </TrackInfo>
+      <StyledPlaylistButton width={18} height={18} trackId={track.id} />
       <Styled_X_SVG height={18} width={18} onClick={removeFromQueue} />
     </StyledQueuedTrack>
   );
@@ -89,14 +91,13 @@ const QueuedTrack = ({ index, track, style, activeTrack }:
 
 export default QueuedTrack;
 
-const Styled_X_SVG = styled(X_SVG)`
-  display: none;
-`;
+const StyledPlaylistButton = styled(PlaylistButton)` display: none; `;
+const Styled_X_SVG = styled(X_SVG)` display: none; `;
 
 const StyledQueuedTrack = styled.section<{ isCurrentTrack: boolean }>`
   background-color: ${(props) => props.isCurrentTrack ? 'rgba(255, 255, 255, 0.15)' : 'none'};
   display: grid;
-  grid-template-columns: 18px 50px 1fr 18px;
+  grid-template-columns: 18px 50px 1fr;
   align-items: center;
   gap: 10px;
   padding: 5px 5px 5px 10px;
@@ -104,11 +105,11 @@ const StyledQueuedTrack = styled.section<{ isCurrentTrack: boolean }>`
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.15);
+    grid-template-columns: 18px 50px 1fr 18px 18px;
     cursor: pointer;
 
-    ${Styled_X_SVG} {
-      display: block;
-    }
+    ${Styled_X_SVG} { display: block; }
+    ${StyledPlaylistButton} { display: flex; }
   }
 `;
 

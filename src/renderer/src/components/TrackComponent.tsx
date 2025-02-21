@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext } from "react";
 import formatSeconds from "@renderer/utils/formatSeconds";
 import { QueueContext } from "@contexts/QueueContext";
 import { PlayingTrackContext } from "@contexts/PlayingTrackContext";
@@ -9,14 +9,12 @@ import createReactTracks from "@renderer/utils/createReactTracks";
 import ReactTrack from "@renderer/react-classes/ReactTrack";
 import updateTrackIndicies from "@renderer/utils/updateTrackIndicies";
 import defaultTrackImage from "../assets/defaultTrackImage.svg";
-import PlaylistMenu from "./PlaylistMenu";
+import PlaylistButton from "./PlaylistButton";
 
 const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[], track: ReactTrack, index: number, style: React.CSSProperties }): JSX.Element => {
-  const $playlistMenuRef = useRef<HTMLElement>(null);
   const { setQueue, queueIndex, setQueueIndex } = useContext(QueueContext);
   const { setPlayingTrack } = useContext(PlayingTrackContext);
   const { setAudioSource } = useContext(AudioSourceContext);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const playAtTrack = () => {
     // Use createReactTracks() when creating a new queue
@@ -38,21 +36,6 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[]
     });
   }
 
-  useEffect(() => {
-    const closePlaylistMenu = (e: MouseEvent): void => {
-      e.stopPropagation();
-      const $playlistMenu = $playlistMenuRef.current as unknown as HTMLElement;
-      if ($playlistMenu && !$playlistMenu.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-
-    document.addEventListener('mousedown', closePlaylistMenu);
-    return () => {
-      document.removeEventListener('mousedown', closePlaylistMenu);
-    }
-  }, []);
-
   return (
     <TrackSection onClick={playAtTrack} style={style}>
       <TrackImage src={track.imgData !== '' ? `data:${track.imgFormat};base64,${track.imgData}` : defaultTrackImage}/>
@@ -62,12 +45,7 @@ const TrackComponent = ({ tracks, track, index, style } : { tracks: ReactTrack[]
       </TrackInfo>
       <TrackAlbum>{track.album}</TrackAlbum>
       <TrackDuration>{formatSeconds(track.duration!)}</TrackDuration>
-      <PlaylistButton onClick={(e) => {
-        e.stopPropagation();
-        setIsOpen((prev) => !prev);
-      }}>
-        {isOpen && <PlaylistMenu inputRef={$playlistMenuRef} trackId={track.id} />}
-      </PlaylistButton>
+      <PlaylistButton width={18} height={18} trackId={track.id} />
       <PlayNextButton onClick={addToQueue}>
         <PlayNext2nd />
         <PlayNext3rd />
@@ -112,42 +90,6 @@ const TrackDuration = styled.p`
   @media (max-width: 820px) {
     display: none;
   }
-`;
-
-const PlaylistButton = styled.button`
-  background: none;
-  border: 2px solid gray;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 18px;
-  width: 18px;
-  position: relative;
-
-  &:before {
-    background-color: gray;
-    content: '';
-    height: 2px;
-    width: 8px;
-    position: absolute;
-  }
-
-  &:after {
-    background-color: gray;
-    content: '';
-    height: 8px;
-    width: 2px;
-    position: absolute;
-  }
-
-  &:hover { border-color: white; }
-  &:hover::after { background-color: white; }
-  &:hover::before { background-color: white; }
-
-  &:active { border-color: #666; }
-  &:active::after { background-color: #666; }
-  &:active::before { background-color: #666; }
 `;
 
 /* top and bottom bar */
